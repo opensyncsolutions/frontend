@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useForgotPassword } from "./service";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import Logo from "@/components/logo";
 
 const formSchema = z.object({
   email: z.string({ required_error: "You must provide an email" }).email(),
@@ -35,9 +36,12 @@ const ForgotPassword = () => {
   };
   return (
     <div className="flex justify-center items-center min-h-[100dvh]">
-      <Card className="max-w-[500px] w-[80%]">
+      <Card className="max-w-[500px] w-[80%] animate-slide-up-and-fade">
         <CardHeader>
-          <CardTitle className="text-center">RKPK</CardTitle>
+          <CardTitle className="text-center flex justify-center flex-col gap-3 items-center">
+            <Logo height={50} />
+            RKPK
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form
