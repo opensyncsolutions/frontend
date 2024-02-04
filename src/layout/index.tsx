@@ -37,7 +37,7 @@ const Layout = () => {
           width > 992
             ? !isSidebarOpen
               ? "w-[calc(100dvw-70px)] ml-[70px]"
-              : "w-[calc(100dvw-200px)] ml-[200px]"
+              : "w-[calc(100dvw-230px)] ml-[230px]"
             : "w-full"
         )}
       >

@@ -1,5 +1,10 @@
+import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
+import { sidebarRoutes } from "./data";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { LucideSidebarClose, X } from "lucide-react";
 
 interface AsideProps {
   isSidebarOpen: boolean;
@@ -7,8 +12,9 @@ interface AsideProps {
   onSelectTab: (tab: string) => void;
 }
 
-const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
+const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
   const { width } = useWindowSize();
+  const pathname = useLocation().pathname;
   return (
     <>
       {width <= 992 && (
@@ -25,8 +31,8 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
       )}
       <aside
         className={cn(
-          "fixed h-[100dvh] border-r bg-white left-0 top-0 transition-all",
-          width > 992 ? (!isSidebarOpen ? "w-[70px]" : "w-[200px]") : "w-[80%]"
+          "fixed h-[100dvh] overflow-hidden border-r bg-white left-0 top-0 transition-all",
+          width > 992 ? (!isSidebarOpen ? "w-[70px]" : "w-[230px]") : "w-[80%]"
         )}
         style={{
           zIndex: 49,
@@ -41,7 +47,61 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
             : {}),
         }}
       >
-        Hello
+        <div
+          className={cn(
+            "h-[65px] py-3 flex items-center justify-between w-full gap-4 min-w-[200px] px-5"
+          )}
+        >
+          <div className={cn("flex items-center min-w-[200px]")}>
+            <Logo />
+            <span
+              className={cn(
+                "transition-all",
+                !isSidebarOpen && width > 992
+                  ? "w-0 overflow-hidden ml-0"
+                  : "animate-fade-in ml-4"
+              )}
+            >
+              RKPK
+            </span>
+          </div>
+          {width <= 992 && (
+            <Button variant={"outline"} onClick={closeSidebar}>
+              <X />
+            </Button>
+          )}
+        </div>
+        <nav className="overflow-y-auto max-h-[calc(100%-65px)] py-4">
+          <ul className="flex flex-col gap-1">
+            {sidebarRoutes.map((route) => (
+              <li className={cn("flex items-center min-w-[200px] px-3")}>
+                <Link
+                  to={route?.to}
+                  onClick={() => {
+                    onSelectTab(route.label);
+                    closeSidebar();
+                  }}
+                  className={cn(
+                    "flex items-center px-2 py-[6px] hover:bg-black/5 w-full transition-all rounded-lg",
+                    pathname.includes(route.to) ? "bg-black/5" : ""
+                  )}
+                >
+                  {route?.icon}
+                  <span
+                    className={cn(
+                      "transition-all",
+                      !isSidebarOpen && width > 992
+                        ? "w-0 overflow-hidden ml-0"
+                        : "animate-fade-in ml-4"
+                    )}
+                  >
+                    {route?.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </aside>
     </>
   );

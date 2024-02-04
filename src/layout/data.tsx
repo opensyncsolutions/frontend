@@ -25,36 +25,36 @@ export type CommantActionsList = {
   title?: string;
 };
 
-export const sidebar_routes: SidebarRoutes[] = [
+export const sidebarRoutes: SidebarRoutes[] = [
   {
     label: "Dashboard",
     to: "/dashboard",
-    icon: <LayoutDashboard />,
+    icon: <LayoutDashboard size={18} />,
   },
   {
     label: "Enrollment",
     to: "/enrollment",
-    icon: <UserPlus />,
+    icon: <UserPlus size={18} />,
   },
   {
     label: "Followup",
     to: "/followup",
-    icon: <CalendarDays />,
+    icon: <CalendarDays size={18} />,
   },
   {
     label: "Blood Collected",
     to: "/blood-collection",
-    icon: <Layers />,
+    icon: <Layers size={18} />,
   },
   {
     label: "Cash Disbursement",
     to: "/cash-disbursement",
-    icon: <Banknote />,
+    icon: <Banknote size={18} />,
   },
   {
     label: "Data Collection",
     to: "/data-collection",
-    icon: <Layers3 />,
+    icon: <Layers3 size={18} />,
   },
 ];
 

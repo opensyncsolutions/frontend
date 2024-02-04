@@ -46,7 +46,7 @@ const Header = ({
         width > 992
           ? !isSidebarOpen
             ? "w-[calc(100dvw-70px)] ml-[70px]"
-            : "w-[calc(100dvw-200px)] ml-[200px]"
+            : "w-[calc(100dvw-230px)] ml-[230px]"
           : "w-full"
       )}
     >
@@ -77,15 +77,15 @@ const Header = ({
         {/* popover */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="!p-3 !rounded-[50%] h-8 w-8">
-              <Avatar>
+            <Button variant="outline" className="!rounded-[50%] h-8 w-8">
+              <Avatar className="h-6 w-6">
                 <AvatarFallback>
                   {user?.full_name?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="min-w-60 mr-4">
+          <PopoverContent className="min-w-60 mr-6">
             <div className="border-b flex gap-4 items-center  pb-4">
               <Avatar>
                 <AvatarFallback>
