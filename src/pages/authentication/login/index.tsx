@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
-  username: z.string({ required_error: "You must provide an email" }),
+  username: z.string({ required_error: "You must provide an email/username" }),
   password: z.string({ required_error: "You must provide a password" }),
 });
 const Login = () => {
