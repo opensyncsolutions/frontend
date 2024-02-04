@@ -4,7 +4,7 @@ import { useWindowSize } from "@/shared/hooks/use-window-size";
 import { sidebarRoutes } from "./data";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LucideSidebarClose, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface AsideProps {
   isSidebarOpen: boolean;
@@ -83,13 +83,16 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
                   }}
                   className={cn(
                     "flex items-center px-2 py-[6px] hover:bg-black/5 w-full transition-all rounded-lg",
-                    pathname.includes(route.to) ? "bg-black/5" : ""
+                    pathname.includes(route.to) ? "bg-black/5" : "",
+                    !isSidebarOpen && width > 992
+                      ? "w-[45px] justify-center"
+                      : ""
                   )}
                 >
                   {route?.icon}
                   <span
                     className={cn(
-                      "transition-all",
+                      "transition-all break-keep whitespace-pre",
                       !isSidebarOpen && width > 992
                         ? "w-0 overflow-hidden ml-0"
                         : "animate-fade-in ml-4"
