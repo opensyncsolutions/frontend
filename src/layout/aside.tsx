@@ -79,7 +79,7 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
                   to={route?.to}
                   onClick={() => {
                     onSelectTab(route.label);
-                    closeSidebar();
+                    if (width <= 992) closeSidebar();
                   }}
                   className={cn(
                     "flex items-center px-2 py-[6px] hover:bg-black/5 w-full transition-all rounded-lg",

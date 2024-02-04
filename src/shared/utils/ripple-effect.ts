@@ -8,9 +8,10 @@ const rippleEffect = (e: { currentTarget: any; clientX: number }) => {
   circle.style.width = circle.style.height = `${diameter}px`;
   circle.style.left = `${e.clientX - element.offsetLeft - radius}px`;
   circle.style.top = `-40px`;
-  circle.classList.add("ripple");
+  circle.classList.add("animate-ripple");
+  circle.classList.add("absolute");
 
-  const ripple = element.getElementsByClassName("ripple")[0];
+  const ripple = element.getElementsByClassName("animate-ripple")[0];
 
   if (ripple) {
     ripple.remove();
