@@ -3,6 +3,7 @@ import { useGetMe } from "./shared/services/auth";
 import { PageLoader } from "./components/ui/loader";
 import { Suspense, lazy } from "react";
 import DashboardRoutes from "./shared/routes/dashboard-routes";
+import Cookies from "js-cookie";
 
 const Error = lazy(() => import("@/pages/error"));
 
@@ -16,6 +17,7 @@ const ForgotPassword = lazy(
 const Layout = lazy(() => import("@/layout"));
 
 const App = () => {
+  const token = Cookies.get("access-token");
   const { me, meError, meLoading, meRefetch } = useGetMe();
   if (meLoading) {
     return <PageLoader />;
@@ -35,7 +37,7 @@ const App = () => {
 
   return (
     <Routes>
-      {!me && (
+      {!me && !token && (
         <>
           <Route
             path="*"
@@ -55,7 +57,7 @@ const App = () => {
           />
         </>
       )}
-      {me && (
+      {(me || token) && (
         <Route
           element={
             <Suspense fallback={<PageLoader />}>
