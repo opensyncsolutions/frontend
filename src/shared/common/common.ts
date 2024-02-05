@@ -11,5 +11,5 @@ export const getAuthHeaders = (): RawAxiosRequestHeaders => {
 
 export const AxiosInstance = axios.create({
   baseURL: API_URL,
-  // withCredentials: true,
+  withCredentials: true,
 });
