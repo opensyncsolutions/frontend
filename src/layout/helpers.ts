@@ -5,11 +5,10 @@ import Cookie from "js-cookie";
 
 export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
   const [open, setOpen] = useState(false);
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
   const navigate = useNavigate();
 
   const signout = () => {
-    // localStorage.removeItem("accessToken");
-    // localStorage.removeItem("refreshToken");
     Cookie.remove("access-token");
     Cookie.remove("refresh-token");
     window.location.reload();
@@ -41,7 +40,10 @@ export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
   const headerActions = [
     {
       label: "Settings",
-      action: () => navigate("/settings"),
+      action: () => {
+        navigate("/settings");
+        setPopoverOpen(false);
+      },
     },
     {
       label: "Logout",
@@ -67,5 +69,7 @@ export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
     commandAction,
     signout,
     headerActions,
+    isPopoverOpen,
+    setPopoverOpen,
   };
 };

@@ -36,8 +36,14 @@ const Header = ({
   onSelectTab,
 }: HeaderProps) => {
   const { width } = useWindowSize();
-  const { commandAction, open, setOpen, headerActions } =
-    useHeaderHelpers(onSelectTab);
+  const {
+    commandAction,
+    open,
+    setOpen,
+    headerActions,
+    isPopoverOpen,
+    setPopoverOpen,
+  } = useHeaderHelpers(onSelectTab);
 
   return (
     <header
@@ -58,7 +64,9 @@ const Header = ({
         >
           <Menu />
         </Button>
-        <span>{selectedTab}</span>
+        <span key={selectedTab} className="animate-fade-in">
+          {selectedTab}
+        </span>
       </div>
       <div className="flex gap-3 items-center">
         <Button
@@ -75,7 +83,7 @@ const Header = ({
           )}
         </Button>
         {/* popover */}
-        <Popover>
+        <Popover onOpenChange={setPopoverOpen} open={isPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="!rounded-[50%] h-8 w-8">
               <Avatar className="h-6 w-6">

@@ -72,7 +72,7 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
           )}
         </div>
         <nav className="overflow-y-auto max-h-[calc(100%-65px)] py-4">
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-4">
             {sidebarRoutes.map((route) => (
               <li className={cn("flex items-center min-w-[200px] px-3")}>
                 <Link
@@ -92,7 +92,7 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
                   {route?.icon}
                   <span
                     className={cn(
-                      "transition-all break-keep whitespace-pre",
+                      "transition-all break-keep whitespace-pre text-sm",
                       !isSidebarOpen && width > 992
                         ? "w-0 overflow-hidden ml-0"
                         : "animate-fade-in ml-4"
