@@ -37,7 +37,7 @@ const Login = () => {
     login(values);
   };
   return (
-    <div className="flex justify-center items-center min-h-[100dvh]">
+    <div className="flex justify-center items-center min-h-[100dvh] py-8">
       <Card className="max-w-[500px] w-[80%] animate-slide-up-and-fade">
         <CardHeader>
           <CardTitle className="text-center flex justify-center flex-col gap-3 items-center">

@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommandActions } from "./data";
+import Cookie from "js-cookie";
 
 export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const signout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("accessToken");
+    // localStorage.removeItem("refreshToken");
+    Cookie.remove("access-token");
+    Cookie.remove("refresh-token");
     window.location.reload();
   };
 

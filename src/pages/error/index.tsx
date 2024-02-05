@@ -24,7 +24,7 @@ const Error = ({
         padding,
       }}
       className={cn(
-        "flex flex-col items-center justify-center h-full max-w-[80%] gap-4 m-auto",
+        "flex flex-col items-center justify-center h-full max-w-[600px] w-[80%] gap-4 m-auto",
         className
       )}
     >

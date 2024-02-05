@@ -82,7 +82,7 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
                     if (width <= 992) closeSidebar();
                   }}
                   className={cn(
-                    "flex items-center px-2 py-[6px] hover:bg-black/5 w-full transition-all rounded-lg",
+                    "flex items-center px-2 py-[6px] text-[#030712] hover:bg-black/5 w-full transition-all rounded-lg",
                     pathname.includes(route.to) ? "bg-black/5" : "",
                     !isSidebarOpen && width > 992
                       ? "w-[45px] justify-center"

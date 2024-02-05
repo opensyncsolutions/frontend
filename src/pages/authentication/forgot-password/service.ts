@@ -1,4 +1,4 @@
-import axios from "axios";
+import { AxiosInstance } from "@/shared/common/common";
 import { useMutation } from "react-query";
 import { toast } from "sonner";
 
@@ -14,7 +14,7 @@ type ForgotPasswordResponse = {
 };
 
 const forgotPassword = async (payload: ForgotPasswordPayload) => {
-  const { data } = await axios.post<ForgotPasswordResponse>(
+  const { data } = await AxiosInstance.post<ForgotPasswordResponse>(
     `/forgot-password?email=${payload?.email}`,
     {},
     {}

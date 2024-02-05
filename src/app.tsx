@@ -1,6 +1,4 @@
-import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-import { API_URL } from "./shared/constants/constants";
 import { useGetMe } from "./shared/services/auth";
 import { PageLoader } from "./components/ui/loader";
 import { Suspense, lazy } from "react";
@@ -14,21 +12,16 @@ const ForgotPassword = lazy(
   () => import("@/pages/authentication/forgot-password")
 );
 
-// dashboard pages
+// authenticated pages
 const Layout = lazy(() => import("@/layout"));
-
-axios.defaults.baseURL = API_URL;
 
 const App = () => {
   const { me, meError, meLoading, meRefetch } = useGetMe();
-
-  const token = localStorage.getItem("accessToken");
-
   if (meLoading) {
     return <PageLoader />;
   }
-
   if (
+    meError &&
     !(meError?.response?.status === 404 || meError?.response?.status === 401)
   ) {
     return (
@@ -42,7 +35,7 @@ const App = () => {
 
   return (
     <Routes>
-      {!me && !token && (
+      {!me && (
         <>
           <Route
             path="*"
@@ -62,7 +55,7 @@ const App = () => {
           />
         </>
       )}
-      {(me || token) && (
+      {me && (
         <Route
           element={
             <Suspense fallback={<PageLoader />}>
