@@ -16,11 +16,9 @@ type LoginResponse = {
 };
 
 const login = async (payload: LoginPayload) => {
-  const { data } = await AxiosInstance.post<LoginResponse>(
-    `/login`,
-    payload,
-    {}
-  );
+  const { data } = await AxiosInstance.post<LoginResponse>(`/login`, payload, {
+    withCredentials: false,
+  });
   return data;
 };
 
