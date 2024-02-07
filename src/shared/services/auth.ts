@@ -5,7 +5,7 @@ import Cookie from "js-cookie";
 export const getMe = async () => {
   const headers = getAuthHeaders();
   const { data } = await AxiosInstance.get<{ data: User; success: boolean }>(
-    "/me",
+    "/auth/me",
     {
       headers,
     }

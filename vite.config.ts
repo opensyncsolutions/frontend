@@ -9,13 +9,13 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api/web": {
-        target: "https://afyaiii-qa.rasxp.com",
+        target: "http://np.rasxp.com:8585",
         changeOrigin: true,
         configure: (_proxy, _options) => {},
       },
 
       "^/fallback/.*": {
-        target: "https://afyaiii-qa.rasxp.com",
+        target: "http://np.rasxp.com:8585",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/fallback/, ""),
       },

@@ -11,5 +11,6 @@ export const getAuthHeaders = (): RawAxiosRequestHeaders => {
 
 export const AxiosInstance = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
+  withCredentials: false,
+  headers: { "Access-Control-Allow-Origin": "*" },
 });
