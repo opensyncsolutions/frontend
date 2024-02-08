@@ -1,7 +1,8 @@
-import { AxiosInstance } from "@/shared/common/common";
 import { useMutation } from "react-query";
 import { toast } from "sonner";
 import Cookie from "js-cookie";
+import { AxiosInstance } from "@/shared/configs/api";
+import { formatErrorMessage } from "@/shared/utils/helpers";
 
 type LoginPayload = {
   username: string;
@@ -25,17 +26,18 @@ const login = async (payload: LoginPayload) => {
 export const useLogin = () => {
   const { mutateAsync, isLoading } = useMutation(login, {
     onSuccess: (res) => {
-      // localStorage.setItem("accessToken", res?.data?.accessToken);
-      // localStorage.setItem("refreshTokens", res?.data?.refreshToken);
       Cookie.set("access-token", res?.data?.accessToken);
       Cookie.set("refresh-token", res?.data?.refreshToken);
       window.location.reload();
     },
     onError: (error: ApiError) => {
-      toast(error?.response?.data?.message || error?.message, {
-        duration: 5000,
-        closeButton: true,
-      });
+      toast(
+        formatErrorMessage(error?.response?.data?.message || error?.message),
+        {
+          duration: 5000,
+          closeButton: true,
+        }
+      );
     },
   });
   return {

@@ -1,10 +1,12 @@
+// Start API
 type ApiError = AxiosError<{
   message:
     | string
     | {
         response: {
           data: {
-            msg: string;
+            msg?: string;
+            message?: string;
           };
           status: number;
         };
@@ -33,3 +35,39 @@ interface User {
   permission: string[];
   role: Record<string, string | number | boolean>;
 }
+
+interface TotalEligible {
+  title: string;
+  stat: number;
+  value: number;
+}
+
+interface TotalNonEligible {
+  title: string;
+  stat: number;
+  value: number;
+}
+
+interface TotalFollowups {
+  title: string;
+  stat: number;
+  value: number;
+}
+
+interface DashboardSummaryType {
+  totalEnrolled: number;
+  totalEligible: TotalEligible;
+  totalNonEligible: TotalNonEligible;
+  totalFollowups: TotalFollowups;
+}
+
+// End API
+
+// Start UI
+type BreadCrumb = {
+  label: string;
+  to?: string;
+  disabled?: boolean;
+};
+
+// End UI

@@ -20,21 +20,15 @@ import { DialogClose } from "@/components/ui/dialog";
 import { CommandGroup } from "@/components/ui/command";
 import { useHeaderHelpers } from "./helpers";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { user } from "@/data/auth";
+import { useGetMe } from "@/shared/services/auth";
+import { useLocation } from "react-router-dom";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
-  selectedTab: string;
-  onSelectTab: (tab: string) => void;
 }
 
-const Header = ({
-  isSidebarOpen,
-  toggleSidebar,
-  selectedTab,
-  onSelectTab,
-}: HeaderProps) => {
+const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   const { width } = useWindowSize();
   const {
     commandAction,
@@ -43,7 +37,11 @@ const Header = ({
     headerActions,
     isPopoverOpen,
     setPopoverOpen,
-  } = useHeaderHelpers(onSelectTab);
+  } = useHeaderHelpers();
+
+  const { me } = useGetMe();
+
+  const selectedTab = useLocation().pathname?.split("/")?.[1];
 
   return (
     <header
@@ -64,7 +62,7 @@ const Header = ({
         >
           <Menu />
         </Button>
-        <span key={selectedTab} className="animate-fade-in">
+        <span key={selectedTab} className="animate-fade-in capitalize">
           {selectedTab}
         </span>
       </div>
@@ -74,6 +72,7 @@ const Header = ({
             setOpen(true);
           }}
           variant={"outline"}
+          className="gap-3"
         >
           Quick Actions{" "}
           {width > 992 && (
@@ -88,7 +87,7 @@ const Header = ({
             <Button variant="outline" className="!rounded-[50%] h-8 w-8">
               <Avatar className="h-6 w-6">
                 <AvatarFallback>
-                  {user?.full_name?.substring(0, 2)?.toUpperCase()}
+                  {me?.full_name?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -97,12 +96,12 @@ const Header = ({
             <div className="border-b flex gap-4 items-center  pb-4">
               <Avatar>
                 <AvatarFallback>
-                  {user?.full_name?.substring(0, 2)?.toUpperCase()}
+                  {me?.full_name?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-bold">{user?.full_name}</span>
-                <span className="text-xs">{user?.email}</span>
+                <span className="text-xs font-bold">{me?.full_name}</span>
+                <span className="text-xs">{me?.email}</span>
               </div>
             </div>
             <div className="flex flex-col pt-3">

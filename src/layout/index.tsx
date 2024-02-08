@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 const Layout = () => {
   const { width } = useWindowSize();
   const [isSidebarOpen, setSidebarOpen] = useState(width > 992);
-  const [selectedTab, setSelectedTab] = useState("Dashboard");
 
   useLayoutEffect(() => {
     setSidebarOpen(width > 992);
@@ -19,17 +18,10 @@ const Layout = () => {
       <Header
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-        selectedTab={selectedTab}
-        onSelectTab={(tab: string) => {
-          setSelectedTab(tab);
-        }}
       />
       <Aside
         isSidebarOpen={isSidebarOpen}
         closeSidebar={() => setSidebarOpen(false)}
-        onSelectTab={(tab: string) => {
-          setSelectedTab(tab);
-        }}
       />
       <main
         className={cn(

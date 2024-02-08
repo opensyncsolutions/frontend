@@ -9,10 +9,9 @@ import { X } from "lucide-react";
 interface AsideProps {
   isSidebarOpen: boolean;
   closeSidebar: () => void;
-  onSelectTab: (tab: string) => void;
 }
 
-const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
+const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
   const { width } = useWindowSize();
   const pathname = useLocation().pathname;
   return (
@@ -73,12 +72,14 @@ const Aside = ({ isSidebarOpen, closeSidebar, onSelectTab }: AsideProps) => {
         </div>
         <nav className="overflow-y-auto max-h-[calc(100%-65px)] py-4">
           <ul className="flex flex-col gap-4">
-            {sidebarRoutes.map((route) => (
-              <li className={cn("flex items-center min-w-[200px] px-3")}>
+            {sidebarRoutes.map((route, i) => (
+              <li
+                className={cn("flex items-center min-w-[200px] px-3")}
+                key={i}
+              >
                 <Link
                   to={route?.to}
                   onClick={() => {
-                    onSelectTab(route.label);
                     if (width <= 992) closeSidebar();
                   }}
                   className={cn(

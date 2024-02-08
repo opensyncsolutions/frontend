@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CommandActions } from "./data";
 import Cookie from "js-cookie";
 
-export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
+export const useHeaderHelpers = () => {
   const [open, setOpen] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const navigate = useNavigate();
@@ -17,11 +17,9 @@ export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
   const commandAction = ({
     action,
     to,
-    title,
   }: {
     action?: CommandActions;
     to?: string;
-    title?: string;
   }) => {
     switch (action) {
       case "logout":
@@ -32,7 +30,6 @@ export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
         break;
     }
 
-    title && onSelectTab(title);
     to && navigate(to);
     setOpen(false);
   };
@@ -64,7 +61,6 @@ export const useHeaderHelpers = (onSelectTab: (tab: string) => void) => {
   }, []);
   return {
     open,
-    onSelectTab,
     setOpen,
     commandAction,
     signout,

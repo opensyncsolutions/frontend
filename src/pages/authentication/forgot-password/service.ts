@@ -1,5 +1,7 @@
-import { AxiosInstance } from "@/shared/common/common";
+import { AxiosInstance } from "@/shared/configs/api";
+import { formatErrorMessage } from "@/shared/utils/helpers";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 type ForgotPasswordPayload = {
@@ -23,12 +25,17 @@ const forgotPassword = async (payload: ForgotPasswordPayload) => {
 };
 
 export const useForgotPassword = () => {
+  const navigate = useNavigate();
   const { mutateAsync, isLoading } = useMutation(forgotPassword, {
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: () => {
+      toast("Reset password email was sent to your email", {
+        duration: 5000,
+        closeButton: true,
+      });
+      navigate("/");
     },
     onError: (error: ApiError) => {
-      toast(error?.response?.data?.msg || error?.message, {
+      toast(formatErrorMessage(error), {
         duration: 5000,
         closeButton: true,
       });

@@ -1,6 +1,6 @@
 import Loader from "@/components/ui/loader";
 import { Suspense, lazy } from "react";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 
 const Home = lazy(() => import("@/pages/dashboard/home"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
@@ -15,6 +15,14 @@ const DashboardRoutes = () => {
     <>
       <Route
         path="*"
+        element={
+          <Suspense fallback={PageLoader}>
+            <Navigate to={"/dashboard"} />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/dashboard"
         element={
           <Suspense fallback={PageLoader}>
             <Home />
