@@ -46,7 +46,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "border-b flex justify-between items-center px-6 py-3 fixed bg-white transition-all",
+        "border-b flex justify-between items-center px-6 py-3 fixed bg-white transition-all z-20",
         width > 992
           ? !isSidebarOpen
             ? "w-[calc(100dvw-70px)] ml-[70px]"

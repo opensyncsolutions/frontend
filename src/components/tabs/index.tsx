@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   ComponentProps,
   ReactNode,
@@ -48,9 +49,9 @@ const Tabs = ({
   }, [ref?.current, activeIndex]);
 
   return (
-    <div {...rest}>
+    <div {...rest} className={cn(rest.className, "relative")}>
       {tabs?.length ? (
-        <nav>
+        <nav className="relative sticky top-0 z-10">
           <ul className="border-b w-full flex items-center relative">
             <div
               className={`z-1 rounded-t-[4px] bg-black/5`}

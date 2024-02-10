@@ -14,7 +14,7 @@ const Layout = () => {
   }, [width]);
 
   return (
-    <div>
+    <>
       <Header
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
@@ -35,7 +35,7 @@ const Layout = () => {
       >
         <Outlet />
       </main>
-    </div>
+    </>
   );
 };
 
