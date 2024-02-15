@@ -22,6 +22,9 @@
 .animate-slide-up-and-fade
     animation: slideUpAndFade 0.5s ease-in-out
 
+.animate-rotate
+    animation: rotate .8s linear 0s infinite forwards
+
 span.animate-ripple
     position: absolute
     border-radius: 50%
@@ -100,3 +103,9 @@ span.animate-ripple
         top: -15px
     100%
         top: 0
+
+@keyframes rotate
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(-360deg)

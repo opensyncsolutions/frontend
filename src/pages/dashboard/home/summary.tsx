@@ -2,7 +2,9 @@ import RoundedProgressBar from "@/components/progress-bar/rounded-progress-bar";
 import { Card } from "@/components/ui/card";
 import Loader from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
+import Error from "@/pages/error";
 import { useDashboardSummary } from "@/shared/services/summary";
+import { formatErrorMessage } from "@/shared/utils/helpers";
 
 interface SummaryProps {
   objective?: "" | "/obj2";
@@ -18,17 +20,33 @@ const arrayOfObjects = (data: DashboardSummaryType | object) =>
     }));
 
 const Summary = ({ objective = "" }: SummaryProps) => {
-  const { dashboardSummary, dashboardSummaryLoading } =
-    useDashboardSummary(objective);
+  const {
+    dashboardSummary,
+    dashboardSummaryLoading,
+    dashboardSummaryError,
+    dashboardSummaryRefetch,
+    dashboardSummaryRefething,
+  } = useDashboardSummary(objective);
 
   const summary = arrayOfObjects(dashboardSummary || {});
 
-  if (dashboardSummaryLoading)
+  if (dashboardSummaryLoading || dashboardSummaryRefething)
     return (
-      <div className="h-12 flex justify-center items-center">
+      <div className="h-60 flex justify-center items-center">
         <Loader />
       </div>
     );
+
+  if (dashboardSummaryError) {
+    return (
+      <Error
+        message={formatErrorMessage(dashboardSummaryError)}
+        refetch={() => {
+          dashboardSummaryRefetch();
+        }}
+      />
+    );
+  }
 
   return (
     <div className="">

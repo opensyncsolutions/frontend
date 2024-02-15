@@ -8,6 +8,7 @@ export type ErrorPageProps = {
   retryText?: string;
   padding?: number;
   className?: string;
+  type?: "destructive" | "default";
 };
 
 const Error = ({
@@ -16,6 +17,7 @@ const Error = ({
   retryText,
   padding = 0,
   className,
+  type = "destructive",
 }: ErrorPageProps) => {
   return (
     <div
@@ -24,14 +26,14 @@ const Error = ({
         padding,
       }}
       className={cn(
-        "flex flex-col items-center justify-center h-full max-w-[600px] w-[80%] gap-4 m-auto",
+        "flex flex-col items-center justify-center h-full max-w-[80%] w-[600px] gap-4 m-auto",
         className
       )}
     >
-      <Alert variant="destructive">
+      <Alert variant={type}>
         <AlertDescription>{message}</AlertDescription>
       </Alert>
-      <Button onClick={refetch}>{retryText || "Retry"}</Button>
+      {refetch && <Button onClick={refetch}>{retryText || "Retry"}</Button>}
     </div>
   );
 };

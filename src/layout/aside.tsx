@@ -31,7 +31,11 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
       <aside
         className={cn(
           "fixed h-[100dvh] overflow-hidden border-r bg-white left-0 top-0 transition-all",
-          width > 992 ? (!isSidebarOpen ? "w-[70px]" : "w-[230px]") : "w-[80%]"
+          width > 992
+            ? !isSidebarOpen
+              ? "w-[70px]"
+              : "w-[230px]"
+            : "w-[320px] max-w-[80%]"
         )}
         style={{
           zIndex: 49,

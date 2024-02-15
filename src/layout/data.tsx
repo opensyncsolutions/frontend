@@ -5,6 +5,7 @@ import {
   Layers3,
   LayoutDashboard,
   UserPlus,
+  Users,
 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -55,6 +56,11 @@ export const sidebarRoutes: SidebarRoutes[] = [
     label: "Data Collection",
     to: "/data-collection",
     icon: <Layers3 size={18} />,
+  },
+  {
+    label: "Users",
+    to: "/users",
+    icon: <Users size={18} />,
   },
 ];
 

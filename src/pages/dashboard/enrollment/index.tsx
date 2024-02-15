@@ -1,7 +1,12 @@
-import { Button } from "@/components/ui/button";
 import PageTemplate from "@/templates/page-template";
+import { useSearchParams } from "react-router-dom";
+import Page from "./page";
+
+const tabKey = "objective";
 
 const Enrollment = () => {
+  const [search] = useSearchParams();
+  const objective = search.get(tabKey);
   return (
     <PageTemplate
       breadCrumb={[
@@ -22,20 +27,14 @@ const Enrollment = () => {
           name: "Objective 2",
           value: "objective-2",
         },
-        {
-          name: "Obje 2",
-          value: "objective-3",
-        },
       ]}
       tabKey="objective"
       title="Enrollment"
-      titleActions={
-        <div>
-          <Button>Download</Button>
-        </div>
-      }
     >
-      Hello enroll please
+      {objective !== "objective-2" && <Page key={"objective 1"} />}
+      {objective === "objective-2" && (
+        <Page objective="/obj2" key={"objective 2"} />
+      )}
     </PageTemplate>
   );
 };

@@ -10,12 +10,13 @@ export const CustomTooltip = ({
   payload,
   label,
   data,
+  names,
 }: TooltipProps<ValueType, NameType> & {
-  data: {
-    name: string;
-    uv: number;
-    pv?: number;
-  }[];
+  data: GraphObject[];
+  names?: {
+    uv: string;
+    pv?: string;
+  };
 }) => {
   let uv = payload?.[0]?.payload?.uv;
   let pv = payload?.[0]?.payload?.pv;
@@ -57,8 +58,16 @@ export const CustomTooltip = ({
           >
             {label}
           </h4>
-          <p className={"text-xs"}>{uv}</p>
-          <p className={"text-xs"}>{pv}</p>
+          {typeof uv === "number" ? (
+            <p className={"text-xs"}>
+              {names?.uv}: {uv}
+            </p>
+          ) : null}
+          {typeof pv === "number" ? (
+            <p className={"text-xs"}>
+              {names?.pv}: {pv}
+            </p>
+          ) : null}
         </div>
       </div>
     );
@@ -79,8 +88,9 @@ export const CustomizedXAxisTick = ({ ...props }) => {
         fill={"#454E57"}
         transform="rotate(-30)"
         opacity={0.6}
+        fontSize={11}
       >
-        {payload.value?.slice(0, 10) + "..."}
+        {payload.value}
       </text>
     </g>
   );

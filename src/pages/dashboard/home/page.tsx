@@ -1,8 +1,9 @@
-import BarGraph from "@/components/charts/bar-chart";
 import Summary from "./summary";
-import { DataTable } from "@/components/ui/data-table";
+// import { DataTable } from "@/components/ui/data-table";
+import Enrollments from "./enrollments";
+import CashDisbursement from "./cash-disbursement";
 
-interface PageProps {
+export interface PageProps {
   objective?: "" | "/obj2";
 }
 
@@ -11,52 +12,16 @@ const Page = ({ objective = "" }: PageProps) => {
     <div className="animate-fade-in">
       <Summary objective={objective} />
       <br />
-      <div className={"border rounded-lg"}>
-        <BarGraph
-          data={[
-            {
-              name: "Nyakanazi Health Center",
-              uv: 10,
-              pv: 1,
-            },
-            {
-              name: "Bulugala Health Center",
-              uv: 13,
-              pv: 3,
-            },
-            {
-              name: "Nyakanazi Health Center",
-              uv: 10,
-              pv: 1,
-            },
-            {
-              name: "Bulugala Health Center",
-              uv: 13,
-              pv: 3,
-            },
-            {
-              name: "Nyakanazi Health Center",
-              uv: 10,
-              pv: 1,
-            },
-            {
-              name: "Bulugala Health Center",
-              uv: 13,
-              pv: 3,
-            },
-            {
-              name: "Nyakanazi Health Center",
-              uv: 10,
-              pv: 1,
-            },
-          ]}
-          names={{
-            uv: "Eligible",
-            pv: "Non Eligible",
-          }}
-        />
+      <div className={"border rounded-lg p-4 space-y-3"}>
+        <h2>ENROLLMENTS - BY CLINIC</h2>
+        <Enrollments objective={objective} />
       </div>
-      <div className={"mt-6"}>
+      <br />
+      <div className={"border rounded-lg p-4 space-y-3"}>
+        <h2>CASH DISBURSEMENTS - BY CLINIC</h2>
+        <CashDisbursement objective={objective} />
+      </div>
+      {/* <div className={"mt-6"}>
         <DataTable
           pagination={{
             page: 1,
@@ -95,7 +60,7 @@ const Page = ({ objective = "" }: PageProps) => {
             },
           ]}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

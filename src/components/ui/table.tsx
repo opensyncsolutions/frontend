@@ -8,7 +8,7 @@ const Table = React.forwardRef<
     containerClassName?: string;
   }
 >(({ className, containerClassName, ...props }, ref) => (
-  <div className={cn("w-full overflow-hidden", containerClassName)}>
+  <div className={cn("w-full overflow-y-hidden", containerClassName)}>
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}

@@ -27,8 +27,6 @@ const RoundedProgressBar = ({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
-  console.log(percent, radius, circumference, strokeDashoffset);
-
   return (
     <svg className="w-full" viewBox={`0 0 ${diameter} ${diameter}`}>
       <circle

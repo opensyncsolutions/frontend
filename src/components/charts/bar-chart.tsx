@@ -10,13 +10,10 @@ import {
   Legend,
 } from "recharts";
 import { CustomTooltip, CustomizedXAxisTick } from "./tools";
+import { useWindowSize } from "@/shared/hooks/use-window-size";
 
 interface BarChartProps {
-  data: {
-    name: string;
-    uv: number;
-    pv?: number;
-  }[];
+  data: GraphObject[];
   label?: {
     x: string;
     y: string;
@@ -29,15 +26,20 @@ interface BarChartProps {
 }
 
 const BarGraph = ({ data, label, tickCount = 6, names }: BarChartProps) => {
+  const { width } = useWindowSize();
   return (
-    <ResponsiveContainer width="100%" height="100%" aspect={3}>
+    <ResponsiveContainer
+      width="100%"
+      height="100%"
+      aspect={width < 767 ? 1 : width < 1200 ? 2 : 3}
+    >
       <BarChart
         data={data}
         margin={{
-          top: 30,
-          right: 10,
-          left: 0,
-          bottom: 30,
+          top: 15,
+          right: 0,
+          left: -30,
+          bottom: 10,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -45,9 +47,12 @@ const BarGraph = ({ data, label, tickCount = 6, names }: BarChartProps) => {
           dataKey="name"
           tickLine={false}
           axisLine={false}
-          height={70}
-          tick={<CustomizedXAxisTick />}
-          interval={"preserveStartEnd"}
+          height={width > 767 ? 40 : 90}
+          interval={0}
+          textAnchor="middle"
+          fontSize={10}
+          opacity={0.6}
+          tick={width < 767 ? <CustomizedXAxisTick /> : undefined}
         >
           <Label value={label?.x} position={"bottom"} fill="black" />
         </XAxis>
@@ -60,13 +65,15 @@ const BarGraph = ({ data, label, tickCount = 6, names }: BarChartProps) => {
           />
         </YAxis>
         <Tooltip
-          content={(props) => <CustomTooltip {...props} data={data} />}
+          content={(props) => (
+            <CustomTooltip {...props} data={data} names={names} />
+          )}
           cursor={false}
         />
         <Bar
           dataKey="uv"
           name={names?.uv}
-          barSize={45}
+          barSize={40}
           fill={"rgba(73, 145, 100, 1)"}
         />
         {typeof data?.[0]?.pv === "number" && (

@@ -52,7 +52,7 @@ const Tabs = ({
     <div {...rest} className={cn(rest.className, "relative")}>
       {tabs?.length ? (
         <nav className="relative sticky top-0 z-10">
-          <ul className="border-b w-full flex items-center relative">
+          <ul className="border-b w-full overflow-x-auto flex items-center relative">
             <div
               className={`z-1 rounded-t-[4px] bg-black/5`}
               style={{
@@ -129,7 +129,7 @@ const Tab = ({
           setSearch(search);
         } else onChange?.(value);
       }}
-      className="z-3 relative pt-2 pb-3 px-3 text-md"
+      className="z-3 relative pt-2 pb-3 px-3 text-md break-keep whitespace-nowrap"
     >
       {name}
     </button>

@@ -4,6 +4,7 @@ import { Navigate, Route } from "react-router-dom";
 
 const Home = lazy(() => import("@/pages/dashboard/home"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
+const Users = lazy(() => import("@/pages/dashboard/users"));
 
 const DashboardRoutes = () => {
   const PageLoader = (
@@ -34,6 +35,14 @@ const DashboardRoutes = () => {
         element={
           <Suspense fallback={PageLoader}>
             <Enrollment />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <Suspense fallback={PageLoader}>
+            <Users />
           </Suspense>
         }
       />

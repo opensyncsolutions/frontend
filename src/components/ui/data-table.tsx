@@ -30,7 +30,7 @@ import Loader from "./loader";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onRowClick?: (record: any) => void;
+  onRowClick?: (record: TData) => void;
   sorting?: SortingState;
   setSorting?: Dispatch<SetStateAction<SortingState>>;
   loading?: boolean;
@@ -78,12 +78,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="rounded-md border relative w-full">
         <Table
-          className={cn(
-            pagination?.fetching || loading ? "opacity-50" : "",
-            `relative`
-          )}
+          className={cn(pagination?.fetching || loading ? "opacity-50" : "")}
           containerClassName={className}
         >
           <TableHeader className={cn(headerClassname)}>
@@ -91,7 +88,22 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="text-neutral-0">
+                    <TableHead
+                      key={header.id}
+                      className={cn(
+                        "text-neutral-0",
+                        // @ts-ignore
+                        header.column.columnDef?.meta?.className
+                          ? // @ts-ignore
+                            header.column.columnDef?.meta?.className +
+                              " bg-neutral-100"
+                          : ""
+                      )}
+                      style={{
+                        width: header.getSize(),
+                        minWidth: header?.getSize(),
+                      }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -106,29 +118,27 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {(loading || pagination?.fetching) && (
-              <div className="w-full h-full hover:bg-white">
-                <div className="flex justify-center w-[100%] h-full max-w-[100vw] absolute left-[-2rem] top-0 items-center flex-col">
+              <div className="w-full h-full min-h-48 hover:bg-white">
+                <div className="flex justify-center w-[100%] h-full max-w-[100vw] absolute top-10 items-center flex-col">
                   <Loader size={150} />
                 </div>
               </div>
             )}
 
-            {!table?.getRowModel()?.rows?.length && (
-              <TableRow className="hover:bg-white">
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {noDataMessage ?? (
-                    <div className="flex flex-col items-center justify-center">
-                      <h3 className="mt-4 text-lg font-bold text-slate-400">
-                        No data Found
-                      </h3>
-                    </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            )}
+            {!table?.getRowModel()?.rows?.length &&
+              !(loading || pagination?.fetching) && (
+                <div className="w-full h-full min-h-48">
+                  <div className="w-[100%] h-full absolute top-8">
+                    {noDataMessage ?? (
+                      <div className="flex flex-col justify-center items-center">
+                        <h3 className="mt-4 text-lg font-bold text-slate-400 text-center">
+                          No data Found
+                        </h3>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             {table.getRowModel().rows?.length
               ? table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -136,7 +146,17 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          // @ts-ignore
+                          cell.column.columnDef?.meta?.className
+                            ? // @ts-ignore
+                              cell.column.columnDef?.meta?.className +
+                                " bg-neutral-50 shadow-lg border-l-neutral-300 border-l-1"
+                            : ""
+                        )}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
