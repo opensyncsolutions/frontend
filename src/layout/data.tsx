@@ -72,7 +72,7 @@ export const useMenuConfig = () => {
     {
       label: "Users",
       to: "users",
-      sort: 3,
+      sort: 7,
     },
   ];
   return {
