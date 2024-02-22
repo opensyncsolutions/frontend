@@ -75,6 +75,7 @@ const Page = ({ objective = "" }: PageProps) => {
           )
         }
         data={enrollments?.data || []}
+        onRowClick={() => {}}
         columns={[
           { header: "Clinic Name", accessorKey: "clinic.name" },
           {
@@ -94,6 +95,74 @@ const Page = ({ objective = "" }: PageProps) => {
             accessorKey: "studyID",
           },
           {
+            header: "CTC ID",
+            accessorKey: "CTC_ID",
+          },
+          {
+            header: "Sex",
+            accessorKey: "gender",
+            cell: (record) => {
+              return record?.row?.original?.gender === "1" ? "Male" : "Female";
+            },
+          },
+          {
+            header: "DOB",
+            accessorKey: "DOB",
+          },
+          {
+            header: "District",
+            accessorKey: "district.district_name",
+          },
+          {
+            header: "Ward",
+            accessorKey: "ward.ward_name",
+          },
+          {
+            header: "HBC Name",
+            accessorKey: "hbc_name",
+          },
+          {
+            header: "HBC Number",
+            accessorKey: "hbc_number",
+          },
+          {
+            header: "Participant Mobile",
+            accessorKey: "phone_one",
+          },
+          {
+            header: "Ownership",
+            accessorKey: "someone_else_number",
+            cell: (record) => {
+              return record?.row?.original?.someone_else_number === "1"
+                ? "Own Phone"
+                : "";
+            },
+          },
+          {
+            header: "Mobile Money",
+            accessorKey: "mobile_money_number",
+          },
+          {
+            header: "Enrolled Date",
+            accessorKey: "enrollment_date",
+          },
+          {
+            header: "Re-Enter DCTC ID",
+            accessorKey: "reenter_CTC_ID",
+          },
+          {
+            header: "Screening ID",
+            accessorKey: "screening_id",
+          },
+          {
+            header: "Scheduled Return to Care Date",
+            accessorKey: "scheduled_return_to_care",
+          },
+          {
+            header: "Collector",
+            accessorKey: "collector.full_name",
+          },
+          {
             header: "Action",
             size: 100,
             cell: () => {
@@ -102,7 +171,14 @@ const Page = ({ objective = "" }: PageProps) => {
                   <button className="px-2 py-2">
                     <EyeIcon size={15} />
                   </button>
-                  <button className="px-2 py-2">
+                  <button
+                    className="px-2 py-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                      // edit clicked
+                    }}
+                  >
                     <Edit2Icon size={15} />
                   </button>
                 </div>

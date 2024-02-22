@@ -31,13 +31,10 @@ export const useLogin = () => {
       window.location.reload();
     },
     onError: (error: ApiError) => {
-      toast(
-        formatErrorMessage(error?.response?.data?.message || error?.message),
-        {
-          duration: 5000,
-          closeButton: true,
-        }
-      );
+      toast(formatErrorMessage(error), {
+        duration: 5000,
+        closeButton: true,
+      });
     },
   });
   return {

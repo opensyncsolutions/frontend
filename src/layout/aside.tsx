@@ -1,7 +1,7 @@
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
-import { sidebarRoutes } from "./data";
+import { useMenuConfig } from "./data";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -14,6 +14,9 @@ interface AsideProps {
 const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
   const { width } = useWindowSize();
   const pathname = useLocation().pathname;
+
+  const { menuItems } = useMenuConfig();
+
   return (
     <>
       {width <= 992 && (
@@ -76,7 +79,7 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
         </div>
         <nav className="overflow-y-auto max-h-[calc(100%-65px)] py-4">
           <ul className="flex flex-col gap-4">
-            {sidebarRoutes.map((route, i) => (
+            {menuItems.map((route, i) => (
               <li
                 className={cn("flex items-center min-w-[200px] px-3")}
                 key={i}

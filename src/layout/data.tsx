@@ -26,43 +26,66 @@ export type CommantActionsList = {
   title?: string;
 };
 
-export const sidebarRoutes: SidebarRoutes[] = [
-  {
-    label: "Dashboard",
-    to: "/dashboard",
-    icon: <LayoutDashboard size={18} />,
-  },
-  {
-    label: "Enrollment",
-    to: "/enrollment",
-    icon: <UserPlus size={18} />,
-  },
-  {
-    label: "Followup",
-    to: "/followup",
-    icon: <CalendarDays size={18} />,
-  },
-  {
-    label: "Blood Collected",
-    to: "/blood-collection",
-    icon: <Layers size={18} />,
-  },
-  {
-    label: "Cash Disbursement",
-    to: "/cash-disbursement",
-    icon: <Banknote size={18} />,
-  },
-  {
-    label: "Data Collection",
-    to: "/data-collection",
-    icon: <Layers3 size={18} />,
-  },
-  {
-    label: "Users",
-    to: "/users",
-    icon: <Users size={18} />,
-  },
-];
+const pathToIcon: Record<string, ReactNode> = {
+  dashboard: <LayoutDashboard size={18} />,
+  enrollment: <UserPlus size={18} />,
+  followup: <CalendarDays size={18} />,
+  "blood-collection": <Layers size={18} />,
+  "cash-disbursement": <Banknote size={18} />,
+  "data-collection": <Layers3 size={18} />,
+  users: <Users size={18} />,
+};
+
+export const useMenuConfig = () => {
+  // this should come from backend
+  const config = [
+    {
+      label: "Dashboard",
+      to: "dashboard",
+      sort: 1,
+    },
+    {
+      label: "Enrollment",
+      to: "enrollment",
+      sort: 2,
+    },
+    {
+      label: "Followup",
+      to: "followup",
+      sort: 3,
+    },
+    {
+      label: "Blood Collected",
+      to: "blood-collection",
+      sort: 4,
+    },
+    {
+      label: "Cash Disbursement",
+      to: "cash-disbursement",
+      sort: 5,
+    },
+    {
+      label: "Data Collection",
+      to: "data-collection",
+      sort: 6,
+    },
+    {
+      label: "Users",
+      to: "users",
+      sort: 3,
+    },
+  ];
+  return {
+    menuItems: config
+      .sort((a, b) => a.sort - b.sort)
+      .map((menu) => {
+        return {
+          ...menu,
+          icon: pathToIcon?.[menu?.to],
+        };
+      }),
+  };
+};
 
 export const quickActions: CommantActionsList[] = [
   {
