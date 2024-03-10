@@ -39,8 +39,7 @@ const ForgotPassword = () => {
       <Card className="max-w-[500px] w-[80%] animate-slide-up-and-fade">
         <CardHeader>
           <CardTitle className="text-center flex justify-center flex-col gap-3 items-center">
-            <Logo height={50} />
-            RKPK
+            <Logo height={40} />
           </CardTitle>
         </CardHeader>
         <CardContent>

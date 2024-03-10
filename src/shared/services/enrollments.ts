@@ -1,6 +1,39 @@
 import { useQuery } from "react-query";
 import { AxiosInstance } from "../configs/api";
 
+// const fields = [
+//   "clinic",
+//   "objective",
+//   "middleName",
+//   "firstName",
+//   "surname",
+//   "dob",
+//   "status",
+//   "studyId",
+//   "ctcId",
+//   "recentVisit",
+//   "participantConsent",
+//   "informedConsent",
+//   "enrollmentDate",
+//   "assessmentDate",
+//   "hbcName",
+//   "hbcNumber",
+//   "scheduledReturn",
+//   "assessmentDate",
+//   "viralLoadDate",
+//   "counsellingDate",
+//   "clinicalInterventionVisit",
+//   "clinicalControlVisit",
+//   "returnMobileNumber",
+//   "mainConsentStudy",
+//   "consentToBeContacted",
+//   "completeBaselineSurvey",
+//   "currentEnrolled",
+//   "organisationUnit",
+//   "createdBy",
+//   "updatedBy",
+// ];
+
 export const useEnrollements = ({
   objective,
   paginate: { page, pageSize },
@@ -11,21 +44,21 @@ export const useEnrollements = ({
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     ["enrollments", objective, page, pageSize],
     async () => {
-      const url = new URL(
-        `${AxiosInstance.defaults.baseURL}/v1${objective}/enrollments/paginate`
-      );
+      const params: Record<string, string | number | boolean> = {
+        fields: "*",
+      };
 
-      if (pageSize) url.searchParams.append("per_page", pageSize.toString());
-      if (page) url.searchParams.append("page", page.toString());
+      if (pageSize) params.pageSize = pageSize;
+      if (page) params.page = page;
 
       const { data } = await AxiosInstance.get<{
-        data: {
-          data: Enrollment[];
-          total: number;
-          last_page: number;
-          current_page: number;
-        };
-      }>(`${url}`);
+        enrollments: Enrollment[];
+        total: number;
+        page: number;
+        pageSize: number;
+      }>(`/enrollments`, {
+        params,
+      });
       return data;
     },
     {
@@ -34,7 +67,7 @@ export const useEnrollements = ({
     }
   );
   return {
-    enrollments: data?.data,
+    enrollments: data,
     enrollmentsError: error as ApiError,
     enrollmentsLoading: isLoading,
     enrollmentsRefetch: refetch,

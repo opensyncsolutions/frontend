@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommandActions } from "./data";
-import Cookie from "js-cookie";
+import { useLogout } from "@/shared/services/auth";
 
 export const useHeaderHelpers = () => {
   const [open, setOpen] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const navigate = useNavigate();
 
-  const signout = () => {
-    Cookie.remove("access-token");
-    Cookie.remove("refresh-token");
-    window.location.reload();
-  };
+  const { logout, logoutLoading } = useLogout();
 
   const commandAction = ({
     action,
@@ -23,7 +19,7 @@ export const useHeaderHelpers = () => {
   }) => {
     switch (action) {
       case "logout":
-        signout();
+        logout();
         break;
 
       default:
@@ -44,7 +40,8 @@ export const useHeaderHelpers = () => {
     },
     {
       label: "Logout",
-      action: () => signout(),
+      action: () => logout(),
+      disabled: logoutLoading,
     },
   ];
 
@@ -63,7 +60,8 @@ export const useHeaderHelpers = () => {
     open,
     setOpen,
     commandAction,
-    signout,
+    logout,
+    logoutLoading,
     headerActions,
     isPopoverOpen,
     setPopoverOpen,

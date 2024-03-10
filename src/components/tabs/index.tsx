@@ -129,7 +129,7 @@ const Tab = ({
           setSearch(search);
         } else onChange?.(value);
       }}
-      className="z-3 relative pt-2 pb-3 px-3 text-md break-keep whitespace-nowrap"
+      className="z-3 relative pt-2 pb-3 px-3 text-xs break-keep whitespace-nowrap"
     >
       {name}
     </button>

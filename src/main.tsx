@@ -8,9 +8,9 @@ import "@/styles/index.sass";
 
 const queryClient = new QueryClient();
 
-if (process.env.VITE_APP_ENV !== "development") {
-  console.log = console.warn = console.error = () => {};
-}
+// if (process.env.VITE_APP_ENV !== "development") {
+//   console.log = console.warn = console.error = () => {};
+// }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

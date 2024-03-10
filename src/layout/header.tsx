@@ -19,7 +19,7 @@ import { quickActions } from "./data";
 import { DialogClose } from "@/components/ui/dialog";
 import { CommandGroup } from "@/components/ui/command";
 import { useHeaderHelpers } from "./helpers";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetMe } from "@/shared/services/auth";
 import { useLocation } from "react-router-dom";
 
@@ -86,8 +86,9 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
           <PopoverTrigger asChild>
             <Button variant="outline" className="!rounded-[50%] h-8 w-8">
               <Avatar className="h-6 w-6">
+                <AvatarImage src={me?.dp} />
                 <AvatarFallback>
-                  {me?.full_name?.substring(0, 2)?.toUpperCase()}
+                  {me?.username?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -95,21 +96,23 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
           <PopoverContent className="min-w-60 mr-6">
             <div className="border-b flex gap-4 items-center  pb-4">
               <Avatar>
+                <AvatarImage src={me?.dp} />
                 <AvatarFallback>
-                  {me?.full_name?.substring(0, 2)?.toUpperCase()}
+                  {me?.username?.substring(0, 2)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-bold">{me?.full_name}</span>
-                <span className="text-xs">{me?.email}</span>
+                <span className="text-xs font-bold">{me?.username}</span>
+                <span className="text-xs">{me?.name}</span>
               </div>
             </div>
             <div className="flex flex-col pt-3">
-              {headerActions.map(({ label, action }, index) => (
+              {headerActions.map(({ label, action, disabled }, index) => (
                 <Button
                   onClick={action}
                   key={index}
                   variant={"ghost"}
+                  disabled={disabled}
                   className="w-[calc(100%+2rem)] !px-4 !ml-[-1rem] justify-start"
                 >
                   {label}

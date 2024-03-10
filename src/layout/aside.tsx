@@ -59,17 +59,7 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
           )}
         >
           <div className={cn("flex items-center min-w-[200px]")}>
-            <Logo />
-            <span
-              className={cn(
-                "transition-all",
-                !isSidebarOpen && width > 992
-                  ? "w-0 overflow-hidden ml-0"
-                  : "animate-fade-in ml-4"
-              )}
-            >
-              RKPK
-            </span>
+            <Logo icon={!isSidebarOpen && width > 992} />
           </div>
           {width <= 992 && (
             <Button variant={"outline"} onClick={closeSidebar}>

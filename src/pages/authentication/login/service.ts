@@ -1,6 +1,5 @@
 import { useMutation } from "react-query";
 import { toast } from "sonner";
-import Cookie from "js-cookie";
 import { AxiosInstance } from "@/shared/configs/api";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 
@@ -9,25 +8,14 @@ type LoginPayload = {
   password: string;
 };
 
-type LoginResponse = {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-  };
-};
-
 const login = async (payload: LoginPayload) => {
-  const { data } = await AxiosInstance.post<LoginResponse>(`/login`, payload, {
-    withCredentials: false,
-  });
+  const { data } = await AxiosInstance.post(`/login`, payload);
   return data;
 };
 
 export const useLogin = () => {
   const { mutateAsync, isLoading } = useMutation(login, {
-    onSuccess: (res) => {
-      Cookie.set("access-token", res?.data?.accessToken);
-      Cookie.set("refresh-token", res?.data?.refreshToken);
+    onSuccess: () => {
       window.location.reload();
     },
     onError: (error: ApiError) => {

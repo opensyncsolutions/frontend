@@ -74,48 +74,38 @@ const Page = ({ objective = "" }: PageProps) => {
             />
           )
         }
-        data={enrollments?.data || []}
+        data={enrollments?.enrollments || []}
         onRowClick={() => {}}
         columns={[
-          { header: "Clinic Name", accessorKey: "clinic.name" },
+          { header: "Organization Name", accessorKey: "organisationUnit.name" },
           {
             header: "Participant Name",
             cell: (record) => {
               return (
-                (record?.row?.original?.first_name || "") +
+                (record?.row?.original?.firstName || "") +
                 " " +
-                (record?.row?.original?.middle_name || "") +
-                " " +
-                (record?.row?.original?.sur_name || "")
+                (record?.row?.original?.surname || "")
               );
             },
           },
           {
             header: "Study ID",
-            accessorKey: "studyID",
+            accessorKey: "studyId",
           },
           {
             header: "CTC ID",
-            accessorKey: "CTC_ID",
+            accessorKey: "ctcId",
           },
           {
             header: "Sex",
             accessorKey: "gender",
             cell: (record) => {
-              return record?.row?.original?.gender === "1" ? "Male" : "Female";
+              return record?.row?.original?.gender;
             },
           },
           {
             header: "DOB",
-            accessorKey: "DOB",
-          },
-          {
-            header: "District",
-            accessorKey: "district.district_name",
-          },
-          {
-            header: "Ward",
-            accessorKey: "ward.ward_name",
+            accessorKey: "dob",
           },
           {
             header: "HBC Name",
@@ -130,25 +120,8 @@ const Page = ({ objective = "" }: PageProps) => {
             accessorKey: "phone_one",
           },
           {
-            header: "Ownership",
-            accessorKey: "someone_else_number",
-            cell: (record) => {
-              return record?.row?.original?.someone_else_number === "1"
-                ? "Own Phone"
-                : "";
-            },
-          },
-          {
-            header: "Mobile Money",
-            accessorKey: "mobile_money_number",
-          },
-          {
             header: "Enrolled Date",
-            accessorKey: "enrollment_date",
-          },
-          {
-            header: "Re-Enter DCTC ID",
-            accessorKey: "reenter_CTC_ID",
+            accessorKey: "created",
           },
           {
             header: "Screening ID",
@@ -161,6 +134,10 @@ const Page = ({ objective = "" }: PageProps) => {
           {
             header: "Collector",
             accessorKey: "collector.full_name",
+          },
+          {
+            header: "Objective",
+            accessorKey: "objective.name",
           },
           {
             header: "Action",

@@ -3,25 +3,25 @@ import { useGetMe } from "./shared/services/auth";
 import { PageLoader } from "./components/ui/loader";
 import { Suspense, lazy } from "react";
 import DashboardRoutes from "./shared/routes/dashboard-routes";
-import Cookies from "js-cookie";
 
 const Error = lazy(() => import("@/pages/error"));
 
 // authentication pages
 const Login = lazy(() => import("@/pages/authentication/login"));
-const ForgotPassword = lazy(
-  () => import("@/pages/authentication/forgot-password")
-);
+// const ForgotPassword = lazy(
+//   () => import("@/pages/authentication/forgot-password")
+// );
 
 // authenticated pages
 const Layout = lazy(() => import("@/layout"));
 
 const App = () => {
-  const token = Cookies.get("access-token");
   const { me, meError, meLoading, meRefetch } = useGetMe();
+
   if (meLoading) {
     return <PageLoader />;
   }
+
   if (
     meError &&
     !(meError?.response?.status === 404 || meError?.response?.status === 401)
@@ -37,7 +37,7 @@ const App = () => {
 
   return (
     <Routes>
-      {!me && !token && (
+      {!me && !meLoading && (
         <>
           <Route
             path="*"
@@ -47,17 +47,17 @@ const App = () => {
               </Suspense>
             }
           />
-          <Route
+          {/* <Route
             path="/forgot-password"
             element={
               <Suspense fallback={<PageLoader />}>
                 <ForgotPassword />
               </Suspense>
             }
-          />
+          /> */}
         </>
       )}
-      {(me || token) && (
+      {me && !meLoading && (
         <Route
           element={
             <Suspense fallback={<PageLoader />}>

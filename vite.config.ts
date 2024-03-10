@@ -8,14 +8,14 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      "/api/web": {
-        target: "http://np.rasxp.com:8585",
+      "/api": {
+        target: "https://opensync.flexcodelabs.com",
         changeOrigin: true,
         configure: (_proxy, _options) => {},
       },
 
       "^/fallback/.*": {
-        target: "http://np.rasxp.com:8585",
+        target: "https://opensync.flexcodelabs.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/fallback/, ""),
       },

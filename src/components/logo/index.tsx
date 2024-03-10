@@ -1,9 +1,16 @@
 import logo from "@/assets/images/logo.svg";
+import logoIcon from "@/assets/images/logo-icon.svg";
 
-const Logo = ({ height = 30 }: { height?: number | string }) => {
+const Logo = ({
+  height = 30,
+  icon,
+}: {
+  height?: number | string;
+  icon?: boolean;
+}) => {
   return (
     <img
-      src={logo}
+      src={icon ? logoIcon : logo}
       style={{
         width: "auto",
         height,

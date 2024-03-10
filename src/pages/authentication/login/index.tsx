@@ -5,12 +5,12 @@ import {
   Card,
   CardContent,
   CardTitle,
-  CardFooter,
+  // CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "./service";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
 
@@ -41,8 +41,7 @@ const Login = () => {
       <Card className="max-w-[500px] w-[80%] animate-slide-up-and-fade">
         <CardHeader>
           <CardTitle className="text-center flex justify-center flex-col gap-3 items-center">
-            <Logo height={50} />
-            RKPK
+            <Logo height={40} />
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -80,13 +79,13 @@ const Login = () => {
                 {loginLoading ? "Please Wait..." : "Login"}
               </Button>
             </div>
-            <CardFooter>
+            {/* <CardFooter>
               <div className="flex justify-center w-full pt-2">
                 <Link to="/forgot-password" className="text-primary">
                   Forgot Password?
                 </Link>
               </div>
-            </CardFooter>
+            </CardFooter> */}
           </form>
         </CardContent>
       </Card>
