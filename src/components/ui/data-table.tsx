@@ -80,9 +80,41 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="rounded-md border relative w-full">
+        {(loading || pagination?.fetching) && (
+          <div className="w-full h-full min-h-[200px] absolute">
+            <div
+              className={cn(
+                "flex justify-center w-[100%] h-full max-w-[100vw] absolute flex justify-center items-center items-center flex-col"
+              )}
+            >
+              <Loader size={150} />
+            </div>
+          </div>
+        )}
+
+        {!table?.getRowModel()?.rows?.length &&
+          !(loading || pagination?.fetching) && (
+            <div className="w-full h-full min-h-[200px] top-6 absolute">
+              <div
+                className={cn(
+                  "w-[100%] h-full absolute flex justify-center items-center"
+                )}
+              >
+                {noDataMessage ?? (
+                  <div className="flex flex-col justify-center items-center">
+                    <h3 className="mt-4 text-lg font-bold text-slate-400 text-center">
+                      No data Found
+                    </h3>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         <Table
           className={cn(pagination?.fetching || loading ? "opacity-50" : "")}
-          containerClassName={className}
+          containerClassName={`${className} ${
+            table?.getRowModel()?.rows?.length ? "" : "min-h-[200px]"
+          }`}
         >
           <TableHeader className={cn(headerClassname)}>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -118,28 +150,6 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {(loading || pagination?.fetching) && (
-              <div className="w-full h-full min-h-48 hover:bg-white">
-                <div className="flex justify-center w-[100%] h-full max-w-[100vw] absolute top-10 items-center flex-col">
-                  <Loader size={150} />
-                </div>
-              </div>
-            )}
-
-            {!table?.getRowModel()?.rows?.length &&
-              !(loading || pagination?.fetching) && (
-                <div className="w-full h-full min-h-48">
-                  <div className="w-[100%] h-full absolute top-8">
-                    {noDataMessage ?? (
-                      <div className="flex flex-col justify-center items-center">
-                        <h3 className="mt-4 text-lg font-bold text-slate-400 text-center">
-                          No data Found
-                        </h3>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
             {table.getRowModel().rows?.length
               ? table.getRowModel().rows.map((row) => (
                   <TableRow

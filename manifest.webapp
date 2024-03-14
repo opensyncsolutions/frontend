@@ -1,0 +1,18 @@
+{
+  "menus": [
+    { "name": "Dashboard", "path": "dashboard", "sortOrder": 1 },
+    { "name": "Enrollments", "path": "enrollments", "sortOrder": 2 },
+    { "name": "Followup", "path": "followup", "sortOrder": 3 },
+    {
+      "name": "Cash Disbursement",
+      "path": "cash-disbursement",
+      "sortOrder": 4
+    },
+    { "name": "Users", "path": "users", "sortOrder": 3 },
+    {
+      "name": "Roles & Privileges",
+      "path": "roles-and-priviledges",
+      "sortOrder": 5
+    }
+  ]
+}

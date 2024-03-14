@@ -1,7 +1,7 @@
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
-import { useMenuConfig } from "./data";
+import { extraSideMenu, useMenuConfig } from "./data";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -67,9 +67,43 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
             </Button>
           )}
         </div>
-        <nav className="overflow-y-auto max-h-[calc(100%-65px)] py-4">
+        <nav className="overflow-y-auto h-[calc(100%-65px)] max-h-[calc(100%-65px)] py-4 flex flex-col justify-between gap-7">
           <ul className="flex flex-col gap-4">
             {menuItems.map((route, i) => (
+              <li
+                className={cn("flex items-center min-w-[200px] px-3")}
+                key={i}
+              >
+                <Link
+                  to={route?.to}
+                  onClick={() => {
+                    if (width <= 992) closeSidebar();
+                  }}
+                  className={cn(
+                    "flex items-center px-2 py-[6px] text-[#030712] hover:bg-black/5 w-full transition-all rounded-lg",
+                    pathname.includes(route.to) ? "bg-black/5" : "",
+                    !isSidebarOpen && width > 992
+                      ? "w-[45px] justify-center"
+                      : ""
+                  )}
+                >
+                  {route?.icon}
+                  <span
+                    className={cn(
+                      "transition-all break-keep whitespace-pre text-sm",
+                      !isSidebarOpen && width > 992
+                        ? "w-0 overflow-hidden ml-0"
+                        : "animate-fade-in ml-4"
+                    )}
+                  >
+                    {route?.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="flex flex-col gap-4">
+            {extraSideMenu.map((route, i) => (
               <li
                 className={cn("flex items-center min-w-[200px] px-3")}
                 key={i}

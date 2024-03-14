@@ -4,6 +4,8 @@ import {
   Layers,
   Layers3,
   LayoutDashboard,
+  Settings,
+  SlidersHorizontal,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -38,6 +40,7 @@ const pathToIcon: Record<string, ReactNode> = {
 
 export const useMenuConfig = () => {
   // this should come from backend
+
   const config = [
     {
       label: "Dashboard",
@@ -86,6 +89,21 @@ export const useMenuConfig = () => {
       }),
   };
 };
+
+export const extraSideMenu = [
+  {
+    label: "Settings",
+    to: "settings",
+    sort: 1,
+    icon: <Settings size={18} />,
+  },
+  {
+    label: "Configurations",
+    to: "configurations",
+    sort: 2,
+    icon: <SlidersHorizontal size={18} />,
+  },
+];
 
 export const quickActions: CommantActionsList[] = [
   {

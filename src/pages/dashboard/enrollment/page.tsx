@@ -1,22 +1,46 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { useEnrollements } from "@/shared/services/enrollments";
-import { Edit2Icon, EyeIcon, FilterIcon, RefreshCcw } from "lucide-react";
+import { Edit2Icon, EyeIcon, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
-import BottomSheet from "@/components/ui/bottom-sheet";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import TableFilters from "@/components/table-filters";
 
-export interface PageProps {
-  objective?: "" | "/obj2";
-}
+const searchableFields = ["name", "studyId", "ctcId"];
+const filterableFields = ["gender", "objective"];
+const sortabledDateFileds = ["dob", "created"];
 
-const Page = ({ objective = "" }: PageProps) => {
+const genderOptions = [
+  { label: "Male", value: "Male" },
+  { label: "Female", value: "Female" },
+];
+
+const objectiveOptions = [
+  { label: "Objective One", value: "Objective One" },
+  { label: "Objective Two", value: "Objective Two" },
+];
+
+const Page = () => {
+  const [filters, setFilters] = useState<Filter[]>([
+    ...searchableFields.map((key) => ({
+      key,
+      value: [],
+    })),
+    ...filterableFields.map((key) => ({
+      key,
+      value: [],
+    })),
+    ...searchableFields.map((key) => ({
+      key,
+      value: [],
+    })),
+  ]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [openFilters, setOpenFilters] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const {
     enrollments,
     enrollmentsLoading,
@@ -24,23 +48,63 @@ const Page = ({ objective = "" }: PageProps) => {
     enrollmentsRefething,
     enrollmentsError,
   } = useEnrollements({
-    objective,
     paginate: { page, pageSize },
+    ...(filters?.find((filter) => filter?.value?.length && filter?.value?.[0])
+      ? {
+          filter: filters
+            .map((filter) => {
+              if (filter?.value?.[0]?.length) {
+                if (filter?.key === "name") {
+                  return `firstName:ilike:${filter?.value?.[0]},middleName:ilike:${filter?.value?.[0]},surname:ilike:${filter?.value?.[0]}`;
+                }
+                if (searchableFields.includes(filter?.key)) {
+                  return `${filter?.key}:ilike:${filter?.value?.[0]}`;
+                }
+              }
+            })
+            .filter((item) => item !== undefined)
+            .join(","),
+        }
+      : {}),
   });
 
-  const loading = enrollmentsLoading;
+  const loading = enrollmentsLoading || isLoading;
 
   return (
     <div className="space-y-5">
       <div className="flex justify-end ">
         <div className="flex gap-3 items-center animate-fade-in">
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => setOpenFilters(!openFilters)}
-          >
-            <FilterIcon size={15} />
-          </Button>
+          <TableFilters
+            title="Filter Enrollment Table"
+            search={searchableFields.map((key) => ({
+              key,
+              placeholder: "Search " + key,
+              value:
+                filters.find((filter) => filter?.key === key)?.value?.[0] || "",
+            }))}
+            selectInputfilters={filterableFields.map((key) => ({
+              key,
+              placeholder: "Filter " + key,
+              isMulti: true,
+              options:
+                key === "gender"
+                  ? genderOptions
+                  : key === "objective"
+                  ? objectiveOptions
+                  : [],
+              value: [
+                filters.find((filter) => filter?.key === key)?.value?.[0] || "",
+              ],
+            }))}
+            dateFilters={sortabledDateFileds.map((key) => ({
+              key,
+              value: [
+                filters.find((filter) => filter?.key === key)?.value?.[0] || "",
+              ],
+            }))}
+            defaultFilters={filters}
+            onFiltersSubmit={(filters) => setFilters(filters)}
+          />
           <Button size={"sm"} onClick={() => enrollmentsRefetch()}>
             <RefreshCcw
               size={15}
@@ -70,7 +134,12 @@ const Page = ({ objective = "" }: PageProps) => {
                   : "No Data found"
               }
               type={enrollmentsError ? "destructive" : "default"}
-              refetch={() => enrollmentsRefetch()}
+              refetch={() => {
+                setLoading(true);
+                enrollmentsRefetch().finally(() => {
+                  setLoading(false);
+                });
+              }}
             />
           )
         }
@@ -97,7 +166,7 @@ const Page = ({ objective = "" }: PageProps) => {
             accessorKey: "ctcId",
           },
           {
-            header: "Sex",
+            header: "Gender",
             accessorKey: "gender",
             cell: (record) => {
               return record?.row?.original?.gender;
@@ -106,34 +175,9 @@ const Page = ({ objective = "" }: PageProps) => {
           {
             header: "DOB",
             accessorKey: "dob",
-          },
-          {
-            header: "HBC Name",
-            accessorKey: "hbc_name",
-          },
-          {
-            header: "HBC Number",
-            accessorKey: "hbc_number",
-          },
-          {
-            header: "Participant Mobile",
-            accessorKey: "phone_one",
-          },
-          {
-            header: "Enrolled Date",
-            accessorKey: "created",
-          },
-          {
-            header: "Screening ID",
-            accessorKey: "screening_id",
-          },
-          {
-            header: "Scheduled Return to Care Date",
-            accessorKey: "scheduled_return_to_care",
-          },
-          {
-            header: "Collector",
-            accessorKey: "collector.full_name",
+            cell(record) {
+              return format(record.row.original.dob, "dd MMM, yyyy");
+            },
           },
           {
             header: "Objective",
@@ -167,16 +211,6 @@ const Page = ({ objective = "" }: PageProps) => {
           },
         ]}
       />
-      <BottomSheet
-        open={openFilters}
-        close={() => setOpenFilters(false)}
-        title="Title"
-      >
-        <div className="min-h-60 space-y-5 px-4">
-          <Input />
-          <Button onClick={() => setOpenFilters(false)}>Close</Button>
-        </div>
-      </BottomSheet>
     </div>
   );
 };

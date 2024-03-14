@@ -88,6 +88,13 @@ interface Enrollment {
   gender: string;
 }
 
+interface Field {
+  name: string;
+  mandatory: boolean;
+  type: "DATE" | "BOOLEAN" | "TEXT";
+  description?: string;
+}
+
 // End API
 
 // Start UI
@@ -110,6 +117,16 @@ interface GraphObject {
   name: string;
   uv: number;
   pv?: number;
+}
+
+interface ValueLabel {
+  label: string;
+  value: string;
+}
+
+interface Filter {
+  key: string,
+  value: string[]
 }
 
 // End UI

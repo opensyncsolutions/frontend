@@ -27,7 +27,7 @@ const BottomSheet = ({
   return (
     <Drawer open={open} dismissible onClose={close}>
       <DrawerContent>
-        <div className="w-full max-w-2xl m-auto">
+        <div className="w-full max-w-2xl m-auto overflow-y-auto max-h-[calc(100dvh+60px)] py-12">
           <DrawerHeader className="flex justify-between items-center">
             {title && <DrawerTitle>{title}</DrawerTitle>}
             <Button onClick={close} variant={"outline"}>

@@ -35,14 +35,14 @@ import { AxiosInstance } from "../configs/api";
 // ];
 
 export const useEnrollements = ({
-  objective,
   paginate: { page, pageSize },
+  filter,
 }: {
-  objective: string;
   paginate: Paginate;
+  filter?: string;
 }) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["enrollments", objective, page, pageSize],
+    ["enrollments", page, pageSize, filter],
     async () => {
       const params: Record<string, string | number | boolean> = {
         fields: "*",
@@ -50,6 +50,7 @@ export const useEnrollements = ({
 
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
+      if (filter) params.filter = filter;
 
       const { data } = await AxiosInstance.get<{
         enrollments: Enrollment[];
