@@ -6,8 +6,7 @@ import { Button } from "../ui/button";
 import { FilterIcon } from "lucide-react";
 import SelectInput from "../ui/select-input";
 import DatePicker from "../ui/date-picker";
-
-const dateFormat = "dd-MM-yyyy";
+import { DATE_FORMAT } from "@/shared/constants/constants";
 
 interface TableFiltersProps {
   title?: ReactNode;
@@ -44,6 +43,17 @@ const TableFilters = ({
 
   return (
     <>
+      {filters?.find((filter) => filter?.value?.[0]?.length) && (
+        <button
+          className="text-red-500 text-xs"
+          onClick={() => {
+            setFilters([]);
+            onFiltersSubmit?.([]);
+          }}
+        >
+          Clear FIlters
+        </button>
+      )}
       <Button
         variant={"outline"}
         size={"sm"}
@@ -173,10 +183,10 @@ const TableFilters = ({
                           );
                           let value: string[] = [];
                           if (date?.from) {
-                            value = [format(date?.from, dateFormat)];
+                            value = [format(date?.from, DATE_FORMAT)];
                           }
                           if (date?.to) {
-                            value = [...value, format(date?.to, dateFormat)];
+                            value = [...value, format(date?.to, DATE_FORMAT)];
                           }
                           if (filterIndex >= 0) {
                             filtersCopy[filterIndex] = {
@@ -198,12 +208,12 @@ const TableFilters = ({
                       value={{
                         ...(value?.[0]
                           ? {
-                              from: parse(value?.[0], dateFormat, new Date()),
+                              from: parse(value?.[0], DATE_FORMAT, new Date()),
                             }
                           : { from: undefined }),
                         ...(value?.[1]
                           ? {
-                              to: parse(value?.[1], dateFormat, new Date()),
+                              to: parse(value?.[1], DATE_FORMAT, new Date()),
                             }
                           : {}),
                       }}
@@ -213,6 +223,16 @@ const TableFilters = ({
               : null}
           </div>
           <div className="text-right space-x-4">
+            {filters?.find((filter) => filter?.value?.[0]?.length) && (
+              <button
+                className="text-red-500 text-xs"
+                onClick={() => {
+                  setFilters([]);
+                }}
+              >
+                Clear FIlters
+              </button>
+            )}
             <Button onClick={() => setOpenFilters(false)} variant={"outline"}>
               Close
             </Button>

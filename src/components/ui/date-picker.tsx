@@ -60,11 +60,13 @@ const DatePicker = ({
         <PopoverContent className="w-auto p-0">
           <Calendar
             mode="range"
-            fromDate={new Date()}
-            disabled={disabled}
             selected={date}
+            toDate={new Date()}
+            disabled={disabled}
             onSelect={(date) => onChange?.(date)}
             initialFocus
+            defaultMonth={date?.from}
+            numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>

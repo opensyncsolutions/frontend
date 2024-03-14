@@ -1,1 +1,2 @@
-export const API_TIMEOUT = 20000;
+export const API_TIMEOUT = 15000;
+export const DATE_FORMAT = "yyyy-MMM-dd";

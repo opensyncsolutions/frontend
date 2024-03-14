@@ -4,6 +4,7 @@ import { Navigate, Route } from "react-router-dom";
 
 const Home = lazy(() => import("@/pages/dashboard/home"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
+const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
 const Users = lazy(() => import("@/pages/dashboard/users"));
 
 const DashboardRoutes = () => {
@@ -35,6 +36,14 @@ const DashboardRoutes = () => {
         element={
           <Suspense fallback={PageLoader}>
             <Enrollment />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/followup"
+        element={
+          <Suspense fallback={PageLoader}>
+            <FollowUp />
           </Suspense>
         }
       />

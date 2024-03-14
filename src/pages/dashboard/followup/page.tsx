@@ -1,30 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { useEnrollements } from "@/shared/services/enrollments";
+import { useFollowUps } from "@/shared/services/followups";
 import { Edit2Icon, EyeIcon, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import TableFilters from "@/components/table-filters";
+// import TableFilters from "@/components/table-filters";
 
-const searchableFields = ["name", "studyId", "ctcId"];
-const filterableFields = ["gender", "objective"];
-const sortabledDateFileds = ["dob", "created"];
+const searchableFields: string[] = [];
+const filterableFields: string[] = [];
+// const sortabledDateFileds: string[] = [];
 
-const genderOptions = [
-  { label: "Male", value: "Male" },
-  { label: "Female", value: "Female" },
-];
+// const genderOptions = [
+//   { label: "Male", value: "Male" },
+//   { label: "Female", value: "Female" },
+// ];
 
-const objectiveOptions = [
-  { label: "Objective One", value: "Objective One" },
-  { label: "Objective Two", value: "Objective Two" },
-];
+// const objectiveOptions = [
+//   { label: "Objective One", value: "Objective One" },
+//   { label: "Objective Two", value: "Objective Two" },
+// ];
 
 const Page = () => {
-  const [filters, setFilters] = useState<Filter[]>([
+  const [
+    filters,
+    // setFilters
+  ] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
       key,
       value: [],
@@ -42,12 +45,12 @@ const Page = () => {
   const [pageSize, setPageSize] = useState(10);
   const [isLoading, setLoading] = useState(false);
   const {
-    enrollments,
-    enrollmentsLoading,
-    enrollmentsRefetch,
-    enrollmentsRefething,
-    enrollmentsError,
-  } = useEnrollements({
+    followups,
+    followupsLoading,
+    followupsRefetch,
+    followupsRefething,
+    followupsError,
+  } = useFollowUps({
     paginate: { page, pageSize },
     ...(filters?.find((filter) => filter?.value?.length && filter?.value?.[0])
       ? {
@@ -60,11 +63,6 @@ const Page = () => {
                 if (searchableFields.includes(filter?.key)) {
                   return `${filter?.key}:ilike:${filter?.value?.[0]}`;
                 }
-                if (sortabledDateFileds.includes(filter?.key)) {
-                  return `${filter?.key}:btn:${filter?.value?.[0]}${
-                    filter?.value?.[1] ? "," + filter?.value?.[1] : ""
-                  }`;
-                }
               }
             })
             .filter((item) => item !== undefined)
@@ -73,13 +71,13 @@ const Page = () => {
       : {}),
   });
 
-  const loading = enrollmentsLoading || isLoading;
+  const loading = followupsLoading || isLoading;
 
   return (
     <div className="space-y-5">
       <div className="flex justify-end ">
         <div className="flex gap-3 items-center animate-fade-in">
-          <TableFilters
+          {/* <TableFilters
             title="Filter Enrollment Table"
             search={searchableFields.map((key) => ({
               key,
@@ -109,11 +107,11 @@ const Page = () => {
             }))}
             defaultFilters={filters}
             onFiltersSubmit={(filters) => setFilters(filters)}
-          />
-          <Button size={"sm"} onClick={() => enrollmentsRefetch()}>
+          /> */}
+          <Button size={"sm"} onClick={() => followupsRefetch()}>
             <RefreshCcw
               size={15}
-              className={cn(enrollmentsRefething ? "animate-rotate" : "")}
+              className={cn(followupsRefething ? "animate-rotate" : "")}
             />
           </Button>
         </div>
@@ -126,7 +124,7 @@ const Page = () => {
           fetching: loading,
           setPage,
           setPageSize,
-          total: enrollments ? Math.ceil(enrollments.total / pageSize) : 1,
+          total: followups ? Math.ceil(followups.total / pageSize) : 1,
         }}
         noDataMessage={
           loading ? undefined : (
@@ -134,63 +132,51 @@ const Page = () => {
               message={
                 loading
                   ? "Please wait"
-                  : enrollmentsError
-                  ? formatErrorMessage(enrollmentsError)
+                  : followupsError
+                  ? formatErrorMessage(followupsError)
                   : "No Data found"
               }
-              type={enrollmentsError ? "destructive" : "default"}
+              type={followupsError ? "destructive" : "default"}
               refetch={() => {
                 setLoading(true);
-                enrollmentsRefetch().finally(() => {
+                followupsRefetch().finally(() => {
                   setLoading(false);
                 });
               }}
             />
           )
         }
-        data={enrollments?.enrollments || []}
+        data={followups?.followups || []}
         onRowClick={() => {}}
         columns={[
-          { header: "Organization Name", accessorKey: "organisationUnit.name" },
           {
-            header: "Participant Name",
-            cell: (record) => {
-              return (
-                (record?.row?.original?.firstName || "") +
-                " " +
-                (record?.row?.original?.surname || "")
-              );
-            },
-          },
-          {
-            header: "Status",
-            accessorKey: "status",
-          },
-          {
-            header: "Study ID",
-            accessorKey: "studyId",
-          },
-          {
-            header: "CTC ID",
-            accessorKey: "ctcId",
-          },
-          {
-            header: "Gender",
-            accessorKey: "gender",
-            cell: (record) => {
-              return record?.row?.original?.gender;
-            },
-          },
-          {
-            header: "DOB",
-            accessorKey: "dob",
+            header: "Created",
+            accessorKey: "created",
             cell(record) {
-              return format(record.row.original.dob, "dd MMM, yyyy");
+              return format(record.row.original.created, "dd MMM, yyyy");
             },
           },
           {
-            header: "Objective",
-            accessorKey: "objective.name",
+            header: "Created By",
+            cell: (record) => {
+              return record?.row?.original?.createdBy?.username || "";
+            },
+          },
+          {
+            header: "Next Visit",
+            accessorKey: "nextVisit",
+            cell(record) {
+              const date = record.row.original.nextVisit;
+              return date ? format(date, "dd MMM, yyyy") : "-";
+            },
+          },
+          {
+            header: "First Return",
+            accessorKey: "firstReturn",
+            cell(record) {
+              const date = record.row.original.firstReturn;
+              return date ? format(date, "dd MMM, yyyy") : "-";
+            },
           },
           {
             header: "Action",

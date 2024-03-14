@@ -88,6 +88,16 @@ interface Enrollment {
   gender: string;
 }
 
+interface FollowUp {
+  id: string;
+  created: string;
+  updated: string;
+  createdBy: User;
+  enrollment: Enrollment;
+  nextVisit?: string
+  firstReturn?: string
+}
+
 interface Field {
   name: string;
   mandatory: boolean;
@@ -125,8 +135,8 @@ interface ValueLabel {
 }
 
 interface Filter {
-  key: string,
-  value: string[]
+  key: string;
+  value: string[];
 }
 
 // End UI
