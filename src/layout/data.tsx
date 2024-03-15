@@ -92,16 +92,22 @@ export const useMenuConfig = () => {
 
 export const extraSideMenu = [
   {
-    label: "Settings",
-    to: "settings",
+    label: "Roles & Privileges",
+    to: "roles-and-privileges",
     sort: 1,
-    icon: <Settings size={18} />,
+    icon: <Users size={18} />,
   },
   {
     label: "Configurations",
     to: "configurations",
     sort: 2,
     icon: <SlidersHorizontal size={18} />,
+  },
+  {
+    label: "Settings",
+    to: "settings",
+    sort: 1,
+    icon: <Settings size={18} />,
   },
 ];
 

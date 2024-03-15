@@ -63,7 +63,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
           <Menu />
         </Button>
         <span key={selectedTab} className="animate-fade-in capitalize">
-          {selectedTab}
+          {selectedTab?.replace(new RegExp("-", "g"), " ")}
         </span>
       </div>
       <div className="flex gap-3 items-center">

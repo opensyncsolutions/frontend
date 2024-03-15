@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 
 const searchableFields = ["name", "studyId", "ctcId"];
-const filterableFields = ["gender", "objective"];
+const filterableFields = ["gender", "status", "objective"];
 const sortabledDateFileds = ["dob", "created"];
 
 const genderOptions = [
@@ -23,6 +23,11 @@ const objectiveOptions = [
   { label: "Objective Two", value: "Objective Two" },
 ];
 
+const statusOptions = [
+  { label: "CONTROL", value: "CONTROL" },
+  { label: "INTERVENTION", value: "INTERVENTION" },
+];
+
 const Page = () => {
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
@@ -33,7 +38,7 @@ const Page = () => {
       key,
       value: [],
     })),
-    ...searchableFields.map((key) => ({
+    ...sortabledDateFileds.map((key) => ({
       key,
       value: [],
     })),
@@ -96,6 +101,8 @@ const Page = () => {
                   ? genderOptions
                   : key === "objective"
                   ? objectiveOptions
+                  : key === "status"
+                  ? statusOptions
                   : [],
               value: [
                 filters.find((filter) => filter?.key === key)?.value?.[0] || "",

@@ -113,6 +113,7 @@ const TableFilters = ({
                     key={filter?.key}
                     options={filter.options}
                     isMulti={filter?.isMulti}
+                    placeholder={`Filter ${filter?.key}`}
                     onChange={(e) => {
                       setFilters((filters) => {
                         let filtersCopy = [...filters];

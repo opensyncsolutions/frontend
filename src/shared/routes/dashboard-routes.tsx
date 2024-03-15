@@ -7,6 +7,10 @@ const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
 const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
 const Users = lazy(() => import("@/pages/dashboard/users"));
 
+const RolesPrivileges = lazy(
+  () => import("@/pages/dashboard/roles-privileges")
+);
+
 const DashboardRoutes = () => {
   const PageLoader = (
     <div className="flex justify-center h-40">
@@ -52,6 +56,14 @@ const DashboardRoutes = () => {
         element={
           <Suspense fallback={PageLoader}>
             <Users />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/roles-and-privileges"
+        element={
+          <Suspense fallback={PageLoader}>
+            <RolesPrivileges />
           </Suspense>
         }
       />

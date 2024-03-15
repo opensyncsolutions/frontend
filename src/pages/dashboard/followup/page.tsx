@@ -36,10 +36,6 @@ const Page = () => {
       key,
       value: [],
     })),
-    ...searchableFields.map((key) => ({
-      key,
-      value: [],
-    })),
   ]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);

@@ -94,8 +94,8 @@ interface FollowUp {
   updated: string;
   createdBy: User;
   enrollment: Enrollment;
-  nextVisit?: string
-  firstReturn?: string
+  nextVisit?: string;
+  firstReturn?: string;
 }
 
 interface Field {
@@ -103,6 +103,24 @@ interface Field {
   mandatory: boolean;
   type: "DATE" | "BOOLEAN" | "TEXT";
   description?: string;
+}
+
+interface Role {
+  id: string;
+  created: string;
+  updated: string;
+  name: string;
+  system: boolean;
+  privileges: Privilege[];
+}
+
+interface Privilege {
+  id: string;
+  created: string;
+  updated: string;
+  system: boolean;
+  name: string;
+  value: string;
 }
 
 // End API

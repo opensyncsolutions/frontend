@@ -209,7 +209,7 @@ export function DataTablePagination<TData>({
     debounceDuration
   );
   return (
-    <div className="flex items-center justify-between p-4">
+    <div className="flex items-center justify-between py-4">
       <p className="text-sm font-medium">
         Page {table.getState().pagination.pageIndex + 1} of{" "}
         {table?.getPageCount()}
