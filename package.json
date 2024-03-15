@@ -7,6 +7,7 @@
     "dev": "vite",
     "start": "vite --port 3000 --host",
     "build": "tsc && vite build",
+    "package": "npm run build && cp manifest.webapp dist && cd dist && zip -r -D app.zip . ",
     "preview": "vite preview"
   },
   "dependencies": {
