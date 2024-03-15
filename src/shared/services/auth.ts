@@ -7,7 +7,11 @@ export const useGetMe = () => {
   const { data, refetch, isLoading, error } = useQuery(
     [],
     async () => {
-      const { data } = await AxiosInstance.get<User>("/me");
+      const { data } = await AxiosInstance.get<User>("/me", {
+        params: {
+          fields: "*",
+        },
+      });
       return data;
     },
     {

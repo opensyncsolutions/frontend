@@ -22,6 +22,7 @@ interface User {
   dp: string;
   name: string;
   active: boolean;
+  roles?: Role[];
 }
 
 interface TotalEligible {
