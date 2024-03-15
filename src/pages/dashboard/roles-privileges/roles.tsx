@@ -5,16 +5,24 @@ import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
 import { useRoles } from "@/shared/services/roles-privileges";
 import { formatErrorMessage } from "@/shared/utils/helpers";
-import { Edit2Icon, EyeIcon, PlusIcon, RefreshCcw } from "lucide-react";
+import {
+  Edit2Icon,
+  EyeIcon,
+  PlusIcon,
+  RefreshCcw,
+  Trash2Icon,
+} from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditRole from "./create-edit-role";
+import DeleteRole from "./delete-role";
 
 const searchableFields = ["name", "privileges.value"];
 
 const selectedRoleToEdit = "selectedRoleToEdit";
 
 const Roles = () => {
+  const [roleToDelete, setRoleToDelete] = useState("");
   const [search, setSearch] = useSearchParams();
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
@@ -167,6 +175,18 @@ const Roles = () => {
                       <Edit2Icon size={15} />
                     </button>
                   )}
+                  {!record?.row?.original.system && (
+                    <button
+                      className="px-2 py-2 text-red-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                        setRoleToDelete(record?.row?.original?.id);
+                      }}
+                    >
+                      <Trash2Icon size={15} />
+                    </button>
+                  )}
                 </div>
               );
             },
@@ -183,6 +203,13 @@ const Roles = () => {
           setSearch(search);
         }}
         refetch={() => rolesRefetch()}
+      />
+      <DeleteRole
+        id={roleToDelete || ""}
+        cb={(refetch) => {
+          if (refetch) rolesRefetch();
+          setRoleToDelete("");
+        }}
       />
     </div>
   );

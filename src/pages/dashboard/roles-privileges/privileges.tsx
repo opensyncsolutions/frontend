@@ -5,10 +5,17 @@ import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
 import { usePrivileges } from "@/shared/services/roles-privileges";
 import { formatErrorMessage } from "@/shared/utils/helpers";
-import { Edit2Icon, EyeIcon, PlusIcon, RefreshCcw } from "lucide-react";
+import {
+  Edit2Icon,
+  EyeIcon,
+  PlusIcon,
+  RefreshCcw,
+  Trash2Icon,
+} from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditPrivilege from "./create-edit-privilege";
+import DeletePrivilege from "./delete-privilege";
 
 const searchableFields = ["name", "value"];
 
@@ -16,6 +23,7 @@ const selectedPrivilegeToEdit = "selectedPrivilegeToEdit";
 
 const Privileges = () => {
   const [search, setSearch] = useSearchParams();
+  const [privilegeToDelete, setPrivilegeToDelete] = useState("");
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
       key,
@@ -162,6 +170,18 @@ const Privileges = () => {
                       <Edit2Icon size={15} />
                     </button>
                   )}
+                  {!record?.row?.original.system && (
+                    <button
+                      className="px-2 py-2 text-red-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                        setPrivilegeToDelete(record?.row?.original?.id);
+                      }}
+                    >
+                      <Trash2Icon size={15} />
+                    </button>
+                  )}
                 </div>
               );
             },
@@ -179,6 +199,13 @@ const Privileges = () => {
           setSearch(search);
         }}
         refetch={() => privilegesRefetch()}
+      />
+      <DeletePrivilege
+        id={privilegeToDelete || ""}
+        cb={(refetch) => {
+          if (refetch) privilegesRefetch();
+          setPrivilegeToDelete("");
+        }}
       />
     </div>
   );
