@@ -8,9 +8,6 @@ const Error = lazy(() => import("@/pages/error"));
 
 // authentication pages
 const Login = lazy(() => import("@/pages/authentication/login"));
-// const ForgotPassword = lazy(
-//   () => import("@/pages/authentication/forgot-password")
-// );
 
 // authenticated pages
 const Layout = lazy(() => import("@/layout"));
@@ -47,14 +44,6 @@ const App = () => {
               </Suspense>
             }
           />
-          {/* <Route
-            path="/forgot-password"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <ForgotPassword />
-              </Suspense>
-            }
-          /> */}
         </>
       )}
       {me && !meLoading && (

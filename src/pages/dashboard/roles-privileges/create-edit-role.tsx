@@ -142,11 +142,11 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
       <Controller
         name="privileges"
         control={control}
-        render={({ field }) => {
+        render={({ field: { ref, ...field } }) => {
           return (
             <SelectInput
               label="Value"
-              placeholder="Value"
+              placeholder="Privileges"
               disabled={loading}
               isMulti
               options={

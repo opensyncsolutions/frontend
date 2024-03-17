@@ -1,18 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Edit2Icon, EyeIcon, RefreshCcw } from "lucide-react";
+import { EyeIcon, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useUsers } from "@/shared/services/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import CreateUser from "./create-user";
+import User from "./user";
+import { useSearchParams } from "react-router-dom";
 
 const searchableFields = ["name", "username"];
 
 const Page = () => {
+  const [search, setSearch] = useSearchParams();
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
       key,
@@ -125,14 +128,6 @@ const Page = () => {
             cell: (record) => (record?.row?.original?.active ? "Yes" : "No"),
           },
           {
-            header: "Last Login",
-            accessorKey: "lastLogin",
-            cell: (record) =>
-              record?.row?.original?.lastLogin
-                ? format(record?.row?.original?.lastLogin, "dd MMM, yyyy")
-                : "-",
-          },
-          {
             header: "Roles",
             accessorKey: "roles",
             cell: (record) =>
@@ -146,21 +141,20 @@ const Page = () => {
           {
             header: "Action",
             size: 100,
-            cell: () => {
+            cell: (record) => {
               return (
                 <div className="flex justify-between gap-3 max-w-[100px]">
-                  <button className="px-2 py-2">
-                    <EyeIcon size={15} />
-                  </button>
                   <button
                     className="px-2 py-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.nativeEvent.stopImmediatePropagation();
-                      // edit clicked
+                    onClick={() => {
+                      if (search.get("selected")) {
+                        search.delete("selected");
+                      }
+                      search.append("selected", record?.row?.original?.id);
+                      setSearch(search);
                     }}
                   >
-                    <Edit2Icon size={15} />
+                    <EyeIcon size={15} />
                   </button>
                 </div>
               );
@@ -170,6 +164,26 @@ const Page = () => {
             },
           },
         ]}
+      />
+      <CreateUser
+        open={search.get("selected") === "new"}
+        close={() => {
+          if (search.get("selected")) search.delete("selected");
+          setSearch(search);
+        }}
+        refetch={() => usersRefetch()}
+      />
+      <User
+        selected={
+          search.get("selected") && search.get("selected") !== "new"
+            ? search.get("selected")
+            : ""
+        }
+        close={() => {
+          if (search.get("selected")) search.delete("selected");
+          setSearch(search);
+        }}
+        refetch={() => usersRefetch()}
       />
     </div>
   );

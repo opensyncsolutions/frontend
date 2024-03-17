@@ -17,6 +17,7 @@ const DashboardRoutes = () => {
       <Loader />
     </div>
   );
+
   return (
     <>
       <Route

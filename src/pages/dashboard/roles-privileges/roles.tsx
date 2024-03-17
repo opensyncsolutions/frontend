@@ -5,17 +5,12 @@ import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
 import { useRoles } from "@/shared/services/roles-privileges";
 import { formatErrorMessage } from "@/shared/utils/helpers";
-import {
-  Edit2Icon,
-  EyeIcon,
-  PlusIcon,
-  RefreshCcw,
-  Trash2Icon,
-} from "lucide-react";
+import { Edit2Icon, PlusIcon, RefreshCcw, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditRole from "./create-edit-role";
 import DeleteRole from "./delete-role";
+import { CellContext } from "@tanstack/react-table";
 
 const searchableFields = ["name", "privileges.value"];
 
@@ -147,53 +142,54 @@ const Roles = () => {
               );
             },
           },
-          {
-            header: "Action",
-            size: 100,
-            cell: (record) => {
-              return (
-                <div className="flex justify-between gap-3 max-w-[100px]">
-                  <button className="px-2 py-2">
-                    <EyeIcon size={15} />
-                  </button>
-                  {!record?.row?.original.system && (
-                    <button
-                      className="px-2 py-2"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.nativeEvent.stopImmediatePropagation();
-                        if (search.get(selectedRoleToEdit)) {
-                          search.delete(selectedRoleToEdit);
-                        }
-                        search.append(
-                          selectedRoleToEdit,
-                          record?.row?.original?.id
-                        );
-                        setSearch(search);
-                      }}
-                    >
-                      <Edit2Icon size={15} />
-                    </button>
-                  )}
-                  {!record?.row?.original.system && (
-                    <button
-                      className="px-2 py-2 text-red-500"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.nativeEvent.stopImmediatePropagation();
-                        setRoleToDelete(record?.row?.original?.id);
-                      }}
-                    >
-                      <Trash2Icon size={15} />
-                    </button>
-                  )}
-                </div>
-              );
-            },
-            meta: {
-              className: "sticky right-0",
-            },
-          },
+          ...(roles?.roles?.find((role) => !role?.system)
+            ? [
+                {
+                  header: "Action",
+                  size: 100,
+                  cell: (record: CellContext<Role, unknown>) => {
+                    return (
+                      <div className="flex justify-between gap-3 max-w-[100px]">
+                        {!record?.row?.original.system && (
+                          <button
+                            className="px-2 py-2"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.nativeEvent.stopImmediatePropagation();
+                              if (search.get(selectedRoleToEdit)) {
+                                search.delete(selectedRoleToEdit);
+                              }
+                              search.append(
+                                selectedRoleToEdit,
+                                record?.row?.original?.id
+                              );
+                              setSearch(search);
+                            }}
+                          >
+                            <Edit2Icon size={15} />
+                          </button>
+                        )}
+                        {!record?.row?.original.system && (
+                          <button
+                            className="px-2 py-2 text-red-500"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.nativeEvent.stopImmediatePropagation();
+                              setRoleToDelete(record?.row?.original?.id);
+                            }}
+                          >
+                            <Trash2Icon size={15} />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  },
+                  meta: {
+                    className: "sticky right-0",
+                  },
+                },
+              ]
+            : []),
         ]}
       />
       <CreateEditRole

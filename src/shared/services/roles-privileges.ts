@@ -6,15 +6,17 @@ import { toast } from "sonner";
 export const useRoles = ({
   paginate: { page, pageSize },
   filter,
+  fields,
 }: {
   paginate: Paginate;
   filter?: string;
+  fields?: string[];
 }) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     ["roles", page, pageSize, filter],
     async () => {
       const params: Record<string, string | number | boolean> = {
-        fields: "name,system,privileges,id",
+        fields: fields?.join(",") || "name,system,privileges,id",
       };
 
       if (pageSize) params.pageSize = pageSize;
