@@ -109,6 +109,15 @@ type Disbursement = {
   createdBy: User;
 };
 
+type dataCollection = {
+  id: string;
+  created: string;
+  updated: string;
+  midlineHvlStatus: string;
+  baselineSurveyStatus: string;
+  endlineSurveyStatus: string;
+};
+
 interface Field {
   name: string;
   mandatory: boolean;

@@ -9,6 +9,11 @@ const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
 const CashDisbursement = lazy(
   () => import("@/pages/dashboard/cash-disbursement")
 );
+const DataCollection = lazy(() => import("@/pages/dashboard/data-collection"));
+const BloodCollection = lazy(
+  () => import("@/pages/dashboard/blood-collection")
+);
+
 const Users = lazy(() => import("@/pages/dashboard/users"));
 
 const RolesPrivileges = lazy(
@@ -29,6 +34,8 @@ const DashboardRoutes = (roles: Role[]) => {
     readUsersRole,
     readFollowUpsRole,
     readDisbursementsRole,
+    readBloodCollectionRole,
+    readDataCollectionRole,
   } = getRoles(roles);
 
   return (
@@ -75,6 +82,26 @@ const DashboardRoutes = (roles: Role[]) => {
           element={
             <Suspense fallback={PageLoader}>
               <CashDisbursement />
+            </Suspense>
+          }
+        />
+      )}
+      {readDataCollectionRole && (
+        <Route
+          path="/data-collections"
+          element={
+            <Suspense fallback={PageLoader}>
+              <DataCollection />
+            </Suspense>
+          }
+        />
+      )}
+      {readBloodCollectionRole && (
+        <Route
+          path="/blood-collections"
+          element={
+            <Suspense fallback={PageLoader}>
+              <BloodCollection />
             </Suspense>
           }
         />

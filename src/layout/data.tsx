@@ -35,9 +35,9 @@ const pathToIcon: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard size={18} />,
   enrollments: <UserPlus size={18} />,
   followup: <CalendarDays size={18} />,
-  "blood-collection": <Layers size={18} />,
+  "blood-collections": <Layers size={18} />,
   "cash-disbursement": <Banknote size={18} />,
-  "data-collection": <Layers3 size={18} />,
+  "data-collections": <Layers3 size={18} />,
   users: <Users size={18} />,
 };
 
