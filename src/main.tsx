@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./app";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/index.sass";
+import { LanguageProvider } from "@/shared/contexts/languages";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +15,13 @@ if (process.env.NODE_ENV !== "development") {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-      <Toaster />
-    </QueryClientProvider>
+    <LanguageProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+        <Toaster />
+      </QueryClientProvider>
+    </LanguageProvider>
   </React.StrictMode>
 );

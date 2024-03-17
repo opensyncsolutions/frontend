@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
-import { Menu, Skull } from "lucide-react";
+import { Check, Languages, Menu, Skull } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -15,13 +15,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ButtonHTMLAttributes } from "react";
-import { useQuickActions } from "./data";
+import { languages, useQuickActions } from "./data";
 import { DialogClose } from "@/components/ui/dialog";
 import { CommandGroup } from "@/components/ui/command";
 import { useHeaderHelpers } from "./helpers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetMe } from "@/shared/services/auth";
 import { useLocation } from "react-router-dom";
+import { useLanguage } from "@/shared/contexts/languages";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -29,6 +30,8 @@ interface HeaderProps {
 }
 
 const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
+  const { language, updateLanguage } = useLanguage();
+
   const { width } = useWindowSize();
   const {
     open,
@@ -68,6 +71,35 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
         </span>
       </div>
       <div className="flex gap-3 items-center">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="h-8 w-8 !p-0">
+              <Languages size={18} />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit px-0 py-2">
+            <div className="flex flex-col">
+              {languages.map(({ label, abbrev }, index) => (
+                <Button
+                  onClick={() => {
+                    updateLanguage({
+                      type: "SET_LANGUAGE",
+                      payload: abbrev,
+                    });
+                  }}
+                  key={index}
+                  variant={"ghost"}
+                  className="!px-4 justify-start gap-2"
+                >
+                  {language === abbrev ? (
+                    <Check size={18} className="animate-fade-in" />
+                  ) : null}{" "}
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
         <Button
           onClick={() => {
             setOpen(true);

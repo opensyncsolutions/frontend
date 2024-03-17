@@ -20,6 +20,17 @@ export type SidebarRoutes = {
   to: string;
 };
 
+export const languages = [
+  {
+    label: "English",
+    abbrev: "en",
+  },
+  {
+    label: "Swahili",
+    abbrev: "sw",
+  },
+];
+
 export type CommandActions = "logout";
 
 export type CommantActionsList = {
@@ -101,10 +112,17 @@ export const useExtraSideMenu = () => {
 
   const { menu } = useGetMenu();
 
-  const { readAuthorityRole, readRolesRole } = getRoles(me?.roles || []);
+  const {
+    readAuthorityRole,
+    readRolesRole,
+    readMenuRole,
+    readFieldsRole,
+    readFormsRole,
+    readObjectivesRole,
+  } = getRoles(me?.roles || []);
   return [
     ...((readAuthorityRole || readRolesRole) &&
-    menu?.menus?.find((menu) => menu?.path === "roles-and-priviledges")
+    menu?.menus?.find((menu) => menu?.path === "roles-and-priviledes")
       ? [
           {
             label: "Roles & Privileges",
@@ -114,12 +132,16 @@ export const useExtraSideMenu = () => {
           },
         ]
       : []),
-    {
-      label: "Configurations",
-      path: "configurations",
-      sort: 2,
-      icon: <SlidersHorizontal size={18} />,
-    },
+    ...(readMenuRole || readFieldsRole || readFormsRole || readObjectivesRole
+      ? [
+          {
+            label: "Configurations",
+            path: "configurations",
+            sort: 2,
+            icon: <SlidersHorizontal size={18} />,
+          },
+        ]
+      : []),
     {
       label: "Settings",
       path: "settings",
@@ -131,9 +153,58 @@ export const useExtraSideMenu = () => {
 
 export const useQuickActions = () => {
   const { menu } = useGetMenu();
+  const { me } = useGetMe();
+  const {
+    readEnrollmentsRole,
+    readUsersRole,
+    readFollowUpsRole,
+    readDisbursementsRole,
+    readBloodCollectionRole,
+    readDataCollectionRole,
+
+    readAuthorityRole,
+    readRolesRole,
+    readMenuRole,
+    readFieldsRole,
+    readFormsRole,
+    readObjectivesRole,
+  } = getRoles(me?.roles || []);
   const quickActions: CommantActionsList[] = [
     ...(menu?.menus
       ? menu?.menus
+          ?.filter((menu) => {
+            //  check roles as well
+            let canAccess = false;
+            if (menu.path === "dashboard") {
+              canAccess = true;
+            }
+            if (readEnrollmentsRole && menu.path === "enrollments") {
+              canAccess = true;
+            }
+            if (readUsersRole && menu.path === "users") {
+              canAccess = true;
+            }
+            if (readFollowUpsRole && menu.path === "followup") {
+              canAccess = true;
+            }
+            if (readDisbursementsRole && menu.path === "cash-disbursement") {
+              canAccess = true;
+            }
+            if (readBloodCollectionRole && menu.path === "blood-collection") {
+              canAccess = true;
+            }
+            if (readDataCollectionRole && menu.path === "data-collection") {
+              canAccess = true;
+            }
+            if (
+              (readAuthorityRole || readRolesRole) &&
+              menu.path === "roles-and-privileges"
+            ) {
+              canAccess = true;
+            }
+
+            return pathToIcon?.[menu?.path] && canAccess;
+          })
           ?.map((menu) => {
             return {
               path: menu?.path,
@@ -143,6 +214,16 @@ export const useQuickActions = () => {
             };
           })
           ?.reverse()
+      : []),
+    ...(readFieldsRole || readFormsRole || readMenuRole || readObjectivesRole
+      ? [
+          {
+            path: "configurations",
+            name: "Configurations",
+            title: "Configurations",
+            possibleKeywords: `Configurations configurations`,
+          },
+        ]
       : []),
     {
       name: "Logout",
