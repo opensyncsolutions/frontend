@@ -109,13 +109,22 @@ type Disbursement = {
   createdBy: User;
 };
 
-type dataCollection = {
+type DataCollection = {
   id: string;
   created: string;
   updated: string;
   midlineHvlStatus: string;
   baselineSurveyStatus: string;
   endlineSurveyStatus: string;
+};
+
+type BloodCollection = {
+  id: string;
+  created: string;
+  updated: string;
+  mdhCollection: string;
+  result: string;
+  resultDate: string;
 };
 
 interface Field {

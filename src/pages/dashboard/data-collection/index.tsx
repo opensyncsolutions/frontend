@@ -13,7 +13,7 @@ const DataCollection = () => {
           label: "Data Collection",
         },
       ]}
-      title="data Collection"
+      title="Data Collection"
     >
       <Page />
     </PageTemplate>

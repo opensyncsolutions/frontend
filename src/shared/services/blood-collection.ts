@@ -20,7 +20,7 @@ export const useBloodCollections = ({
       if (filter) params.filter = filter;
 
       const { data } = await AxiosInstance.get<{
-        disbursements: Disbursement[];
+        bloodCollections: BloodCollection[];
         total: number;
         page: number;
         pageSize: number;

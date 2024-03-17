@@ -20,7 +20,7 @@ export const useDataCollections = ({
       if (filter) params.filter = filter;
 
       const { data } = await AxiosInstance.get<{
-        dataCollections: dataCollection[];
+        dataCollections: DataCollection[];
         total: number;
         page: number;
         pageSize: number;
