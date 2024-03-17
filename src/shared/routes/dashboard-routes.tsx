@@ -6,6 +6,9 @@ import { getRoles } from "../utils/roles";
 const Home = lazy(() => import("@/pages/dashboard/home"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
 const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
+const CashDisbursement = lazy(
+  () => import("@/pages/dashboard/cash-disbursement")
+);
 const Users = lazy(() => import("@/pages/dashboard/users"));
 
 const RolesPrivileges = lazy(
@@ -25,6 +28,7 @@ const DashboardRoutes = (roles: Role[]) => {
     readRolesRole,
     readUsersRole,
     readFollowUpsRole,
+    readDisbursementsRole,
   } = getRoles(roles);
 
   return (
@@ -61,6 +65,16 @@ const DashboardRoutes = (roles: Role[]) => {
           element={
             <Suspense fallback={PageLoader}>
               <FollowUp />
+            </Suspense>
+          }
+        />
+      )}
+      {readDisbursementsRole && (
+        <Route
+          path="/cash-disbursement"
+          element={
+            <Suspense fallback={PageLoader}>
+              <CashDisbursement />
             </Suspense>
           }
         />

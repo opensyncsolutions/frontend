@@ -99,6 +99,16 @@ interface FollowUp {
   firstReturn?: string;
 }
 
+type Disbursement = {
+  id: string;
+  created: string;
+  updated: string;
+  amount: number;
+  transid: string;
+  utilityref: string;
+  createdBy: User;
+};
+
 interface Field {
   name: string;
   mandatory: boolean;
@@ -130,7 +140,7 @@ interface Menu {
   updated: string;
   name: string;
   path: string;
-  sortOrder: number
+  sortOrder: number;
   displayName: string;
 }
 
