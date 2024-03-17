@@ -5,7 +5,7 @@ export const useGetMenu = () => {
   const { data } = useQuery(
     ["menus"],
     async () => {
-      const { data } = await AxiosInstance.get("/menus");
+      const { data } = await AxiosInstance.get<{ menus: Menu[] }>("/menus");
       return data;
     },
     {
@@ -13,5 +13,5 @@ export const useGetMenu = () => {
       refetchOnWindowFocus: false,
     }
   );
-  return { data };
+  return { menu: data };
 };

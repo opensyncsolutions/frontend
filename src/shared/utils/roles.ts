@@ -143,6 +143,99 @@ export const getRoles = (roles: Role[]) => {
     )
   )?.id;
 
+  // disbursement
+  const readDisbursementsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createDisbursementsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editDisbursementsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteDisbursementsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  // blood collection
+  const readBloodCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createBloodCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editBloodCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteBloodCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  // data collectioj
+  const readDataCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createDataCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_DISBURSEMENTS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editDataCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteDataCollectionRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_DISBURSEMENTS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
   return {
     // roles
     readRolesRole,
@@ -173,5 +266,23 @@ export const getRoles = (roles: Role[]) => {
     createFollowUpsRole,
     editFollowUpsRole,
     deleteFollowUpsRole,
+
+    // disbursement
+    readDisbursementsRole,
+    createDisbursementsRole,
+    editDisbursementsRole,
+    deleteDisbursementsRole,
+
+    // blood collection
+    readBloodCollectionRole,
+    createBloodCollectionRole,
+    editBloodCollectionRole,
+    deleteBloodCollectionRole,
+
+    // data collection
+    readDataCollectionRole,
+    createDataCollectionRole,
+    editDataCollectionRole,
+    deleteDataCollectionRole,
   };
 };

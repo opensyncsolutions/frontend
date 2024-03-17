@@ -47,7 +47,7 @@ const DashboardRoutes = (roles: Role[]) => {
       />
       {readEnrollmentsRole && (
         <Route
-          path="/enrollment"
+          path="/enrollments"
           element={
             <Suspense fallback={PageLoader}>
               <Enrollment />

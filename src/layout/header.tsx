@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ButtonHTMLAttributes } from "react";
-import { quickActions } from "./data";
+import { useQuickActions } from "./data";
 import { DialogClose } from "@/components/ui/dialog";
 import { CommandGroup } from "@/components/ui/command";
 import { useHeaderHelpers } from "./helpers";
@@ -31,13 +31,14 @@ interface HeaderProps {
 const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   const { width } = useWindowSize();
   const {
-    commandAction,
     open,
-    setOpen,
     headerActions,
     isPopoverOpen,
+    commandAction,
+    setOpen,
     setPopoverOpen,
   } = useHeaderHelpers();
+  const quickActions = useQuickActions();
 
   const { me } = useGetMe();
 

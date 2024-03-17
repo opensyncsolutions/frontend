@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { useGetMenu } from "./service";
 
 export type SidebarRoutes = {
   label: string;
@@ -26,13 +27,13 @@ export type CommantActionsList = {
   possibleKeywords: string;
   description?: string;
   action?: CommandActions;
-  to?: string;
+  path?: string;
   title?: string;
 };
 
 const pathToIcon: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard size={18} />,
-  enrollment: <UserPlus size={18} />,
+  enrollments: <UserPlus size={18} />,
   followup: <CalendarDays size={18} />,
   "blood-collection": <Layers size={18} />,
   "cash-disbursement": <Banknote size={18} />,
@@ -43,82 +44,71 @@ const pathToIcon: Record<string, ReactNode> = {
 export const useMenuConfig = () => {
   const { me } = useGetMe();
 
-  const { readEnrollmentsRole, readUsersRole, readFollowUpsRole } = getRoles(
-    me?.roles || []
-  );
-  // this should come from backend
+  const { menu } = useGetMenu();
 
-  const config = [
-    {
-      label: "Dashboard",
-      to: "dashboard",
-      sort: 1,
-    },
-    ...(readEnrollmentsRole
-      ? [
-          {
-            label: "Enrollment",
-            to: "enrollment",
-            sort: 2,
-          },
-        ]
-      : []),
-    ...(readFollowUpsRole
-      ? [
-          {
-            label: "Followup",
-            to: "followup",
-            sort: 3,
-          },
-        ]
-      : []),
-    {
-      label: "Blood Collected",
-      to: "blood-collection",
-      sort: 4,
-    },
-    {
-      label: "Cash Disbursement",
-      to: "cash-disbursement",
-      sort: 5,
-    },
-    {
-      label: "Data Collection",
-      to: "data-collection",
-      sort: 6,
-    },
-    ...(readUsersRole
-      ? [
-          {
-            label: "Users",
-            to: "users",
-            sort: 7,
-          },
-        ]
-      : []),
-  ];
+  const {
+    readEnrollmentsRole,
+    readUsersRole,
+    readFollowUpsRole,
+    readDisbursementsRole,
+    readBloodCollectionRole,
+    readDataCollectionRole,
+  } = getRoles(me?.roles || []);
+
   return {
-    menuItems: config
-      .sort((a, b) => a.sort - b.sort)
-      .map((menu) => {
-        return {
-          ...menu,
-          icon: pathToIcon?.[menu?.to],
-        };
-      }),
+    menuItems:
+      menu?.menus
+        ?.filter((menu) => {
+          //  check roles as well
+          let canAccess = false;
+          if (menu.path === "dashboard") {
+            canAccess = true;
+          }
+          if (readEnrollmentsRole && menu.path === "enrollments") {
+            canAccess = true;
+          }
+          if (readUsersRole && menu.path === "users") {
+            canAccess = true;
+          }
+          if (readFollowUpsRole && menu.path === "followup") {
+            canAccess = true;
+          }
+          if (readDisbursementsRole && menu.path === "cash-disbursement") {
+            canAccess = true;
+          }
+          if (readBloodCollectionRole && menu.path === "blood-collection") {
+            canAccess = true;
+          }
+          if (readDataCollectionRole && menu.path === "data-collection") {
+            canAccess = true;
+          }
+          return pathToIcon?.[menu?.path] && canAccess;
+        })
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((menu) => {
+          return {
+            ...menu,
+            label: menu?.displayName,
+            path: menu?.path,
+            icon: pathToIcon?.[menu?.path],
+          };
+        }) || [],
   };
 };
 
 export const useExtraSideMenu = () => {
   const { me } = useGetMe();
 
+  const { menu } = useGetMenu();
+
   const { readAuthorityRole, readRolesRole } = getRoles(me?.roles || []);
   return [
-    ...(readAuthorityRole || readRolesRole
+    ...((readAuthorityRole || readRolesRole) &&
+    menu?.menus?.find((menu) => menu?.path === "roles-and-priviledges")
       ? [
           {
             label: "Roles & Privileges",
-            to: "roles-and-privileges",
+            path: "roles-and-privileges",
             sort: 1,
             icon: <Users size={18} />,
           },
@@ -126,35 +116,39 @@ export const useExtraSideMenu = () => {
       : []),
     {
       label: "Configurations",
-      to: "configurations",
+      path: "configurations",
       sort: 2,
       icon: <SlidersHorizontal size={18} />,
     },
     {
       label: "Settings",
-      to: "settings",
+      path: "settings",
       sort: 1,
       icon: <Settings size={18} />,
     },
   ];
 };
 
-export const quickActions: CommantActionsList[] = [
-  {
-    name: "Dashboard",
-    possibleKeywords: "home dashboard",
-    to: "/dashboard",
-    title: "Dashboard",
-  },
-  {
-    name: "Enrollment",
-    possibleKeywords: "enrollment",
-    to: "/enrollment",
-    title: "Enrollment",
-  },
-  {
-    name: "Logout",
-    possibleKeywords: "signout logout",
-    action: "logout",
-  },
-];
+export const useQuickActions = () => {
+  const { menu } = useGetMenu();
+  const quickActions: CommantActionsList[] = [
+    ...(menu?.menus
+      ? menu?.menus
+          ?.map((menu) => {
+            return {
+              path: menu?.path,
+              name: menu?.name || "",
+              title: menu?.displayName,
+              possibleKeywords: `${menu?.path} ${menu?.name} ${menu?.displayName}`,
+            };
+          })
+          ?.reverse()
+      : []),
+    {
+      name: "Logout",
+      possibleKeywords: "signout logout",
+      action: "logout",
+    },
+  ];
+  return quickActions;
+};

@@ -12,10 +12,10 @@ export const useHeaderHelpers = () => {
 
   const commandAction = ({
     action,
-    to,
+    path,
   }: {
     action?: CommandActions;
-    to?: string;
+    path?: string;
   }) => {
     switch (action) {
       case "logout":
@@ -26,7 +26,7 @@ export const useHeaderHelpers = () => {
         break;
     }
 
-    to && navigate(to);
+    path && navigate(path);
     setOpen(false);
   };
 

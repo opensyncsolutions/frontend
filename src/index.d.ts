@@ -124,6 +124,16 @@ interface Privilege {
   value: string;
 }
 
+interface Menu {
+  id: string;
+  created: string;
+  updated: string;
+  name: string;
+  path: string;
+  sortOrder: number
+  displayName: string;
+}
+
 // End API
 
 // Start UI
