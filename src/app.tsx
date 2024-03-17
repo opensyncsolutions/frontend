@@ -54,7 +54,7 @@ const App = () => {
             </Suspense>
           }
         >
-          {DashboardRoutes()}
+          {DashboardRoutes(me?.roles || [])}
         </Route>
       )}
     </Routes>

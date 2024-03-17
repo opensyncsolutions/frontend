@@ -9,7 +9,7 @@ export const useGetMe = () => {
     async () => {
       const { data } = await AxiosInstance.get<User>("/me", {
         params: {
-          fields: "*",
+          fields: "roles.privileges,dp,username,name,id",
         },
       });
       return data;

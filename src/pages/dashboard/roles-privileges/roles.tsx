@@ -11,12 +11,18 @@ import { useSearchParams } from "react-router-dom";
 import CreateEditRole from "./create-edit-role";
 import DeleteRole from "./delete-role";
 import { CellContext } from "@tanstack/react-table";
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
 
 const searchableFields = ["name", "privileges.value"];
 
 const selectedRoleToEdit = "selectedRoleToEdit";
 
 const Roles = () => {
+  const { me } = useGetMe();
+  const { createRolesRole, editRolesRole, deleteRolesRole } = getRoles(
+    me?.roles || []
+  );
   const [roleToDelete, setRoleToDelete] = useState("");
   const [search, setSearch] = useSearchParams();
   const [filters, setFilters] = useState<Filter[]>([
@@ -76,18 +82,20 @@ const Roles = () => {
               className={cn(rolesRefething ? "animate-rotate" : "")}
             />
           </Button>
-          <Button
-            size={"sm"}
-            onClick={() => {
-              if (search.get(selectedRoleToEdit)) {
-                search.delete(selectedRoleToEdit);
-              }
-              search.append(selectedRoleToEdit, "new");
-              setSearch(search);
-            }}
-          >
-            <PlusIcon size={15} />
-          </Button>
+          {createRolesRole && (
+            <Button
+              size={"sm"}
+              onClick={() => {
+                if (search.get(selectedRoleToEdit)) {
+                  search.delete(selectedRoleToEdit);
+                }
+                search.append(selectedRoleToEdit, "new");
+                setSearch(search);
+              }}
+            >
+              <PlusIcon size={15} />
+            </Button>
+          )}
         </div>
       </div>
       <DataTable
@@ -150,7 +158,7 @@ const Roles = () => {
                   cell: (record: CellContext<Role, unknown>) => {
                     return (
                       <div className="flex justify-between gap-3 max-w-[100px]">
-                        {!record?.row?.original.system && (
+                        {!record?.row?.original.system && editRolesRole && (
                           <button
                             className="px-2 py-2"
                             onClick={(e) => {
@@ -169,7 +177,7 @@ const Roles = () => {
                             <Edit2Icon size={15} />
                           </button>
                         )}
-                        {!record?.row?.original.system && (
+                        {!record?.row?.original.system && deleteRolesRole && (
                           <button
                             className="px-2 py-2 text-red-500"
                             onClick={(e) => {
@@ -193,7 +201,9 @@ const Roles = () => {
         ]}
       />
       <CreateEditRole
-        selected={search.get(selectedRoleToEdit)}
+        selected={
+          editRolesRole || createRolesRole ? search.get(selectedRoleToEdit) : ""
+        }
         close={() => {
           if (search.get(selectedRoleToEdit)) search.delete(selectedRoleToEdit);
           setSearch(search);
@@ -201,7 +211,7 @@ const Roles = () => {
         refetch={() => rolesRefetch()}
       />
       <DeleteRole
-        id={roleToDelete || ""}
+        id={deleteRolesRole ? roleToDelete || "" : ""}
         cb={(refetch) => {
           if (refetch) rolesRefetch();
           setRoleToDelete("");

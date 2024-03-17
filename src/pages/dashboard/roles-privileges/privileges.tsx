@@ -5,23 +5,23 @@ import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
 import { usePrivileges } from "@/shared/services/roles-privileges";
 import { formatErrorMessage } from "@/shared/utils/helpers";
-import {
-  Edit2Icon,
-  PlusIcon,
-  RefreshCcw,
-  Trash2Icon,
-} from "lucide-react";
+import { Edit2Icon, PlusIcon, RefreshCcw, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditPrivilege from "./create-edit-privilege";
 import DeletePrivilege from "./delete-privilege";
 import { CellContext } from "@tanstack/react-table";
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
 
 const searchableFields = ["name", "value"];
 
 const selectedPrivilegeToEdit = "selectedPrivilegeToEdit";
 
 const Privileges = () => {
+  const { me } = useGetMe();
+  const { editAuthorityRole, deleteAuthorityRole, createAuthorityRole } =
+    getRoles(me?.roles || []);
   const [search, setSearch] = useSearchParams();
   const [privilegeToDelete, setPrivilegeToDelete] = useState("");
   const [filters, setFilters] = useState<Filter[]>([
@@ -86,18 +86,20 @@ const Privileges = () => {
               className={cn(privilegesRefething ? "animate-rotate" : "")}
             />
           </Button>
-          <Button
-            size={"sm"}
-            onClick={() => {
-              if (search.get(selectedPrivilegeToEdit)) {
-                search.delete(selectedPrivilegeToEdit);
-              }
-              search.append(selectedPrivilegeToEdit, "new");
-              setSearch(search);
-            }}
-          >
-            <PlusIcon size={15} />
-          </Button>
+          {createAuthorityRole && (
+            <Button
+              size={"sm"}
+              onClick={() => {
+                if (search.get(selectedPrivilegeToEdit)) {
+                  search.delete(selectedPrivilegeToEdit);
+                }
+                search.append(selectedPrivilegeToEdit, "new");
+                setSearch(search);
+              }}
+            >
+              <PlusIcon size={15} />
+            </Button>
+          )}
         </div>
       </div>
       <DataTable
@@ -150,7 +152,7 @@ const Privileges = () => {
                   cell: (record: CellContext<Privilege, unknown>) => {
                     return (
                       <div className="flex justify-between gap-3 max-w-[100px]">
-                        {!record?.row?.original.system && (
+                        {!record?.row?.original.system && editAuthorityRole && (
                           <button
                             className="px-2 py-2"
                             onClick={(e) => {
@@ -169,18 +171,19 @@ const Privileges = () => {
                             <Edit2Icon size={15} />
                           </button>
                         )}
-                        {!record?.row?.original.system && (
-                          <button
-                            className="px-2 py-2 text-red-500"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.nativeEvent.stopImmediatePropagation();
-                              setPrivilegeToDelete(record?.row?.original?.id);
-                            }}
-                          >
-                            <Trash2Icon size={15} />
-                          </button>
-                        )}
+                        {!record?.row?.original.system &&
+                          deleteAuthorityRole && (
+                            <button
+                              className="px-2 py-2 text-red-500"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.nativeEvent.stopImmediatePropagation();
+                                setPrivilegeToDelete(record?.row?.original?.id);
+                              }}
+                            >
+                              <Trash2Icon size={15} />
+                            </button>
+                          )}
                       </div>
                     );
                   },
@@ -193,7 +196,11 @@ const Privileges = () => {
         ]}
       />
       <CreateEditPrivilege
-        selected={search.get(selectedPrivilegeToEdit)}
+        selected={
+          editAuthorityRole || createAuthorityRole
+            ? search.get(selectedPrivilegeToEdit)
+            : ""
+        }
         close={() => {
           if (search.get(selectedPrivilegeToEdit))
             search.delete(selectedPrivilegeToEdit);
@@ -202,7 +209,7 @@ const Privileges = () => {
         refetch={() => privilegesRefetch()}
       />
       <DeletePrivilege
-        id={privilegeToDelete || ""}
+        id={deleteAuthorityRole ? privilegeToDelete || "" : ""}
         cb={(refetch) => {
           if (refetch) privilegesRefetch();
           setPrivilegeToDelete("");

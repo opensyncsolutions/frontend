@@ -1,7 +1,7 @@
 import Logo from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
-import { extraSideMenu, useMenuConfig } from "./data";
+import { useExtraSideMenu, useMenuConfig } from "./data";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -16,6 +16,8 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
   const pathname = useLocation().pathname;
 
   const { menuItems } = useMenuConfig();
+
+  const extraSideMenu = useExtraSideMenu();
 
   return (
     <>

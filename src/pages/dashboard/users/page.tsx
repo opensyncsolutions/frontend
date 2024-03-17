@@ -11,10 +11,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CreateUser from "./create-user";
 import User from "./user";
 import { useSearchParams } from "react-router-dom";
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
 
 const searchableFields = ["name", "username"];
 
 const Page = () => {
+  const { me } = useGetMe();
+  const { createUsersRole } = getRoles(me?.roles || []);
   const [search, setSearch] = useSearchParams();
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
@@ -166,7 +170,7 @@ const Page = () => {
         ]}
       />
       <CreateUser
-        open={search.get("selected") === "new"}
+        open={createUsersRole ? search.get("selected") === "new" : false}
         close={() => {
           if (search.get("selected")) search.delete("selected");
           setSearch(search);

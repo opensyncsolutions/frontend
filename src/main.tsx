@@ -8,7 +8,7 @@ import "@/styles/index.sass";
 
 const queryClient = new QueryClient();
 
-if (process.env.VITE_APP_ENV !== "development") {
+if (process.env.NODE_ENV !== "development") {
   console.log = console.warn = console.error = () => {};
 }
 

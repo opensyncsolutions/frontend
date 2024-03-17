@@ -1,3 +1,5 @@
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
 import {
   Banknote,
   CalendarDays,
@@ -39,6 +41,11 @@ const pathToIcon: Record<string, ReactNode> = {
 };
 
 export const useMenuConfig = () => {
+  const { me } = useGetMe();
+
+  const { readEnrollmentsRole, readUsersRole, readFollowUpsRole } = getRoles(
+    me?.roles || []
+  );
   // this should come from backend
 
   const config = [
@@ -47,16 +54,24 @@ export const useMenuConfig = () => {
       to: "dashboard",
       sort: 1,
     },
-    {
-      label: "Enrollment",
-      to: "enrollment",
-      sort: 2,
-    },
-    {
-      label: "Followup",
-      to: "followup",
-      sort: 3,
-    },
+    ...(readEnrollmentsRole
+      ? [
+          {
+            label: "Enrollment",
+            to: "enrollment",
+            sort: 2,
+          },
+        ]
+      : []),
+    ...(readFollowUpsRole
+      ? [
+          {
+            label: "Followup",
+            to: "followup",
+            sort: 3,
+          },
+        ]
+      : []),
     {
       label: "Blood Collected",
       to: "blood-collection",
@@ -72,11 +87,15 @@ export const useMenuConfig = () => {
       to: "data-collection",
       sort: 6,
     },
-    {
-      label: "Users",
-      to: "users",
-      sort: 7,
-    },
+    ...(readUsersRole
+      ? [
+          {
+            label: "Users",
+            to: "users",
+            sort: 7,
+          },
+        ]
+      : []),
   ];
   return {
     menuItems: config
@@ -90,26 +109,35 @@ export const useMenuConfig = () => {
   };
 };
 
-export const extraSideMenu = [
-  {
-    label: "Roles & Privileges",
-    to: "roles-and-privileges",
-    sort: 1,
-    icon: <Users size={18} />,
-  },
-  {
-    label: "Configurations",
-    to: "configurations",
-    sort: 2,
-    icon: <SlidersHorizontal size={18} />,
-  },
-  {
-    label: "Settings",
-    to: "settings",
-    sort: 1,
-    icon: <Settings size={18} />,
-  },
-];
+export const useExtraSideMenu = () => {
+  const { me } = useGetMe();
+
+  const { readAuthorityRole, readRolesRole } = getRoles(me?.roles || []);
+  return [
+    ...(readAuthorityRole || readRolesRole
+      ? [
+          {
+            label: "Roles & Privileges",
+            to: "roles-and-privileges",
+            sort: 1,
+            icon: <Users size={18} />,
+          },
+        ]
+      : []),
+    {
+      label: "Configurations",
+      to: "configurations",
+      sort: 2,
+      icon: <SlidersHorizontal size={18} />,
+    },
+    {
+      label: "Settings",
+      to: "settings",
+      sort: 1,
+      icon: <Settings size={18} />,
+    },
+  ];
+};
 
 export const quickActions: CommantActionsList[] = [
   {
