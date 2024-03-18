@@ -69,7 +69,7 @@ export const useCreateMenu = (cb?: () => void) => {
         });
       },
       onSuccess: () => {
-        toast("Successfully created privilege", {
+        toast("Successfully created menu", {
           duration: 5000,
           closeButton: true,
         });
@@ -97,7 +97,7 @@ export const useEditMenu = (id: string, cb?: () => void) => {
         });
       },
       onSuccess: () => {
-        toast("Successfully updated privilege", {
+        toast("Successfully updated menu", {
           duration: 5000,
           closeButton: true,
         });

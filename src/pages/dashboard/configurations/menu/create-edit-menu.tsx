@@ -210,7 +210,8 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                     placeholder="Select path"
                     disabled={loading}
                     options={[
-                      ...(id !== "new"
+                      ...(id !== "new" &&
+                      paths?.find((path) => menu?.path === path)
                         ? [
                             {
                               label: menu?.path,
