@@ -10,10 +10,10 @@ const DataCollection = () => {
           to: "/dashboard",
         },
         {
-          label: "Data Collection",
+          label: "Data Collections",
         },
       ]}
-      title="Data Collection"
+      title="Data Collections"
     >
       <Page />
     </PageTemplate>

@@ -1,4 +1,5 @@
 import PageTemplate from "@/templates/page-template";
+import Menu from "./menu";
 
 const Configurations = () => {
   return (
@@ -14,7 +15,7 @@ const Configurations = () => {
         },
       ]}
     >
-      Hello
+      <Menu />
     </PageTemplate>
   );
 };

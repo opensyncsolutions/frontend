@@ -10,10 +10,10 @@ const BloodCollection = () => {
           to: "/dashboard",
         },
         {
-          label: "Blood Collection",
+          label: "Blood Collections",
         },
       ]}
-      title="Blood Collection"
+      title="Blood Collections"
     >
       <Page />
     </PageTemplate>

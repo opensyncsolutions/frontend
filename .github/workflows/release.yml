@@ -1,0 +1,77 @@
+name: RELEASE
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: [develop]
+
+jobs:
+  PR:
+    if: |
+      contains(github.event.head_commit.message, 'release') && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🔀
+        uses: BaharaJr/create-pr@0.0.1
+        with:
+          GITHUB_TOKEN: ${{secrets.TOKEN}}
+          DESTINATION_BRANCH: main
+          KEYWORD: release
+
+  CHECK_MESSAGE:
+    if: |
+      github.event_name == 'pull_request'
+    name: COMMIT CHECK
+    runs-on: ubuntu-latest
+    outputs:
+      sms: ${{ steps.sms_id.outputs.sms }}
+    steps:
+      - name: 🚚
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: ❇️
+        id: sms_id
+        run: echo "sms=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
+
+  RELEASE:
+    name: RELEASE
+    runs-on: ubuntu-latest
+    needs: CHECK_MESSAGE
+    if: ${{ contains(needs.CHECK_MESSAGE.outputs.sms, 'release') }}
+    steps:
+      - name: 🚚
+        uses: actions/checkout@v4
+
+      - name: ♻️
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run package
+      - run: |
+          curl --request POST \
+          --url ${{secrets.URL}} \
+          --header 'Authorization: Basic ${{ secrets.AUTH }}' \
+          --form 'app=@"dist/app.zip"' \
+          --fail
+  MERGE:
+    if: |
+      github.event_name == 'pull_request'
+    name: MERGE PR
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: 🔀
+        uses: BaharaJr/merge-pr@0.0.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}

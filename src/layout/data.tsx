@@ -1,4 +1,5 @@
 import { useGetMe } from "@/shared/services/auth";
+import { useMenus } from "@/shared/services/menus";
 import { getRoles } from "@/shared/utils/roles";
 import {
   Banknote,
@@ -12,7 +13,6 @@ import {
   Users,
 } from "lucide-react";
 import { ReactNode } from "react";
-import { useGetMenu } from "./service";
 
 export type SidebarRoutes = {
   label: string;
@@ -52,10 +52,21 @@ const pathToIcon: Record<string, ReactNode> = {
   users: <Users size={18} />,
 };
 
+export const paths = [
+  "dashboard",
+  "enrollments",
+  "followup",
+  "blood-collections",
+  "cash-disbursement",
+  "data-collections",
+  "roles-and-privileges",
+  "configurations",
+];
+
 export const useMenuConfig = () => {
   const { me } = useGetMe();
 
-  const { menu } = useGetMenu();
+  const { menus } = useMenus();
 
   const {
     readEnrollmentsRole,
@@ -68,7 +79,7 @@ export const useMenuConfig = () => {
 
   return {
     menuItems:
-      menu?.menus
+      menus?.menus
         ?.filter((menu) => {
           //  check roles as well
           let canAccess = false;
@@ -110,7 +121,7 @@ export const useMenuConfig = () => {
 export const useExtraSideMenu = () => {
   const { me } = useGetMe();
 
-  const { menu } = useGetMenu();
+  const { menus } = useMenus();
 
   const {
     readAuthorityRole,
@@ -122,7 +133,7 @@ export const useExtraSideMenu = () => {
   } = getRoles(me?.roles || []);
   return [
     ...((readAuthorityRole || readRolesRole) &&
-    menu?.menus?.find((menu) => menu?.path === "roles-and-priviledes")
+    menus?.menus?.find((menu) => menu?.path === "roles-and-priviledes")
       ? [
           {
             label: "Roles & Privileges",
@@ -152,7 +163,7 @@ export const useExtraSideMenu = () => {
 };
 
 export const useQuickActions = () => {
-  const { menu } = useGetMenu();
+  const { menus } = useMenus();
   const { me } = useGetMe();
   const {
     readEnrollmentsRole,
@@ -170,8 +181,8 @@ export const useQuickActions = () => {
     readObjectivesRole,
   } = getRoles(me?.roles || []);
   const quickActions: CommantActionsList[] = [
-    ...(menu?.menus
-      ? menu?.menus
+    ...(menus?.menus
+      ? menus?.menus
           ?.filter((menu) => {
             //  check roles as well
             let canAccess = false;

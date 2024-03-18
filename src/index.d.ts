@@ -130,7 +130,7 @@ type BloodCollection = {
 interface Field {
   name: string;
   mandatory: boolean;
-  type: "DATE" | "BOOLEAN" | "TEXT";
+  type: "DATE" | "BOOLEAN" | "TEXT" | "NUMBER";
   description?: string;
 }
 
@@ -160,6 +160,7 @@ interface Menu {
   path: string;
   sortOrder: number;
   displayName: string;
+  code: string;
 }
 
 // End API
