@@ -8,11 +8,31 @@
       "path": "cash-disbursement",
       "sortOrder": 4
     },
-    { "name": "Users", "path": "users", "sortOrder": 3 },
+    {
+      "name": "Blood Collections",
+      "path": "blood-collections",
+      "sortOrder": 5
+    },
+    {
+      "name": "Data Collections",
+      "path": "data-collections",
+      "sortOrder": 6
+    },
+    {
+      "name": "Cash Disbursement",
+      "path": "cash-disbursement",
+      "sortOrder": 7
+    },
+    { "name": "Users", "path": "users", "sortOrder": 8 },
     {
       "name": "Roles & Privileges",
-      "path": "roles-and-priviledges",
-      "sortOrder": 5
+      "path": "roles-and-privileges",
+      "sortOrder": 8
+    }
+    {
+      "name": "Configurations",
+      "path": "configurations",
+      "sortOrder": 8
     }
   ]
 }
