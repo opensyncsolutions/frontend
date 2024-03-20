@@ -66,7 +66,7 @@ const Privileges = () => {
         <h3 className="font-bold text-xl">Privileges</h3>
         <div className="flex gap-3 items-center animate-fade-in">
           <TableFilters
-            title="Filter Roles Table"
+            title="Filter Privileges Table"
             search={searchableFields.map((key) => ({
               key,
               placeholder: "Search " + key,

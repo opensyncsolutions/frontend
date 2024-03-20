@@ -56,7 +56,7 @@ const Page = () => {
       <div className="flex justify-end ">
         <div className="flex gap-3 items-center animate-fade-in">
           <TableFilters
-            title="Filter Enrollment Table"
+            title="Filter Data Collections Table"
             search={searchableFields.map((key) => ({
               key,
               placeholder: "Search " + key,

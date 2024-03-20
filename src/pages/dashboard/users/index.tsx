@@ -12,6 +12,15 @@ const Users = () => {
   return (
     <PageTemplate
       title="Users"
+      breadCrumb={[
+        {
+          label: "Dashboard",
+          to: "/dashboard",
+        },
+        {
+          label: "Users",
+        },
+      ]}
       titleActions={
         createUsersRole && (
           <Button

@@ -17,7 +17,7 @@ const Configurations = () => {
       ]}
     >
       <Menu />
-      <DragAndDropList />
+      {/* <DragAndDropList /> */}
     </PageTemplate>
   );
 };
