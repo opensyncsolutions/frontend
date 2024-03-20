@@ -133,9 +133,10 @@ export const useExtraSideMenu = () => {
     readFormsRole,
     readObjectivesRole,
   } = getRoles(me?.roles || []);
+
   return [
     ...((readAuthorityRole || readRolesRole) &&
-    menus?.menus?.find((menu) => menu?.path === "roles-and-priviledes")
+    menus?.menus?.find((menu) => menu?.path === "roles-and-privileges")
       ? [
           {
             label: "Roles & Privileges",
