@@ -19,16 +19,25 @@ export const useRoles = ({
         fields: fields?.join(",") || "name,system,privileges,id",
       };
 
+      let filters = "";
+
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
-      if (filter) params.filter = filter;
-
+      if (filter)
+        filter?.split(",").forEach((filter) => {
+          if (filters) {
+            filters = filters + "&filter=" + filter;
+          } else {
+            filters = "filter=" + filter;
+          }
+        });
+      params.rootJoin = "OR";
       const { data } = await AxiosInstance.get<{
         roles: Role[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/roles`, {
+      }>(`/roles?${filters}`, {
         params,
       });
       return data;
@@ -178,16 +187,26 @@ export const usePrivileges = ({
         fields: "*",
       };
 
+      let filters = "";
+
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
-      if (filter) params.filter = filter;
+      if (filter)
+        filter?.split(",").forEach((filter) => {
+          if (filters) {
+            filters = filters + "&filter=" + filter;
+          } else {
+            filters = "filter=" + filter;
+          }
+        });
+      params.rootJoin = "OR";
 
       const { data } = await AxiosInstance.get<{
         privileges: Privilege[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/privileges`, {
+      }>(`/privileges?${filters}`, {
         params,
       });
       return data;

@@ -15,16 +15,26 @@ export const useDisbursements = ({
         fields: "*",
       };
 
+      let filters = "";
+
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
-      if (filter) params.filter = filter;
+      if (filter)
+        filter?.split(",").forEach((filter) => {
+          if (filters) {
+            filters = filters + "&filter=" + filter;
+          } else {
+            filters = "filter=" + filter;
+          }
+        });
+      params.rootJoin = "OR";
 
       const { data } = await AxiosInstance.get<{
         disbursements: Disbursement[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/disbursements`, {
+      }>(`/disbursements?${filters}`, {
         params,
       });
       return data;

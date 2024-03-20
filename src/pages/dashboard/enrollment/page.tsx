@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 
-const searchableFields = ["name", "studyId", "ctcId"];
+const searchableFields = ["organisationUnit", "name", "studyId", "ctcId"];
 const filterableFields = ["gender", "status", "objective"];
 const sortabledDateFileds = ["dob", "created"];
 
@@ -62,8 +62,21 @@ const Page = () => {
                 if (filter?.key === "name") {
                   return `firstName:ilike:${filter?.value?.[0]},middleName:ilike:${filter?.value?.[0]},surname:ilike:${filter?.value?.[0]}`;
                 }
+                if (filter?.key === "organisationUnit") {
+                  return `organisationUnit.name:ilike:${filter?.value?.[0]}`;
+                }
                 if (searchableFields.includes(filter?.key)) {
                   return `${filter?.key}:ilike:${filter?.value?.[0]}`;
+                }
+                if (filterableFields.includes(filter?.key)) {
+                  if (filter?.key === "objective") {
+                    return filter.value
+                      .map((value) => `${filter?.key}.name:eq:${value}`)
+                      .join(",");
+                  }
+                  return filter.value
+                    .map((value) => `${filter?.key}:eq:${value}`)
+                    .join(",");
                 }
                 if (sortabledDateFileds.includes(filter?.key)) {
                   return `${filter?.key}:btn:${filter?.value?.[0]}${

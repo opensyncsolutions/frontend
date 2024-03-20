@@ -14,17 +14,27 @@ export const useBloodCollections = ({
       const params: Record<string, string | number | boolean> = {
         fields: "*",
       };
+      let filters = "";
 
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
-      if (filter) params.filter = filter;
+
+      if (filter)
+        filter?.split(",").forEach((filter) => {
+          if (filters) {
+            filters = filters + "&filter=" + filter;
+          } else {
+            filters = "filter=" + filter;
+          }
+        });
+      params.rootJoin = "OR";
 
       const { data } = await AxiosInstance.get<{
         bloodCollections: BloodCollection[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/bloodCollections`, {
+      }>(`/bloodCollections?${filters}`, {
         params,
       });
       return data;

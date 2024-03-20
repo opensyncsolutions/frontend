@@ -68,8 +68,6 @@ export const useMenuConfig = () => {
 
   const { menus } = useMenus();
 
-  console.log(menus);
-
   const {
     readEnrollmentsRole,
     readUsersRole,
@@ -175,7 +173,6 @@ export const useQuickActions = () => {
     readDisbursementsRole,
     readBloodCollectionRole,
     readDataCollectionRole,
-
     readAuthorityRole,
     readRolesRole,
     readMenuRole,
@@ -216,8 +213,16 @@ export const useQuickActions = () => {
             ) {
               canAccess = true;
             }
-
-            return pathToIcon?.[menu?.path] && canAccess;
+            if (
+              (readFieldsRole ||
+                readFormsRole ||
+                readMenuRole ||
+                readObjectivesRole) &&
+              menu.path === "configurations"
+            ) {
+              canAccess = true;
+            }
+            return canAccess;
           })
           ?.map((menu) => {
             return {
@@ -227,18 +232,8 @@ export const useQuickActions = () => {
               possibleKeywords: `${menu?.path} ${menu?.name} ${menu?.displayName}`,
             };
           })
-          ?.reverse()
       : []),
-    ...(readFieldsRole || readFormsRole || readMenuRole || readObjectivesRole
-      ? [
-          {
-            path: "configurations",
-            name: "Configurations",
-            title: "Configurations",
-            possibleKeywords: `Configurations configurations`,
-          },
-        ]
-      : []),
+
     {
       name: "Logout",
       possibleKeywords: "signout logout",

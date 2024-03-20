@@ -48,16 +48,26 @@ export const useEnrollements = ({
         fields: "*",
       };
 
+      let filters = "";
+
       if (pageSize) params.pageSize = pageSize;
       if (page) params.page = page;
-      if (filter) params.filter = filter;
+      if (filter)
+        filter?.split(",").forEach((filter) => {
+          if (filters) {
+            filters = filters + "&filter=" + filter;
+          } else {
+            filters = "filter=" + filter;
+          }
+        });
+      params.rootJoin = "OR";
 
       const { data } = await AxiosInstance.get<{
         enrollments: Enrollment[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/enrollments`, {
+      }>(`/enrollments?${filters}`, {
         params,
       });
       return data;
@@ -75,5 +85,3 @@ export const useEnrollements = ({
     enrollmentsRefething: isRefetching,
   };
 };
-
-

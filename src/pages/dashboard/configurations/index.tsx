@@ -1,5 +1,6 @@
 import PageTemplate from "@/templates/page-template";
 import Menu from "./menu";
+import DragAndDropList from "@/components/dnd";
 
 const Configurations = () => {
   return (
@@ -16,6 +17,7 @@ const Configurations = () => {
       ]}
     >
       <Menu />
+      <DragAndDropList />
     </PageTemplate>
   );
 };

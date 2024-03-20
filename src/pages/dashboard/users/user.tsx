@@ -66,7 +66,7 @@ const User = ({
           }}
         />
       )}
-      {!edit && (
+      {!edit && user && (
         <div className="space-x-3 text-right">
           <Button variant={"outline"} onClick={onClose}>
             Close
