@@ -68,6 +68,8 @@ export const useMenuConfig = () => {
 
   const { menus } = useMenus();
 
+  console.log(menus);
+
   const {
     readEnrollmentsRole,
     readUsersRole,
@@ -98,10 +100,10 @@ export const useMenuConfig = () => {
           if (readDisbursementsRole && menu.path === "cash-disbursement") {
             canAccess = true;
           }
-          if (readBloodCollectionRole && menu.path === "blood-collection") {
+          if (readBloodCollectionRole && menu.path === "blood-collections") {
             canAccess = true;
           }
-          if (readDataCollectionRole && menu.path === "data-collection") {
+          if (readDataCollectionRole && menu.path === "data-collections") {
             canAccess = true;
           }
           return pathToIcon?.[menu?.path] && canAccess;
