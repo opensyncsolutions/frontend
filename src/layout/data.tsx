@@ -1,3 +1,4 @@
+import { useLanguage } from "@/shared/contexts/languages";
 import { useGetMe } from "@/shared/services/auth";
 import { useMenus } from "@/shared/services/menus";
 import { getRoles } from "@/shared/utils/roles";
@@ -68,6 +69,8 @@ export const useMenuConfig = () => {
 
   const { menus } = useMenus();
 
+  const { language } = useLanguage();
+
   const {
     readEnrollmentsRole,
     readUsersRole,
@@ -110,7 +113,8 @@ export const useMenuConfig = () => {
         .map((menu) => {
           return {
             ...menu,
-            label: menu?.displayName,
+            label:
+              menu?.translations?.[language]?.displayName || menu?.displayName,
             path: menu?.path,
             icon: pathToIcon?.[menu?.path],
           };
@@ -118,10 +122,17 @@ export const useMenuConfig = () => {
   };
 };
 
+const morePathToIcon: Record<string, ReactNode> = {
+  "roles-and-privileges": <Users size={18} />,
+  configurations: <SlidersHorizontal size={18} />,
+};
+
 export const useExtraSideMenu = () => {
   const { me } = useGetMe();
 
   const { menus } = useMenus();
+
+  const { language } = useLanguage();
 
   const {
     readAuthorityRole,
@@ -133,29 +144,40 @@ export const useExtraSideMenu = () => {
   } = getRoles(me?.roles || []);
 
   return [
-    ...((readAuthorityRole || readRolesRole) &&
-    menus?.menus?.find((menu) => menu?.path === "roles-and-privileges")
-      ? [
-          {
-            label: "Roles & Privileges",
-            path: "roles-and-privileges",
-            sort: 1,
-            icon: <Users size={18} />,
-          },
-        ]
-      : []),
-    ...(readMenuRole || readFieldsRole || readFormsRole || readObjectivesRole
-      ? [
-          {
-            label: "Configurations",
-            path: "configurations",
-            sort: 2,
-            icon: <SlidersHorizontal size={18} />,
-          },
-        ]
-      : []),
+    ...(menus?.menus
+      ?.filter((menu) => {
+        let canAccess = false;
+        if (
+          (readAuthorityRole || readRolesRole) &&
+          menu.path === "roles-and-privileges"
+        ) {
+          canAccess = true;
+        }
+        if (
+          (readMenuRole ||
+            readFieldsRole ||
+            readFormsRole ||
+            readObjectivesRole) &&
+          menu.path === "configurations"
+        ) {
+          canAccess = true;
+        }
+
+        return morePathToIcon?.[menu?.path] && canAccess;
+      })
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((menu) => {
+        return {
+          ...menu,
+          label:
+            menu?.translations?.[language]?.displayName || menu?.displayName,
+          path: menu?.path,
+          icon: morePathToIcon?.[menu?.path],
+        };
+      }) || []),
+    ,
     {
-      label: "Settings",
+      label: language === "sw" ? "Tengeneza" : "Settings",
       path: "settings",
       sort: 1,
       icon: <Settings size={18} />,
@@ -180,6 +202,9 @@ export const useQuickActions = () => {
     readFormsRole,
     readObjectivesRole,
   } = getRoles(me?.roles || []);
+
+  const { language } = useLanguage();
+
   const quickActions: CommantActionsList[] = [
     ...(menus?.menus
       ? menus?.menus
@@ -227,16 +252,20 @@ export const useQuickActions = () => {
           ?.map((menu) => {
             return {
               path: menu?.path,
-              name: menu?.name || "",
-              title: menu?.displayName,
-              possibleKeywords: `${menu?.path} ${menu?.name} ${menu?.displayName}`,
+              title:
+                menu?.translations?.[language]?.displayName ||
+                menu?.displayName,
+              name:
+                menu?.translations?.[language]?.displayName ||
+                menu?.displayName,
+              possibleKeywords: `${menu?.translations?.[language]?.displayName} ${menu?.path} ${menu?.displayName}`,
             };
           })
       : []),
 
     {
-      name: "Logout",
-      possibleKeywords: "signout logout",
+      name: language === "sw" ? "Ondoka" : "Logout",
+      possibleKeywords: "signout logout ondoka",
       action: "logout",
     },
   ];

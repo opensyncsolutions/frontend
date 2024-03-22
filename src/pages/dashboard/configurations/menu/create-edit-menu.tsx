@@ -74,10 +74,18 @@ const CreateEditMenu = ({
   );
 };
 
+const LanguageSchema = z.object({
+  displayName: z.string({ required_error: "You must provide a name" }),
+});
+
 const formSchema = z.object({
   code: z.string().optional(),
   displayName: z.string({ required_error: "You must provide a name" }),
   path: z.string({ required_error: "You must provide a name" }),
+  translations: z.object({
+    en: LanguageSchema,
+    sw: LanguageSchema,
+  }),
 });
 
 const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
@@ -111,6 +119,14 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
       path: menu?.path || "",
       displayName: menu?.displayName || "",
       code: menu?.code || "",
+      translations: {
+        en: {
+          displayName: menu?.translations?.en?.displayName || "",
+        },
+        sw: {
+          displayName: menu?.translations?.sw?.displayName || "",
+        },
+      },
     },
   });
 
@@ -155,97 +171,204 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
-      {fields?.map(({ name, type }) => {
-        if ((type === "TEXT" || type === "NUMBER") && name !== "path") {
-          return (
-            <Controller
-              key={name}
-              name={name as any}
-              control={control}
-              render={({ field }) => (
-                <Input
-                  label={capitalizeFirstLetter(
-                    separateTextOnCapitalLetter(field?.name)
-                  )}
-                  placeholder={`Enter ${separateTextOnCapitalLetter(
-                    field?.name
-                  )}`}
-                  disabled={loading}
-                  type={type === "NUMBER" ? "number" : "text"}
-                  {...field}
-                  error={
-                    errors?.[name as "displayName" | "path" | "code"]
-                      ?.message || ""
-                  }
-                  onInput={
-                    type === "NUMBER"
-                      ? (e) => {
-                          e.currentTarget.value = e.currentTarget.value.replace(
-                            /\D/g,
-                            ""
-                          );
-                        }
-                      : undefined
-                  }
-                />
-              )}
-            />
-          );
-        }
-        if (type === "TEXT" && name === "path") {
-          return (
-            <Controller
-              name="path"
-              control={control}
-              render={({ field: { ref, ...field } }) => {
-                return (
-                  <SelectInput
-                    label="Path"
-                    placeholder="Select path"
+      <div className="space-y-3 rounded border p-3">
+        <h3>Default</h3>
+        {fields?.map(({ name, type }) => {
+          if (
+            (type === "TEXT" || type === "NUMBER") &&
+            name !== "path" &&
+            name !== "name" &&
+            name !== "sortOrder" &&
+            name !== "description"
+          ) {
+            return (
+              <Controller
+                key={name}
+                name={name as any}
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label={capitalizeFirstLetter(
+                      separateTextOnCapitalLetter(field?.name)
+                    )}
+                    placeholder={`Enter ${separateTextOnCapitalLetter(
+                      field?.name
+                    )}`}
                     disabled={loading}
-                    options={[
-                      ...(id !== "new" &&
-                      paths?.find((path) => menu?.path === path)
-                        ? [
-                            {
-                              label: menu?.path,
-                              value: menu?.path,
-                            },
-                          ]
-                        : []),
-                      ...paths
-                        .filter((path) => {
-                          return !menus?.menus?.find(
-                            (menu) => menu?.path === path
-                          );
-                        })
-                        .map((path) => ({
-                          label: path,
-                          value: path,
-                        })),
-                    ]}
+                    type={type === "NUMBER" ? "number" : "text"}
                     {...field}
-                    value={
-                      field?.value
-                        ? {
-                            // @ts-ignore
-                            value: field?.value,
-                            label: field?.value,
+                    error={
+                      errors?.[name as "displayName" | "path" | "code"]
+                        ?.message || ""
+                    }
+                    onInput={
+                      type === "NUMBER"
+                        ? (e) => {
+                            e.currentTarget.value =
+                              e.currentTarget.value.replace(/\D/g, "");
                           }
                         : undefined
                     }
-                    onChange={(e) => {
-                      field?.onChange(e.value);
-                    }}
-                    error={errors?.[name]?.message || ""}
                   />
-                );
-              }}
-            />
-          );
-        }
-        return null;
-      })}
+                )}
+              />
+            );
+          }
+          if (type === "TEXT" && name === "path") {
+            return (
+              <Controller
+                name="path"
+                control={control}
+                render={({ field: { ref, ...field } }) => {
+                  return (
+                    <SelectInput
+                      label="Path"
+                      placeholder="Select path"
+                      disabled={loading}
+                      options={[
+                        ...(id !== "new" &&
+                        paths?.find((path) => menu?.path === path)
+                          ? [
+                              {
+                                label: menu?.path,
+                                value: menu?.path,
+                              },
+                            ]
+                          : []),
+                        ...paths
+                          .filter((path) => {
+                            return !menus?.menus?.find(
+                              (menu) => menu?.path === path
+                            );
+                          })
+                          .map((path) => ({
+                            label: path,
+                            value: path,
+                          })),
+                      ]}
+                      {...field}
+                      value={
+                        field?.value
+                          ? {
+                              // @ts-ignore
+                              value: field?.value,
+                              label: field?.value,
+                            }
+                          : undefined
+                      }
+                      onChange={(e) => {
+                        field?.onChange(e.value);
+                      }}
+                      error={errors?.[name]?.message || ""}
+                    />
+                  );
+                }}
+              />
+            );
+          }
+          return null;
+        })}
+      </div>
+      <div className="space-y-3 rounded border p-3">
+        <h3>English</h3>
+        {fields?.map(({ name, type }) => {
+          if (
+            (type === "TEXT" || type === "NUMBER") &&
+            name !== "path" &&
+            name !== "name" &&
+            name !== "sortOrder" &&
+            name !== "description" &&
+            name !== "code"
+          ) {
+            return (
+              <Controller
+                key={name}
+                name={("translations.en." + name) as any}
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label={capitalizeFirstLetter(
+                      separateTextOnCapitalLetter(name)
+                    )}
+                    placeholder={`Enter ${separateTextOnCapitalLetter(name)}`}
+                    disabled={loading}
+                    type={type === "NUMBER" ? "number" : "text"}
+                    {...field}
+                    error={
+                      errors?.[
+                        ("translations.en." + name) as
+                          | "displayName"
+                          | "path"
+                          | "code"
+                      ]?.message || ""
+                    }
+                    onInput={
+                      type === "NUMBER"
+                        ? (e) => {
+                            e.currentTarget.value =
+                              e.currentTarget.value.replace(/\D/g, "");
+                          }
+                        : undefined
+                    }
+                  />
+                )}
+              />
+            );
+          }
+
+          return null;
+        })}
+      </div>
+      <div className="space-y-3 rounded border p-3">
+        <h3>Swahili</h3>
+        {fields?.map(({ name, type }) => {
+          if (
+            (type === "TEXT" || type === "NUMBER") &&
+            name !== "path" &&
+            name !== "name" &&
+            name !== "sortOrder" &&
+            name !== "description" &&
+            name !== "code"
+          ) {
+            return (
+              <Controller
+                key={name}
+                name={("translations.sw." + name) as any}
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label={capitalizeFirstLetter(
+                      separateTextOnCapitalLetter(name)
+                    )}
+                    placeholder={`Enter ${separateTextOnCapitalLetter(name)}`}
+                    disabled={loading}
+                    type={type === "NUMBER" ? "number" : "text"}
+                    {...field}
+                    error={
+                      errors?.[
+                        ("translations.sw." + name) as
+                          | "displayName"
+                          | "path"
+                          | "code"
+                      ]?.message || ""
+                    }
+                    onInput={
+                      type === "NUMBER"
+                        ? (e) => {
+                            e.currentTarget.value =
+                              e.currentTarget.value.replace(/\D/g, "");
+                          }
+                        : undefined
+                    }
+                  />
+                )}
+              />
+            );
+          }
+
+          return null;
+        })}
+      </div>
       <div className="flex justify-end">
         <Button
           disabled={!getValues("displayName") || !getValues("path") || loading}

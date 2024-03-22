@@ -7,12 +7,12 @@ import {
 } from "react";
 
 // Define the types
-type Action = { type: "SET_LANGUAGE"; payload: string };
+type Action = { type: "SET_LANGUAGE"; payload: "en" | "sw" };
 
-type State = string;
+type State = "en" | "sw";
 
 // Define the initial state
-const initialState: State = localStorage.getItem("language") || "en";
+const initialState: State = localStorage.getItem("language") || ("en" as any);
 
 // Create the context
 const LanguageContext = createContext<{

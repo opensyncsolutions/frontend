@@ -22,7 +22,11 @@ const SideSheet = ({
 }) => {
   return (
     <Sheet open={open} onOpenChange={close}>
-      <SheetContent>
+      <SheetContent
+        style={{
+          overflowY: "auto",
+        }}
+      >
         <SheetHeader>{title && <SheetTitle>{title}</SheetTitle>}</SheetHeader>
         {children}
         {footer && <SheetFooter>{footer}</SheetFooter>}

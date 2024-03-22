@@ -160,6 +160,14 @@ interface Menu {
   sortOrder: number;
   displayName: string;
   code?: string;
+  translations?: {
+    en: {
+      displayName: string;
+    };
+    sw: {
+      displayName: string;
+    };
+  };
 }
 
 // End API
