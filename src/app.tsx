@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useGetMe } from "./shared/services/auth";
 import { PageLoader } from "./components/ui/loader";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import DashboardRoutes from "./shared/routes/dashboard-routes";
 
 const Error = lazy(() => import("@/pages/error"));
@@ -9,10 +9,14 @@ const Error = lazy(() => import("@/pages/error"));
 // authentication pages
 const Login = lazy(() => import("@/pages/authentication/login"));
 
-// authenticated pages
+// authenticated layout
 const Layout = lazy(() => import("@/layout"));
 
 const App = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [window.location.pathname]);
+
   const { me, meError, meLoading, meRefetch } = useGetMe();
 
   if (meLoading) {

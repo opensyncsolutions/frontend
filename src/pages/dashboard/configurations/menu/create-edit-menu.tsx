@@ -76,15 +76,17 @@ const CreateEditMenu = ({
 
 const formSchema = z.object({
   code: z.string().optional(),
-  name: z.string({ required_error: "You must provide a name" }),
   displayName: z.string({ required_error: "You must provide a name" }),
   path: z.string({ required_error: "You must provide a name" }),
-  sortOrder: z.string().optional(),
 });
 
 const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const { menu } = useMenu(id && id !== "new" ? id : "");
   const { menus } = useMenus();
+
+  const highestSortOrder: number | undefined = menus?.menus?.sort(
+    (a, b) => b.sortOrder - a.sortOrder
+  )[0].sortOrder;
 
   const { fields, fieldsLoading, fieldsError, fieldsRefetch } =
     useFields("menus");
@@ -106,10 +108,8 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: menu?.name || "",
       path: menu?.path || "",
       displayName: menu?.displayName || "",
-      sortOrder: menu?.sortOrder + "",
       code: menu?.code || "",
     },
   });
@@ -121,20 +121,11 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
     if (id === "new") {
       return createMenu({
         ...values,
-        ...(values?.sortOrder
-          ? {
-              sortOrder: Number(values?.sortOrder),
-            }
-          : { sortOrder: undefined }),
+        sortOrder: highestSortOrder ? highestSortOrder + 1 : 1,
       }).then(() => cb?.());
     }
     return editMenu({
       ...values,
-      ...(values?.sortOrder
-        ? {
-            sortOrder: Number(values?.sortOrder),
-          }
-        : { sortOrder: undefined }),
     }).then(() => cb?.());
   };
 
@@ -182,7 +173,10 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                   disabled={loading}
                   type={type === "NUMBER" ? "number" : "text"}
                   {...field}
-                  error={errors.name?.message || ""}
+                  error={
+                    errors?.[name as "displayName" | "path" | "code"]
+                      ?.message || ""
+                  }
                   onInput={
                     type === "NUMBER"
                       ? (e) => {
@@ -243,7 +237,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                     onChange={(e) => {
                       field?.onChange(e.value);
                     }}
-                    error={errors.name?.message || ""}
+                    error={errors?.[name]?.message || ""}
                   />
                 );
               }}

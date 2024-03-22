@@ -1,4 +1,4 @@
-import React from "react";
+// import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -14,14 +14,14 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <LanguageProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-        <Toaster />
-      </QueryClientProvider>
-    </LanguageProvider>
-  </React.StrictMode>
+  // <StrictMode>
+  <LanguageProvider>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      <Toaster />
+    </QueryClientProvider>
+  </LanguageProvider>
+  // </StrictMode>
 );

@@ -83,6 +83,34 @@ export const useCreateMenu = (cb?: () => void) => {
   };
 };
 
+export const useUpdateMenuBatch = (cb?: () => void) => {
+  const { mutateAsync, isLoading } = useMutation(
+    async (payload: Menu[]) => {
+      const { data } = await AxiosInstance.post("/menus", payload);
+      return data;
+    },
+    {
+      onError: (error) => {
+        toast(formatErrorMessage(error), {
+          duration: 5000,
+          closeButton: true,
+        });
+      },
+      onSuccess: () => {
+        toast("Successfully updated menus", {
+          duration: 5000,
+          closeButton: true,
+        });
+        cb?.();
+      },
+    }
+  );
+  return {
+    updateBatch: mutateAsync,
+    updateBatchLoading: isLoading,
+  };
+};
+
 export const useEditMenu = (id: string, cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async (payload: MenuPayload) => {
