@@ -23,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetMe } from "@/shared/services/auth";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/shared/contexts/languages";
+import { useTranslations } from "@/shared/hooks/use-translations";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -31,7 +32,7 @@ interface HeaderProps {
 
 const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   const { language, updateLanguage } = useLanguage();
-
+  const { translate } = useTranslations();
   const { width } = useWindowSize();
   const {
     open,
@@ -84,7 +85,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
                   onClick={() => {
                     updateLanguage({
                       type: "SET_LANGUAGE",
-                      payload: abbrev,
+                      payload: abbrev as "en" | "sw",
                     });
                   }}
                   key={index}
@@ -107,7 +108,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
           variant={"outline"}
           className="gap-3"
         >
-          Quick Actions{" "}
+          {translate("Quick Actions")}
           {width > 992 && (
             <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
               <span className="text-xs">⌘</span>/

@@ -2,17 +2,33 @@ import { Edit2Icon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import DeleteMenu from "./delete-menu";
 import { useSearchParams } from "react-router-dom";
+import { useLanguage } from "@/shared/contexts/languages";
+import { useTranslations } from "@/shared/hooks/use-translations";
 
 const selectedMenuToEdit = "selectedMenuToEdit";
 
 const MenuItem = ({ menu }: { menu: Menu }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [search, setSearch] = useSearchParams();
+  const { language } = useLanguage();
+  const { translate } = useTranslations();
+  const [viewMore, setViewMore] = useState(false);
   return (
     <div className="flex justify-between">
-      <div className="flex flex-col gap-1">
-        <span className="text-sm">{menu?.displayName}</span>
-        <span className="text-xs">Path: {menu?.path}</span>
+      <div className="flex flex-col gap-1 items-start">
+        <span className="text-sm">
+          {menu?.translations?.[language]?.displayName || menu?.displayName}
+        </span>
+        <span className="text-xs">
+          {translate("Path")}: /{menu?.path}
+        </span>
+        <div></div>
+        <button
+          className="p-0 text-xs text-primary"
+          onClick={() => setViewMore(!viewMore)}
+        >
+          {!viewMore ? translate("More") : translate("Less")}
+        </button>
       </div>
       <div className="flex justify-end items-center">
         <button

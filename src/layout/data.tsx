@@ -1,4 +1,5 @@
 import { useLanguage } from "@/shared/contexts/languages";
+import { useTranslations } from "@/shared/hooks/use-translations";
 import { useGetMe } from "@/shared/services/auth";
 import { useMenus } from "@/shared/services/menus";
 import { getRoles } from "@/shared/utils/roles";
@@ -134,6 +135,8 @@ export const useExtraSideMenu = () => {
 
   const { language } = useLanguage();
 
+  const { translate } = useTranslations();
+
   const {
     readAuthorityRole,
     readRolesRole,
@@ -177,7 +180,7 @@ export const useExtraSideMenu = () => {
       }) || []),
     ,
     {
-      label: language === "sw" ? "Tengeneza" : "Settings",
+      label: translate("Settings"),
       path: "settings",
       sort: 1,
       icon: <Settings size={18} />,
@@ -202,6 +205,8 @@ export const useQuickActions = () => {
     readFormsRole,
     readObjectivesRole,
   } = getRoles(me?.roles || []);
+
+  const { translate } = useTranslations();
 
   const { language } = useLanguage();
 
@@ -264,7 +269,7 @@ export const useQuickActions = () => {
       : []),
 
     {
-      name: language === "sw" ? "Ondoka" : "Logout",
+      name: translate("Logout"),
       possibleKeywords: "signout logout ondoka",
       action: "logout",
     },

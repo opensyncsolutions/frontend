@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommandActions } from "./data";
 import { useLogout } from "@/shared/services/auth";
+import { useTranslations } from "@/shared/hooks/use-translations";
 
 export const useHeaderHelpers = () => {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,7 @@ export const useHeaderHelpers = () => {
   const navigate = useNavigate();
 
   const { logout, logoutLoading } = useLogout();
+  const { translate } = useTranslations();
 
   const commandAction = ({
     action,
@@ -32,14 +34,14 @@ export const useHeaderHelpers = () => {
 
   const headerActions = [
     {
-      label: "Settings",
+      label: translate("Settings"),
       action: () => {
         navigate("/settings");
         setPopoverOpen(false);
       },
     },
     {
-      label: "Logout",
+      label: translate("Logout"),
       action: () => logout(),
       disabled: logoutLoading,
     },
