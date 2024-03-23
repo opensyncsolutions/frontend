@@ -22,6 +22,7 @@ import { useFields } from "@/shared/services/fields";
 import { Input } from "@/components/ui/input";
 import SelectInput from "@/components/ui/select-input";
 import { paths } from "@/layout/data";
+import { languages } from "@/shared/constants/constants";
 
 const CreateEditMenu = ({
   selected,
@@ -74,20 +75,6 @@ const CreateEditMenu = ({
   );
 };
 
-const LanguageSchema = z.object({
-  displayName: z.string({ required_error: "You must provide a name" }),
-});
-
-const formSchema = z.object({
-  code: z.string().optional(),
-  displayName: z.string({ required_error: "You must provide a name" }),
-  path: z.string({ required_error: "You must provide a name" }),
-  translations: z.object({
-    en: LanguageSchema,
-    sw: LanguageSchema,
-  }),
-});
-
 const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const { menu } = useMenu(id && id !== "new" ? id : "");
   const { menus } = useMenus();
@@ -107,6 +94,29 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
 
   const loading = createMenuLoading || editMenuLoading;
 
+  const LanguageSchema = z.object({
+    displayName: z.string({ required_error: "You must provide a name" }),
+  });
+
+  const translationsObject: Record<string, typeof LanguageSchema> = {};
+  languages.forEach((lang) => {
+    translationsObject[lang.lang] = LanguageSchema;
+  });
+
+  const formSchema = z.object({
+    code: z.string().optional(),
+    displayName: z.string({ required_error: "You must provide a name" }),
+    path: z.string({ required_error: "You must provide a name" }),
+    translations: z.object(translationsObject),
+  });
+
+  const defaultTranslations: Record<string, Record<string, string>> = {};
+  languages.forEach(({ lang }) => {
+    defaultTranslations[lang] = {
+      displayName: menu?.translations?.[lang]?.displayName || "",
+    };
+  });
+
   const {
     handleSubmit,
     formState: { errors },
@@ -119,14 +129,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
       path: menu?.path || "",
       displayName: menu?.displayName || "",
       code: menu?.code || "",
-      translations: {
-        en: {
-          displayName: menu?.translations?.en?.displayName || "",
-        },
-        sw: {
-          displayName: menu?.translations?.sw?.displayName || "",
-        },
-      },
+      translations: defaultTranslations,
     },
   });
 
@@ -269,106 +272,63 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
           return null;
         })}
       </div>
-      <div className="space-y-3 rounded border p-3">
-        <h3>English</h3>
-        {fields?.map(({ name, type }) => {
-          if (
-            (type === "TEXT" || type === "NUMBER") &&
-            name !== "path" &&
-            name !== "name" &&
-            name !== "sortOrder" &&
-            name !== "description" &&
-            name !== "code"
-          ) {
-            return (
-              <Controller
-                key={name}
-                name={("translations.en." + name) as any}
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    label={capitalizeFirstLetter(
-                      separateTextOnCapitalLetter(name)
+      {languages.map(({ lang, name }) => {
+        return (
+          <div className="space-y-3 rounded border p-3" key={lang}>
+            <h3>{name}</h3>
+            {fields?.map(({ name, type }) => {
+              if (
+                (type === "TEXT" || type === "NUMBER") &&
+                name !== "path" &&
+                name !== "name" &&
+                name !== "sortOrder" &&
+                name !== "description" &&
+                name !== "code"
+              ) {
+                return (
+                  <Controller
+                    key={name}
+                    name={("translations." + lang + "." + name) as any}
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        label={capitalizeFirstLetter(
+                          separateTextOnCapitalLetter(name)
+                        )}
+                        placeholder={`Enter ${separateTextOnCapitalLetter(
+                          name
+                        )}`}
+                        disabled={loading}
+                        type={type === "NUMBER" ? "number" : "text"}
+                        {...field}
+                        error={
+                          errors?.[
+                            ("translations." + lang + "." + name) as
+                              | "displayName"
+                              | "path"
+                              | "code"
+                          ]?.message || ""
+                        }
+                        onInput={
+                          type === "NUMBER"
+                            ? (e) => {
+                                e.currentTarget.value =
+                                  e.currentTarget.value.replace(/\D/g, "");
+                              }
+                            : undefined
+                        }
+                      />
                     )}
-                    placeholder={`Enter ${separateTextOnCapitalLetter(name)}`}
-                    disabled={loading}
-                    type={type === "NUMBER" ? "number" : "text"}
-                    {...field}
-                    error={
-                      errors?.[
-                        ("translations.en." + name) as
-                          | "displayName"
-                          | "path"
-                          | "code"
-                      ]?.message || ""
-                    }
-                    onInput={
-                      type === "NUMBER"
-                        ? (e) => {
-                            e.currentTarget.value =
-                              e.currentTarget.value.replace(/\D/g, "");
-                          }
-                        : undefined
-                    }
                   />
-                )}
-              />
-            );
-          }
+                );
+              }
 
-          return null;
-        })}
-      </div>
-      <div className="space-y-3 rounded border p-3">
-        <h3>Swahili</h3>
-        {fields?.map(({ name, type }) => {
-          if (
-            (type === "TEXT" || type === "NUMBER") &&
-            name !== "path" &&
-            name !== "name" &&
-            name !== "sortOrder" &&
-            name !== "description" &&
-            name !== "code"
-          ) {
-            return (
-              <Controller
-                key={name}
-                name={("translations.sw." + name) as any}
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    label={capitalizeFirstLetter(
-                      separateTextOnCapitalLetter(name)
-                    )}
-                    placeholder={`Enter ${separateTextOnCapitalLetter(name)}`}
-                    disabled={loading}
-                    type={type === "NUMBER" ? "number" : "text"}
-                    {...field}
-                    error={
-                      errors?.[
-                        ("translations.sw." + name) as
-                          | "displayName"
-                          | "path"
-                          | "code"
-                      ]?.message || ""
-                    }
-                    onInput={
-                      type === "NUMBER"
-                        ? (e) => {
-                            e.currentTarget.value =
-                              e.currentTarget.value.replace(/\D/g, "");
-                          }
-                        : undefined
-                    }
-                  />
-                )}
-              />
-            );
-          }
+              return null;
+            })}
+          </div>
+        );
+      })}
 
-          return null;
-        })}
-      </div>
       <div className="flex justify-end">
         <Button
           disabled={!getValues("displayName") || !getValues("path") || loading}

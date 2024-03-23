@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useWindowSize } from "@/shared/hooks/use-window-size";
-import { Check, Languages, Menu, Skull } from "lucide-react";
+import { Check, Menu, Skull } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ButtonHTMLAttributes } from "react";
-import { languages, useQuickActions } from "./data";
+import { useQuickActions } from "./data";
 import { DialogClose } from "@/components/ui/dialog";
 import { CommandGroup } from "@/components/ui/command";
 import { useHeaderHelpers } from "./helpers";
@@ -24,6 +24,7 @@ import { useGetMe } from "@/shared/services/auth";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/shared/contexts/languages";
 import { useTranslations } from "@/shared/hooks/use-translations";
+import { languages } from "@/shared/constants/constants";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -75,27 +76,27 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className="h-8 w-8 !p-0">
-              <Languages size={18} />
+              {language}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-fit px-0 py-2">
             <div className="flex flex-col">
-              {languages.map(({ label, abbrev }, index) => (
+              {languages.map(({ lang, name }, index) => (
                 <Button
                   onClick={() => {
                     updateLanguage({
                       type: "SET_LANGUAGE",
-                      payload: abbrev as "en" | "sw",
+                      payload: lang as Languages,
                     });
                   }}
                   key={index}
                   variant={"ghost"}
                   className="!px-4 justify-start gap-2"
                 >
-                  {language === abbrev ? (
+                  {language === lang ? (
                     <Check size={18} className="animate-fade-in" />
                   ) : null}{" "}
-                  {label}
+                  {name}
                 </Button>
               ))}
             </div>

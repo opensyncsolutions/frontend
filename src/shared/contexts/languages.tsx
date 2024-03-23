@@ -7,9 +7,9 @@ import {
 } from "react";
 
 // Define the types
-type Action = { type: "SET_LANGUAGE"; payload: "en" | "sw" };
+type Action = { type: "SET_LANGUAGE"; payload: Languages };
 
-type State = "en" | "sw";
+type State = Languages;
 
 // Define the initial state
 const initialState: State = localStorage.getItem("language") || ("en" as any);

@@ -160,14 +160,7 @@ interface Menu {
   sortOrder: number;
   displayName: string;
   code?: string;
-  translations?: {
-    en: {
-      displayName: string;
-    };
-    sw: {
-      displayName: string;
-    };
-  };
+  translations?: Record<Languages, Record<"displayName", string>>;
 }
 
 // End API
@@ -205,3 +198,9 @@ interface Filter {
 }
 
 // End UI
+
+// start language
+type Languages = "en" | "sw" | "fr";
+type LanguagesNames = "English" | "Swahili" | "Franc";
+
+// end language

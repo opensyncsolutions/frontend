@@ -22,17 +22,6 @@ export type SidebarRoutes = {
   to: string;
 };
 
-export const languages = [
-  {
-    label: "English",
-    abbrev: "en",
-  },
-  {
-    label: "Swahili",
-    abbrev: "sw",
-  },
-];
-
 export type CommandActions = "logout";
 
 export type CommantActionsList = {
