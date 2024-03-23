@@ -8,8 +8,6 @@ const Form = () => {
   const { formId } = useParams<{ formId: string }>();
   const { form } = useForm(formId || "");
 
-  console.log(form);
-
   return (
     <PageTemplate
       title={form ? form?.translations?.[language]?.name || form?.name : "Form"}
