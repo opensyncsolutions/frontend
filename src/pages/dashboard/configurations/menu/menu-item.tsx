@@ -40,7 +40,7 @@ const MenuItem = ({ menu }: { menu: Menu }) => {
                 return null;
               }
               return (
-                <div className="flex gap-1 text-xs">
+                <div className="flex gap-1 text-xs" key={lang?.lang}>
                   <span>{lang.name}: </span>
                   <span>{menu?.translations?.[lang?.lang].displayName}</span>
                 </div>

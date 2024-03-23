@@ -20,3 +20,13 @@ export const separateTextOnCapitalLetter = (displayName: string): string => {
     .trim()
     .toLowerCase();
 };
+
+export const compareArray = (
+  arr1: { id: string }[],
+  arr2: { id: string }[]
+): boolean => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  return arr1.every((obj, index) => obj.id === arr2[index].id);
+};

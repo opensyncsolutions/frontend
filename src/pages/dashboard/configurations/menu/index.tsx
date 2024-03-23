@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import ErrorComponent from "@/pages/error";
 import { useGetMe } from "@/shared/services/auth";
 import { useMenus, useUpdateMenuBatch } from "@/shared/services/menus";
-import { formatErrorMessage } from "@/shared/utils/helpers";
+import { compareArray, formatErrorMessage } from "@/shared/utils/helpers";
 import { getRoles } from "@/shared/utils/roles";
 import { PlusIcon, RefreshCcw } from "lucide-react";
 import { useState } from "react";
@@ -95,18 +95,26 @@ const Menu = () => {
               })) || []
           }
           onDataReordering={(data) => {
-            // @ts-ignore
-            const newMenus: Menu[] = data?.map((menu, index) => {
-              const menuItem = menus?.menus?.find(
-                (item) => item?.id === menu?.id
-              );
-              return {
-                ...menuItem,
-                id: menu.id,
-                sortOrder: index + 1,
-              };
-            });
-            updateBatch(newMenus);
+            const prevData = menus?.menus
+              ?.sort((a, b) => a.sortOrder - b.sortOrder)
+              .map((menu) => ({
+                id: menu?.id,
+              }));
+
+            if (!compareArray(data, prevData)) {
+              // @ts-ignore
+              const newMenus: Menu[] = data?.map((menu, index) => {
+                const menuItem = menus?.menus?.find(
+                  (item) => item?.id === menu?.id
+                );
+                return {
+                  ...menuItem,
+                  id: menu.id,
+                  sortOrder: index + 1,
+                };
+              });
+              updateBatch(newMenus);
+            }
           }}
           loading={updateBatchLoading || menusRefetching}
         />
