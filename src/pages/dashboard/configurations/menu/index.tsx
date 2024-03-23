@@ -76,7 +76,15 @@ const Menu = () => {
             menusError ? formatErrorMessage(menusError) : "No Data found"
           }
           type={menusError ? "destructive" : "default"}
+          retryText={menusError && !createMenuRole ? "Retry" : "Create"}
           refetch={() => {
+            if (!menusError) {
+              if (search.get(selectedMenuToEdit)) {
+                search.delete(selectedMenuToEdit);
+              }
+              search.append(selectedMenuToEdit, "new");
+              return setSearch(search);
+            }
             setLoading(true);
             menusRefetch().finally(() => {
               setLoading(false);
@@ -85,7 +93,7 @@ const Menu = () => {
           className="max-h-48"
         />
       )}
-      {menus?.menus?.length && (
+      {menus?.menus?.length ? (
         <DragAndDropList
           data={
             menus?.menus
@@ -127,7 +135,7 @@ const Menu = () => {
           }}
           loading={updateBatchLoading || menusRefetching}
         />
-      )}
+      ) : null}
 
       <CreateEditMenu
         selected={

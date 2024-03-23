@@ -29,7 +29,7 @@ const MenuItem = ({
     <div className="flex justify-between gap-3 w-full">
       <div className="flex flex-col gap-1 items-start w-full">
         <span className="font-bold">
-          {menu?.translations?.[language]?.displayName || menu?.displayName}
+          {menu?.translations?.[language]?.name || menu?.name}
         </span>
         <span className="text-xs">
           {translate("Path")}: /{menu?.path}
@@ -52,7 +52,7 @@ const MenuItem = ({
               return (
                 <div className="flex gap-1 text-xs" key={lang?.lang}>
                   <span>{lang.name}: </span>
-                  <span>{menu?.translations?.[lang?.lang].displayName}</span>
+                  <span>{menu?.translations?.[lang?.lang].name}</span>
                 </div>
               );
             })}
@@ -93,9 +93,7 @@ const MenuItem = ({
       {canDelete && (
         <DeleteMenu
           id={openDelete ? menu?.id : ""}
-          name={
-            menu?.translations?.[language]?.displayName || menu?.displayName
-          }
+          name={menu?.translations?.[language]?.name || menu?.name}
           cb={(deleted) => {
             if (deleted) {
               refetch();

@@ -104,8 +104,7 @@ export const useMenuConfig = () => {
         .map((menu) => {
           return {
             ...menu,
-            label:
-              menu?.translations?.[language]?.displayName || menu?.displayName,
+            label: menu?.translations?.[language]?.name || menu?.name,
             path: menu?.path,
             icon: pathToIcon?.[menu?.path],
           };
@@ -162,8 +161,7 @@ export const useExtraSideMenu = () => {
       .map((menu) => {
         return {
           ...menu,
-          label:
-            menu?.translations?.[language]?.displayName || menu?.displayName,
+          label: menu?.translations?.[language]?.name || menu?.name,
           path: menu?.path,
           icon: morePathToIcon?.[menu?.path],
         };
@@ -247,13 +245,9 @@ export const useQuickActions = () => {
           ?.map((menu) => {
             return {
               path: menu?.path,
-              title:
-                menu?.translations?.[language]?.displayName ||
-                menu?.displayName,
-              name:
-                menu?.translations?.[language]?.displayName ||
-                menu?.displayName,
-              possibleKeywords: `${menu?.translations?.[language]?.displayName} ${menu?.path} ${menu?.displayName}`,
+              title: menu?.translations?.[language]?.name || menu?.name,
+              name: menu?.translations?.[language]?.name || menu?.name,
+              possibleKeywords: `${menu?.translations?.[language]?.name} ${menu?.path} ${menu?.name}`,
             };
           })
       : []),

@@ -169,9 +169,9 @@ interface Menu {
   updated: string;
   path: string;
   sortOrder: number;
-  displayName: string;
+  name: string;
   code?: string;
-  translations?: Record<Languages, Record<"displayName", string>>;
+  translations?: Record<Languages, Record<"name", string>>;
 }
 
 interface FormResponse {

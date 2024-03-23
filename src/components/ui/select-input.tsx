@@ -73,7 +73,7 @@ const SelectInput = ({
         placeholder={placeholder}
         components={animatedComponents}
         options={options}
-        closeMenuOnSelect={false}
+        closeMenuOnSelect={!isMulti}
         noOptionsMessage={() => "No options found!!"}
         onChange={onChange}
         classNames={{

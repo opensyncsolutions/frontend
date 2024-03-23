@@ -6,7 +6,6 @@ import { toast } from "sonner";
 interface MenuPayload {
   path: string;
   name?: string;
-  displayName: string;
   sortOrder?: number;
   description?: string;
   code?: string;

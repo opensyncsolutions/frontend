@@ -12,8 +12,8 @@ export const capitalizeFirstLetter = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const separateTextOnCapitalLetter = (displayName: string): string => {
-  return displayName
+export const separateTextOnCapitalLetter = (name: string): string => {
+  return name
     ?.split(".")
     ?.join(" ")
     .replace(/([A-Z])/g, " $1")

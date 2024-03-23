@@ -81,7 +81,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
 
   const highestSortOrder: number | undefined = menus?.menus?.sort(
     (a, b) => b.sortOrder - a.sortOrder
-  )[0].sortOrder;
+  )?.[0]?.sortOrder;
 
   const { fields, fieldsLoading, fieldsError, fieldsRefetch } =
     useFields("menus");
@@ -95,7 +95,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const loading = createMenuLoading || editMenuLoading;
 
   const LanguageSchema = z.object({
-    displayName: z.string({ required_error: "You must provide a name" }),
+    name: z.string({ required_error: "You must provide a name" }),
   });
 
   const translationsObject: Record<string, typeof LanguageSchema> = {};
@@ -104,7 +104,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   });
 
   const formSchema = z.object({
-    displayName: z.string({ required_error: "You must provide a name" }),
+    name: z.string({ required_error: "You must provide a name" }),
     path: z.string({ required_error: "You must provide a name" }),
     translations: z.object(translationsObject),
   });
@@ -112,7 +112,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const defaultTranslations: Record<string, Record<string, string>> = {};
   languages.forEach(({ lang }) => {
     defaultTranslations[lang] = {
-      displayName: menu?.translations?.[lang]?.displayName || "",
+      name: menu?.translations?.[lang]?.name || "",
     };
   });
 
@@ -126,13 +126,12 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       path: menu?.path || "",
-      displayName: menu?.displayName || "",
-
+      name: menu?.name || "",
       translations: defaultTranslations,
     },
   });
 
-  watch("displayName");
+  watch("name");
   watch("path");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -173,8 +172,6 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
     );
   }
 
-  console.log(menus?.menus, paths);
-
   return (
     <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-3 rounded border p-3">
@@ -183,10 +180,10 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
           if (
             (type === "TEXT" || type === "NUMBER") &&
             name !== "path" &&
-            name !== "name" &&
             name !== "sortOrder" &&
             name !== "description" &&
-            name !== "code"
+            name !== "code" &&
+            name !== "displayName"
           ) {
             return (
               <Controller
@@ -195,6 +192,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                 control={control}
                 render={({ field }) => (
                   <Input
+                    key={name}
                     label={capitalizeFirstLetter(
                       separateTextOnCapitalLetter(field?.name)
                     )}
@@ -202,11 +200,8 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                       field?.name
                     )}`}
                     disabled={loading}
-                    type={type === "NUMBER" ? "number" : "text"}
                     {...field}
-                    error={
-                      errors?.[name as "displayName" | "path"]?.message || ""
-                    }
+                    error={errors?.[name as "name" | "path"]?.message || ""}
                     onInput={
                       type === "NUMBER"
                         ? (e) => {
@@ -283,7 +278,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
               if (
                 (type === "TEXT" || type === "NUMBER") &&
                 name !== "path" &&
-                name !== "name" &&
+                name !== "displayName" &&
                 name !== "sortOrder" &&
                 name !== "description" &&
                 name !== "code"
@@ -295,6 +290,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                     control={control}
                     render={({ field }) => (
                       <Input
+                        key={name}
                         label={capitalizeFirstLetter(
                           separateTextOnCapitalLetter(name)
                         )}
@@ -307,7 +303,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                         error={
                           errors?.[
                             ("translations." + lang + "." + name) as
-                              | "displayName"
+                              | "name"
                               | "path"
                           ]?.message || ""
                         }
@@ -332,9 +328,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
       })}
 
       <div className="flex justify-end">
-        <Button
-          disabled={!getValues("displayName") || !getValues("path") || loading}
-        >
+        <Button disabled={!getValues("name") || !getValues("path") || loading}>
           {loading ? "Please Wait" : id === "new" ? "Create" : "Edit"}
         </Button>
       </div>

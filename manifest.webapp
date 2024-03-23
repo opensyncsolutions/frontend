@@ -1,33 +1,121 @@
 {
   "menus": [
-    { "name": "Dashboard", "path": "dashboard", "sortOrder": 1 },
-    { "name": "Enrollments", "path": "enrollments", "sortOrder": 2 },
-    { "name": "Followup", "path": "followup", "sortOrder": 3 },
+    {
+      "name": "Dashboard",
+      "path": "dashboard",
+      "sortOrder": 1,
+      "translations": {
+        "en": {
+          "name": "Dashboard"
+        },
+        "sw": {
+          "name": "Dashibodi"
+        }
+      }
+    },
+    {
+      "name": "Enrollments",
+      "path": "enrollments",
+      "sortOrder": 2,
+      "translations": {
+        "en": {
+          "name": "Enrollments"
+        },
+        "sw": {
+          "name": "Uandikishwaji"
+        }
+      }
+    },
+    {
+      "name": "Followup",
+      "path": "followup",
+      "sortOrder": 3,
+      "translations": {
+        "en": {
+          "name": "Followup"
+        },
+        "sw": {
+          "name": "Ufuatiliaji"
+        }
+      }
+    },
     {
       "name": "Cash Disbursement",
       "path": "cash-disbursement",
-      "sortOrder": 4
+      "sortOrder": 4,
+      "translations": {
+        "en": {
+          "name": "Cash Disbursement"
+        },
+        "sw": {
+          "name": "Malipo ya Fedha"
+        }
+      }
     },
     {
       "name": "Blood Collections",
       "path": "blood-collections",
-      "sortOrder": 5
+      "sortOrder": 5,
+      "translations": {
+        "en": {
+          "name": "Blood Collections"
+        },
+        "sw": {
+          "name": "Ukusanyaji wa Damu"
+        }
+      }
     },
     {
       "name": "Data Collections",
       "path": "data-collections",
-      "sortOrder": 6
+      "sortOrder": 6,
+      "translations": {
+        "en": {
+          "name": "Data Collections"
+        },
+        "sw": {
+          "name": "Ukusanyaji wa Data"
+        }
+      }
     },
-    { "name": "Users", "path": "users", "sortOrder": 7 },
+    {
+      "name": "Users",
+      "path": "users",
+      "sortOrder": 7,
+      "translations": {
+        "en": {
+          "name": "Users"
+        },
+        "sw": {
+          "name": "Watumiaji"
+        }
+      }
+    },
     {
       "name": "Roles & Privileges",
       "path": "roles-and-privileges",
-      "sortOrder": 8
-    }
+      "sortOrder": 8,
+      "translations": {
+        "en": {
+          "name": "Roles & Privileges"
+        },
+        "sw": {
+          "name": "Vipaumbele & Haki za Kipekee"
+        }
+      }
+    },
     {
       "name": "Configurations",
       "path": "configurations",
-      "sortOrder": 9
+      "sortOrder": 9,
+      "translations": {
+        "en": {
+          "name": "Configurations"
+        },
+        "sw": {
+          "name": "Usanidi"
+        }
+      }
     }
   ]
 }
