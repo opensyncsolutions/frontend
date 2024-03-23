@@ -50,6 +50,7 @@ export const paths = [
   "blood-collections",
   "cash-disbursement",
   "data-collections",
+  "users",
   "roles-and-privileges",
   "configurations",
 ];

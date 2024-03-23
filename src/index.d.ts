@@ -132,6 +132,17 @@ interface Field {
   mandatory: boolean;
   type: "DATE" | "BOOLEAN" | "TEXT" | "NUMBER";
   description?: string;
+  sortOrder: number;
+  translations?: Record<Languages, Record<"name", string>>;
+}
+
+interface Section {
+  id: string;
+  code: string;
+  name: string;
+  sortOrder: number;
+  fields: Field[];
+  translations?: Record<Languages, Record<"name", string>>;
 }
 
 interface Role {
@@ -162,6 +173,56 @@ interface Menu {
   code?: string;
   translations?: Record<Languages, Record<"displayName", string>>;
 }
+
+interface FormResponse {
+  id: string;
+  name: string;
+  code: string;
+  translations?: Record<Languages, Record<"name", string>>;
+  fields: Field[];
+}
+
+type Form =
+  | "menus"
+  | "users"
+  | "roles"
+  | "privileges"
+  | "organisationUnits"
+  | "enrollments"
+  | "stages"
+  | "followups"
+  | "disbursements"
+  | "bloodCollections"
+  | "dataCollections"
+  | "eacs"
+  | "sessions"
+  | "objectives"
+  | "forms"
+  | "fields"
+  | "sections"
+  | "phones"
+  | "networks";
+
+type FormNames =
+  | "Menus"
+  | "Users"
+  | "Roles"
+  | "Privileges"
+  | "Organisation Units"
+  | "Enrollments"
+  | "Stages"
+  | "Followups"
+  | "Disbursements"
+  | "Blood Collections"
+  | "Data Collections"
+  | "Eacs"
+  | "Sessions"
+  | "Objectives"
+  | "Forms"
+  | "Fields"
+  | "Sections"
+  | "Phones"
+  | "Networks";
 
 // End API
 

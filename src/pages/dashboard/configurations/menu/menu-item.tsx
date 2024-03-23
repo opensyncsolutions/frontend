@@ -8,7 +8,17 @@ import { languages } from "@/shared/constants/constants";
 
 const selectedMenuToEdit = "selectedMenuToEdit";
 
-const MenuItem = ({ menu }: { menu: Menu }) => {
+const MenuItem = ({
+  menu,
+  canEdit,
+  canDelete,
+  refetch,
+}: {
+  menu: Menu;
+  canDelete: boolean;
+  canEdit: boolean;
+  refetch: () => void;
+}) => {
   const content = useRef<HTMLDivElement>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [search, setSearch] = useSearchParams();
@@ -57,31 +67,43 @@ const MenuItem = ({ menu }: { menu: Menu }) => {
         </button>
       </div>
       <div className="flex justify-end items-center">
-        <button
-          className="px-2 py-2"
-          onClick={() => {
-            if (search.get(selectedMenuToEdit)) {
-              search.delete(selectedMenuToEdit);
-            }
-            search.append(selectedMenuToEdit, menu?.id);
-            setSearch(search);
-          }}
-        >
-          <Edit2Icon size={16} />
-        </button>
-        <button
-          className="px-2 py-2 text-red-500"
-          onClick={() => setOpenDelete(true)}
-        >
-          <Trash2Icon size={16} />
-        </button>
+        {canEdit && (
+          <button
+            className="px-2 py-2"
+            onClick={() => {
+              if (search.get(selectedMenuToEdit)) {
+                search.delete(selectedMenuToEdit);
+              }
+              search.append(selectedMenuToEdit, menu?.id);
+              setSearch(search);
+            }}
+          >
+            <Edit2Icon size={16} />
+          </button>
+        )}
+        {canDelete && (
+          <button
+            className="px-2 py-2 text-red-500"
+            onClick={() => setOpenDelete(true)}
+          >
+            <Trash2Icon size={16} />
+          </button>
+        )}
       </div>
-      <DeleteMenu
-        id={openDelete ? menu?.id : ""}
-        cb={() => {
-          setOpenDelete(false);
-        }}
-      />
+      {canDelete && (
+        <DeleteMenu
+          id={openDelete ? menu?.id : ""}
+          name={
+            menu?.translations?.[language]?.displayName || menu?.displayName
+          }
+          cb={(deleted) => {
+            if (deleted) {
+              refetch();
+            }
+            setOpenDelete(false);
+          }}
+        />
+      )}
     </div>
   );
 };

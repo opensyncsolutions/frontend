@@ -104,7 +104,6 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   });
 
   const formSchema = z.object({
-    code: z.string().optional(),
     displayName: z.string({ required_error: "You must provide a name" }),
     path: z.string({ required_error: "You must provide a name" }),
     translations: z.object(translationsObject),
@@ -128,7 +127,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
     defaultValues: {
       path: menu?.path || "",
       displayName: menu?.displayName || "",
-      code: menu?.code || "",
+
       translations: defaultTranslations,
     },
   });
@@ -141,10 +140,12 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
       return createMenu({
         ...values,
         sortOrder: highestSortOrder ? highestSortOrder + 1 : 1,
+        code: values?.path,
       }).then(() => cb?.());
     }
     return editMenu({
       ...values,
+      code: values?.path,
     }).then(() => cb?.());
   };
 
@@ -172,6 +173,8 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
     );
   }
 
+  console.log(menus?.menus, paths);
+
   return (
     <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-3 rounded border p-3">
@@ -182,7 +185,8 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
             name !== "path" &&
             name !== "name" &&
             name !== "sortOrder" &&
-            name !== "description"
+            name !== "description" &&
+            name !== "code"
           ) {
             return (
               <Controller
@@ -201,8 +205,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                     type={type === "NUMBER" ? "number" : "text"}
                     {...field}
                     error={
-                      errors?.[name as "displayName" | "path" | "code"]
-                        ?.message || ""
+                      errors?.[name as "displayName" | "path"]?.message || ""
                     }
                     onInput={
                       type === "NUMBER"
@@ -306,7 +309,6 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                             ("translations." + lang + "." + name) as
                               | "displayName"
                               | "path"
-                              | "code"
                           ]?.message || ""
                         }
                         onInput={

@@ -79,7 +79,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
               {language}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-fit px-0 py-2">
+          <PopoverContent className="w-fit px-0 py-2 mr-20">
             <div className="flex flex-col">
               {languages.map(({ lang, name }, index) => (
                 <Button
@@ -129,7 +129,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="min-w-60 mr-6">
-            <div className="border-b flex gap-4 items-center  pb-4">
+            <div className="border-b flex gap-4 items-center pb-4">
               <Avatar>
                 <AvatarImage src={me?.dp} />
                 <AvatarFallback>

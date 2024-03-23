@@ -8,11 +8,11 @@ import { getRoles } from "@/shared/utils/roles";
 import { PlusIcon, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import DeleteMenu from "./delete-menu";
 import CreateEditMenu from "./create-edit-menu";
 import DragAndDropList from "@/components/dnd";
 import MenuItem from "./menu-item";
 import Loader from "@/components/ui/loader";
+import { useTranslations } from "@/shared/hooks/use-translations";
 
 const selectedMenuToEdit = "selectedMenuToEdit";
 
@@ -21,7 +21,7 @@ const Menu = () => {
   const { createMenuRole, editMenuRole, deleteMenuRole } = getRoles(
     me?.roles || []
   );
-  const [menuToDelete, setMenuToDelete] = useState("");
+  const { translate } = useTranslations();
   const [search, setSearch] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
   const { menus, menusError, menusLoading, menusRefetch, menusRefetching } =
@@ -33,9 +33,9 @@ const Menu = () => {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 h-fit">
       <div className="flex justify-between">
-        <h3 className="font-bold text-xl">Menus</h3>
+        <h3 className="font-bold text-xl">{translate("Menus")}</h3>
         <div className="flex gap-3 items-center animate-fade-in">
           <Button
             size={"sm"}
@@ -82,6 +82,7 @@ const Menu = () => {
               setLoading(false);
             });
           }}
+          className="max-h-48"
         />
       )}
       {menus?.menus?.length && (
@@ -91,7 +92,15 @@ const Menu = () => {
               ?.sort((a, b) => a.sortOrder - b.sortOrder)
               ?.map((menu) => ({
                 id: menu?.id,
-                content: <MenuItem menu={menu} key={menu?.id} />,
+                content: (
+                  <MenuItem
+                    menu={menu}
+                    key={menu?.id}
+                    canDelete={!!deleteMenuRole}
+                    canEdit={!!editMenuRole}
+                    refetch={() => menusRefetch()}
+                  />
+                ),
               })) || []
           }
           onDataReordering={(data) => {
@@ -129,13 +138,6 @@ const Menu = () => {
           setSearch(search);
         }}
         refetch={() => menusRefetch()}
-      />
-      <DeleteMenu
-        id={deleteMenuRole ? menuToDelete || "" : ""}
-        cb={(refetch) => {
-          if (refetch) menusRefetch();
-          setMenuToDelete("");
-        }}
       />
     </div>
   );

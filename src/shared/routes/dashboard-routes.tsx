@@ -21,6 +21,8 @@ const RolesPrivileges = lazy(
 );
 const Configurations = lazy(() => import("@/pages/dashboard/configurations"));
 
+const Form = lazy(() => import("@/pages/dashboard/configurations/form"));
+
 const DashboardRoutes = (roles: Role[]) => {
   const PageLoader = (
     <div className="flex justify-center h-40">
@@ -49,7 +51,7 @@ const DashboardRoutes = (roles: Role[]) => {
         path="*"
         element={
           <Suspense fallback={PageLoader}>
-            <Navigate to={"/dashboard"} />
+            <Navigate to={"/dashboard"} replace />
           </Suspense>
         }
       />
@@ -140,6 +142,16 @@ const DashboardRoutes = (roles: Role[]) => {
           element={
             <Suspense fallback={PageLoader}>
               <Configurations />
+            </Suspense>
+          }
+        />
+      )}
+      {readFormsRole && (
+        <Route
+          path="/configurations/forms/:formId"
+          element={
+            <Suspense fallback={PageLoader}>
+              <Form />
             </Suspense>
           }
         />

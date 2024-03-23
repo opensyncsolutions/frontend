@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { AxiosInstance } from "../configs/api";
 
-export const useFields = (path: string) => {
+export const useFields = (path: Form) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     ["fields", path],
     async () => {
@@ -13,6 +13,7 @@ export const useFields = (path: string) => {
       return data;
     },
     {
+      enabled: !!path,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }

@@ -18,12 +18,7 @@
       "path": "data-collections",
       "sortOrder": 6
     },
-    {
-      "name": "Cash Disbursement",
-      "path": "cash-disbursement",
-      "sortOrder": 7
-    },
-    { "name": "Users", "path": "users", "sortOrder": 8 },
+    { "name": "Users", "path": "users", "sortOrder": 7 },
     {
       "name": "Roles & Privileges",
       "path": "roles-and-privileges",
@@ -32,7 +27,7 @@
     {
       "name": "Configurations",
       "path": "configurations",
-      "sortOrder": 8
+      "sortOrder": 9
     }
   ]
 }

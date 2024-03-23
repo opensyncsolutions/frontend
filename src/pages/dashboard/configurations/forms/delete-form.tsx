@@ -1,38 +1,38 @@
 import { Button } from "@/components/ui/button";
 import Modal from "@/components/ui/modal";
-import { useDeleteMenu } from "@/shared/services/menus";
+import { useDeleteForm } from "@/shared/services/forms";
 
-const DeleteMenu = ({
+const DeleteForm = ({
   id,
   name,
   cb,
 }: {
   id: string;
   name: string;
-  cb: (deleted?: boolean) => void;
+  cb: (refetch?: boolean) => void;
 }) => {
-  const { deleteMenu, deleteMenuLoading } = useDeleteMenu(id, () => cb(true));
+  const { deleteForm, deleteFormLoading } = useDeleteForm(id, () => cb(true));
   return (
     <Modal
       open={!!id}
       close={() => cb()}
       title={`Delete ${name}`}
-      description={`Are you sure you want to delete this menu? This action is irreversible`}
+      description="Are you sure you want to delete this menu? This action is irreversible"
       footer={
         <div className="space-x-4">
           <Button
             variant={"outline"}
             onClick={() => cb()}
-            disabled={deleteMenuLoading}
+            disabled={deleteFormLoading}
           >
             Cancel
           </Button>
           <Button
             variant={"destructive"}
-            disabled={deleteMenuLoading}
-            onClick={() => deleteMenu()}
+            disabled={deleteFormLoading}
+            onClick={() => deleteForm()}
           >
-            {deleteMenuLoading ? "Deleting" : "Confirm"}
+            {deleteFormLoading ? "Deleting" : "Confirm"}
           </Button>
         </div>
       }
@@ -40,4 +40,4 @@ const DeleteMenu = ({
   );
 };
 
-export default DeleteMenu;
+export default DeleteForm;
