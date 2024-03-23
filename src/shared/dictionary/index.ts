@@ -15,4 +15,22 @@ const dictionary = [
     fr: "jhb",
     default: "Path",
   },
+  {
+    en: "More",
+    sw: "Zaidi",
+    fr: "jhb",
+    default: "More",
+  },
+  {
+    en: "Less",
+    sw: "Pungufu",
+    fr: "jhb",
+    default: "Less",
+  },
+  {
+    en: "Translations",
+    sw: "Tafsiri",
+    fr: "jhb",
+    default: "Translations",
+  },
 ];

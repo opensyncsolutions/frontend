@@ -12,4 +12,5 @@ export const languages: {
     lang: "sw",
     name: "Swahili",
   },
+  { lang: "fr", name: "Franc" },
 ];
