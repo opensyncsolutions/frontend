@@ -46,7 +46,7 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
       )}
       <aside
         className={cn(
-          "fixed h-[100dvh] overflow-hidden border-r bg-white left-0 top-0 transition-all",
+          "fixed h-[100dvh] overflow-hidden border-r bg-primary left-0 top-0 transition-all",
           width > 992
             ? !isSidebarOpen
               ? "w-[70px]"
@@ -111,8 +111,10 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
                       if (width <= 992) closeSidebar();
                     }}
                     className={cn(
-                      "flex items-center px-2 py-[6px] text-[#030712] hover:bg-black/5 w-full transition-all rounded-lg",
-                      pathname.includes(route.path) ? "bg-black/5" : "",
+                      "flex items-center px-2 py-[6px] text-[#B7D1D6]  w-full transition-all rounded-lg",
+                      pathname.includes(route.path)
+                        ? "bg-white/85 text-black/90"
+                        : "hover:bg-white/10",
                       !isSidebarOpen && width > 992
                         ? "w-[45px] justify-center"
                         : ""
@@ -145,8 +147,10 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
                       if (width <= 992) closeSidebar();
                     }}
                     className={cn(
-                      "flex items-center px-2 py-[6px] text-[#030712] hover:bg-black/5 w-full transition-all rounded-lg",
-                      pathname.includes(route?.path || "") ? "bg-black/5" : "",
+                      "flex items-center px-2 py-[6px] text-[#B7D1D6] w-full transition-all rounded-lg",
+                      pathname.includes(route?.path || "")
+                        ? "bg-white/85 text-black/90"
+                        : "hover:bg-white/10",
                       !isSidebarOpen && width > 992
                         ? "w-[45px] justify-center"
                         : ""

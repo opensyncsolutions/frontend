@@ -61,6 +61,14 @@ const Forms = () => {
               </PopoverTrigger>
               <PopoverContent className="w-fit px-0 py-2 mr-6">
                 <div className="flex flex-col items-start">
+                  {!formsOptions.filter(
+                    (option) =>
+                      !forms?.forms.find((form) => option?.code === form?.code)
+                  )?.length ? (
+                    <div className="px-5 py-1 text-sm">No option</div>
+                  ) : (
+                    ""
+                  )}
                   {formsOptions
                     .filter(
                       (option) =>
@@ -78,7 +86,7 @@ const Forms = () => {
                           }}
                           disabled={createFormLoading}
                         >
-                           {form?.translations?.[language]?.name || form?.name}
+                          {form?.translations?.[language]?.name || form?.name}
                         </button>
                       );
                     })}

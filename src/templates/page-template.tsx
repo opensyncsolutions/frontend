@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useLayoutEffect } from "react";
 import Tabs, { Tab } from "@/components/tabs";
 import Breadcrumb from "@/components/breadcrumb";
 
@@ -19,6 +19,9 @@ const PageTemplate = ({
   children,
   tabKey,
 }: PageTemplateProps) => {
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="space-y-8 pt-4 md:pt-8 px-6 md:pt-4 animate-fade-in gap-4 sticky top-[55px] md:top-[40px] !z-10 bg-white pb-[8px]">
