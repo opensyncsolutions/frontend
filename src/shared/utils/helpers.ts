@@ -21,12 +21,21 @@ export const separateTextOnCapitalLetter = (name: string): string => {
     .toLowerCase();
 };
 
-export const compareArray = (
-  arr1: { id: string }[],
-  arr2: { id: string }[]
-): boolean => {
-  if (arr1.length !== arr2.length) {
+export const compareArray = (arr1: any[], arr2: any[]): boolean => {
+  // Convert arrays to sets
+  const set1 = new Set(arr1.map((obj) => JSON.stringify(obj)));
+  const set2 = new Set(arr2.map((obj) => JSON.stringify(obj)));
+  if (set1.size !== set2.size) {
     return false;
   }
-  return arr1.every((obj, index) => obj.id === arr2[index].id);
+
+  // Check if all elements in set1 are in set2
+  for (const elem of set1) {
+    if (!set2.has(elem)) {
+      return false;
+    }
+  }
+
+  // If sets have the same elements, return true
+  return true;
 };

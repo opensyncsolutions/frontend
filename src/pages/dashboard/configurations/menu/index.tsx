@@ -116,20 +116,19 @@ const Menu = () => {
               ?.sort((a, b) => a.sortOrder - b.sortOrder)
               .map((menu) => ({
                 id: menu?.id,
+                sortOrder: menu?.sortOrder,
               }));
 
-            if (!compareArray(data, prevData)) {
-              // @ts-ignore
-              const newMenus: Menu[] = data?.map((menu, index) => {
-                const menuItem = menus?.menus?.find(
-                  (item) => item?.id === menu?.id
-                );
+            const newMenus: { id: string; sortOrder: number }[] = data?.map(
+              (menu, index) => {
                 return {
-                  ...menuItem,
                   id: menu.id,
                   sortOrder: index + 1,
                 };
-              });
+              }
+            );
+
+            if (!compareArray(newMenus, prevData)) {
               updateBatch(newMenus);
             }
           }}

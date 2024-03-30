@@ -5,7 +5,7 @@ import { formsOptions } from "../forms/data";
 import { ReactNode, useState } from "react";
 import Loader from "@/components/ui/loader";
 import Error from "@/pages/error";
-import { formatErrorMessage } from "@/shared/utils/helpers";
+import { compareArray, formatErrorMessage } from "@/shared/utils/helpers";
 import NestedDragAndDrop, { NestedDnDItem } from "@/components/dnd/nested-dnd";
 import { getRoles } from "@/shared/utils/roles";
 import { useGetMe } from "@/shared/services/auth";
@@ -35,7 +35,7 @@ const Page = ({
     any,
     unknown,
     {
-      code: string;
+      name: string;
       sortOrder: number;
       id?: string | undefined;
     }[],
@@ -118,9 +118,22 @@ const Page = ({
             canEditSection: !!editSectionsRole,
           })}
           onDataReordering={async (data) => {
-            const { sections, fields } = rearrangeData(data);
-            await editSections(sections);
-            editFields(fields);
+            const { sections, fields: newFields } = rearrangeData(data);
+            const oldSections: NewSection[] =
+              form.sections?.map((section) => ({
+                id: section?.id,
+                sortOrder: section?.sortOrder,
+              })) || [];
+            const oldFields: NewField[] =
+              fields?.map((field) => ({
+                name: field?.name,
+                id: field?.name,
+                sortOrder: field?.sortOrder,
+              })) || [];
+
+            if (!compareArray(sections, oldSections))
+              await editSections(sections);
+            if (!compareArray(oldFields, newFields)) editFields(newFields);
           }}
           loading={isRefetching || editSectionsLoading || editFieldsLoading}
         />
@@ -261,13 +274,16 @@ const groupSections = ({
     subItems: fieldsWithoutSection,
   };
 
-  groupedSections.unshift(unnamedSection);
+  groupedSections
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .unshift(unnamedSection);
 
   return groupedSections;
 };
 
 interface NewField {
-  code: string;
+  name: string;
+  id?: string;
   sortOrder: number;
 }
 
@@ -286,6 +302,7 @@ const rearrangeData = (
     id: string;
     subItems: {
       name: string;
+      id?: string;
     }[];
   }[]
 ): Result => {
@@ -294,10 +311,10 @@ const rearrangeData = (
 
   data.forEach((item, index) => {
     if (item.id !== "unnamed-section") {
-      const section: NewSection = { id: item.id, sortOrder: index + 1 };
+      const section: NewSection = { id: item.id, sortOrder: index };
       sections.push(section);
       item.subItems.forEach((subItem, index) => {
-        fields.push({ code: subItem?.name, sortOrder: index + 1 });
+        fields.push({ name: subItem?.name, id: subItem?.id, sortOrder: index });
       });
     } else if (
       item.id === "unnamed-section" &&
@@ -305,7 +322,7 @@ const rearrangeData = (
       item.subItems.length > 0
     ) {
       item.subItems.forEach((subItem, index) => {
-        fields.push({ code: subItem?.name, sortOrder: index + 1 });
+        fields.push({ name: subItem?.name, id: subItem?.id, sortOrder: index });
       });
     }
   });

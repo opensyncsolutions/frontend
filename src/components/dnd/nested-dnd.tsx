@@ -40,7 +40,7 @@ const NestedDragAndDrop = ({
 }: {
   data: NestedDnDItem[];
   onDataReordering: (
-    data: { id: string; subItems: { name: string }[] }[]
+    data: { id: string; subItems: { name: string; id: string }[] }[]
   ) => void;
   loading?: boolean;
 }) => {
@@ -63,6 +63,7 @@ const NestedDragAndDrop = ({
           id: item?.id,
           subItems: item?.subItems?.map((item) => ({
             name: item?.id,
+            id: item?.id,
           })),
         }))
       );
@@ -101,6 +102,7 @@ const NestedDragAndDrop = ({
             id: item?.id,
             subItems: item?.subItems?.map((item) => ({
               name: item?.id,
+              id: item?.id,
             })),
           }))
         );
@@ -124,6 +126,7 @@ const NestedDragAndDrop = ({
             id: item?.id,
             subItems: item?.subItems?.map((item) => ({
               name: item?.id,
+              id: item?.id,
             })),
           }))
         );
