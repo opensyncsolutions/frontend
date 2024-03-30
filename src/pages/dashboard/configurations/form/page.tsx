@@ -122,7 +122,7 @@ const Page = ({
             await editSections(sections);
             editFields(fields);
           }}
-          loading={isRefetching}
+          loading={isRefetching || editSectionsLoading || editFieldsLoading}
         />
         {createSectionsRole && (
           <CreateSection
