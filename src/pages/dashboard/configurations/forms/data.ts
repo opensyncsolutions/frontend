@@ -1,11 +1,13 @@
 export const formsOptions: {
   code: Form;
   name: FormNames;
+  field: Fields;
   translations?: Record<Languages, Record<"name", string>>;
 }[] = [
   {
-    code: "enrollments",
+    code: "ENROLLMENT",
     name: "Enrollments",
+    field: "enrollments",
     translations: {
       en: { name: "Enrollments" },
       sw: { name: "Uandikishwaji" },
@@ -13,8 +15,9 @@ export const formsOptions: {
     },
   },
   {
-    code: "disbursements",
+    code: "DISBURSEMENT",
     name: "Disbursements",
+    field: "disbursements",
     translations: {
       en: { name: "Disbursements" },
       sw: { name: "Malipo" },
@@ -22,8 +25,9 @@ export const formsOptions: {
     },
   },
   {
-    code: "followups",
+    code: "FOLLOWUP",
     name: "Followups",
+    field: "followups",
     translations: {
       en: { name: "Followups" },
       sw: { name: "Ufuatiliaji" },
@@ -31,8 +35,9 @@ export const formsOptions: {
     },
   },
   {
-    code: "bloodCollections",
+    code: "BLOODCOLLECTION",
     name: "Blood Collections",
+    field: "bloodCollections",
     translations: {
       en: { name: "Blood Collections" },
       sw: { name: "Ukusanyaji wa Damu" },
@@ -40,8 +45,9 @@ export const formsOptions: {
     },
   },
   {
-    code: "dataCollections",
+    code: "DATACOLLECTION",
     name: "Data Collections",
+    field: "dataCollections",
     translations: {
       en: { name: "Data Collections" },
       sw: { name: "Ukusanyaji wa Data" },
@@ -49,120 +55,13 @@ export const formsOptions: {
     },
   },
   {
-    code: "users",
-    name: "Users",
-    translations: {
-      en: { name: "Users" },
-      sw: { name: "Watumiaji" },
-      fr: { name: "Utilisateurs" },
-    },
-  },
-  {
-    code: "objectives",
-    name: "Objectives",
-    translations: {
-      en: { name: "Objectives" },
-      sw: { name: "Malengo" },
-      fr: { name: "Objectifs" },
-    },
-  },
-  {
-    code: "organisationUnits",
-    name: "Organisation Units",
-    translations: {
-      en: { name: "Organisation Units" },
-      sw: { name: "Vipengele vya Shirika" },
-      fr: { name: "Unités d'Organisation" },
-    },
-  },
-  {
-    code: "menus",
-    name: "Menus",
-    translations: {
-      en: { name: "Menus" },
-      sw: { name: "Menyu" },
-      fr: { name: "Menus" },
-    },
-  },
-  {
-    code: "eacs",
+    code: "EAC",
     name: "Eacs",
+    field: "eacs",
     translations: {
       en: { name: "Eacs" },
       sw: { name: "Eacs" },
       fr: { name: "Eacs" },
-    },
-  },
-  {
-    code: "roles",
-    name: "Roles",
-    translations: {
-      en: { name: "Roles" },
-      sw: { name: "Vipaumbele" },
-      fr: { name: "Rôles" },
-    },
-  },
-  {
-    code: "privileges",
-    name: "Privileges",
-    translations: {
-      en: { name: "Privileges" },
-      sw: { name: "Haki za Kipekee" },
-      fr: { name: "Privilèges" },
-    },
-  },
-  {
-    code: "sections",
-    name: "Sections",
-    translations: {
-      en: { name: "Sections" },
-      sw: { name: "Sehemu" },
-      fr: { name: "Sections" },
-    },
-  },
-  {
-    code: "fields",
-    name: "Fields",
-    translations: {
-      en: { name: "Fields" },
-      sw: { name: "Maeneo" },
-      fr: { name: "Champs" },
-    },
-  },
-  {
-    code: "stages",
-    name: "Stages",
-    translations: {
-      en: { name: "Stages" },
-      sw: { name: "Hatua" },
-      fr: { name: "Étapes" },
-    },
-  },
-  {
-    code: "phones",
-    name: "Phones",
-    translations: {
-      en: { name: "Phones" },
-      sw: { name: "Simu" },
-      fr: { name: "Téléphones" },
-    },
-  },
-  {
-    code: "sessions",
-    name: "Sessions",
-    translations: {
-      en: { name: "Sessions" },
-      sw: { name: "Kikao" },
-      fr: { name: "Séances" },
-    },
-  },
-  {
-    code: "networks",
-    name: "Networks",
-    translations: {
-      en: { name: "Networks" },
-      sw: { name: "Mitandao" },
-      fr: { name: "Réseaux" },
     },
   },
 ];

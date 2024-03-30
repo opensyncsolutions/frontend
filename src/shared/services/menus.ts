@@ -82,10 +82,10 @@ export const useCreateMenu = (cb?: () => void) => {
   };
 };
 
-export const useUpdateMenuBatch = (cb?: () => void) => {
+export const useBulkyEditMenu = (cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async (payload: Menu[]) => {
-      const { data } = await AxiosInstance.post("/menus", payload);
+      const { data } = await AxiosInstance.put("/menus/bulky", payload);
       return data;
     },
     {

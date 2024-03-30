@@ -33,4 +33,16 @@ const dictionary = [
     fr: "jhb",
     default: "Translations",
   },
+  {
+    en: "Form",
+    sw: "Fomu",
+    fr: "jhb",
+    default: "Form",
+  },
+  {
+    en: "Code",
+    sw: "Msimbo",
+    fr: "jhb",
+    default: "Code",
+  },
 ];

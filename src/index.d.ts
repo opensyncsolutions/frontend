@@ -128,12 +128,18 @@ type BloodCollection = {
 };
 
 interface Field {
+  id: string;
+  code: string;
   name: string;
   mandatory: boolean;
   type: "DATE" | "BOOLEAN" | "TEXT" | "NUMBER";
   description?: string;
   sortOrder: number;
-  translations?: Record<Languages, Record<"name", string>>;
+  options: Record<"name" | "value", string>[];
+  translations?: Record<
+    Languages,
+    Record<"name" | "code" | "description", string>
+  >;
 }
 
 interface Section {
@@ -142,7 +148,7 @@ interface Section {
   name: string;
   sortOrder: number;
   fields: Field[];
-  translations?: Record<Languages, Record<"name", string>>;
+  translations?: Record<Languages, Record<"code" | "name", string>>;
 }
 
 interface Role {
@@ -179,50 +185,36 @@ interface FormResponse {
   name: string;
   code: string;
   translations?: Record<Languages, Record<"name", string>>;
-  fields: Field[];
+  fields?: Field[];
+  sections?: Section[];
 }
 
 type Form =
+  | "ENROLLMENT"
+  | "FOLLOWUP"
+  | "DISBURSEMENT"
+  | "BLOODCOLLECTION"
+  | "DATACOLLECTION"
+  | "EAC";
+
+type Fields =
   | "menus"
-  | "users"
-  | "roles"
-  | "privileges"
-  | "organisationUnits"
-  | "enrollments"
-  | "stages"
-  | "followups"
-  | "disbursements"
-  | "bloodCollections"
-  | "dataCollections"
   | "eacs"
-  | "sessions"
-  | "objectives"
-  | "forms"
-  | "fields"
+  | "enrollments"
+  | "followups"
+  | "dataCollections"
+  | "bloodCollections"
+  | "disbursements"
   | "sections"
-  | "phones"
-  | "networks";
+  | "fields";
 
 type FormNames =
-  | "Menus"
-  | "Users"
-  | "Roles"
-  | "Privileges"
-  | "Organisation Units"
   | "Enrollments"
-  | "Stages"
   | "Followups"
   | "Disbursements"
   | "Blood Collections"
   | "Data Collections"
-  | "Eacs"
-  | "Sessions"
-  | "Objectives"
-  | "Forms"
-  | "Fields"
-  | "Sections"
-  | "Phones"
-  | "Networks";
+  | "Eacs";
 
 // End API
 

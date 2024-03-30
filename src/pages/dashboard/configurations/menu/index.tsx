@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ErrorComponent from "@/pages/error";
 import { useGetMe } from "@/shared/services/auth";
-import { useMenus, useUpdateMenuBatch } from "@/shared/services/menus";
+import { useMenus, useBulkyEditMenu } from "@/shared/services/menus";
 import { compareArray, formatErrorMessage } from "@/shared/utils/helpers";
 import { getRoles } from "@/shared/utils/roles";
 import { PlusIcon, RefreshCcw } from "lucide-react";
@@ -28,7 +28,7 @@ const Menu = () => {
     useMenus();
   const loading = menusLoading || isLoading;
 
-  const { updateBatch, updateBatchLoading } = useUpdateMenuBatch(() =>
+  const { updateBatch, updateBatchLoading } = useBulkyEditMenu(() =>
     menusRefetch()
   );
 

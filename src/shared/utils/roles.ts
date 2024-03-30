@@ -328,6 +328,35 @@ export const getRoles = (roles: Role[]) => {
     )
   )?.id;
 
+  // sections
+  const readSectionsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_SECTIONS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createSectionsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_SECTIONS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editSectionsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_SECTIONS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteSectionsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_SECTIONS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
   // objectives
   const readObjectivesRole = roles?.find((role) =>
     role?.privileges?.find(
@@ -424,6 +453,12 @@ export const getRoles = (roles: Role[]) => {
     createFieldsRole,
     editFieldsRole,
     deleteFieldsRole,
+
+    // sections
+    readSectionsRole,
+    createSectionsRole,
+    editSectionsRole,
+    deleteSectionsRole,
 
     // objectives
     readObjectivesRole,

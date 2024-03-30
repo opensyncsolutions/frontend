@@ -1,12 +1,41 @@
 import { useLanguage } from "@/shared/contexts/languages";
+import { useTranslations } from "@/shared/hooks/use-translations";
 import { useForm } from "@/shared/services/forms";
 import PageTemplate from "@/templates/page-template";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import Page from "./page";
+import { formsOptions } from "../forms/data";
+import { useBulkyEditFields, useFields } from "@/shared/services/fields";
+import { Button } from "@/components/ui/button";
+import { PlusIcon, RefreshCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
+import { useBulkyEditSections } from "@/shared/services/sections";
 
 const Form = () => {
+  const [search, setSearch] = useSearchParams();
   const { language } = useLanguage();
+  const { translate } = useTranslations();
   const { formId } = useParams<{ formId: string }>();
-  const { form } = useForm(formId || "");
+  const { form, formRefetch, formRefetching } = useForm(formId || "");
+  const formData = formsOptions.find(({ code }) => form?.code === code);
+
+  const { fields, fieldsRefetch, fieldsRefething } = useFields(
+    formData?.field || ""
+  );
+
+  const { editFields, editFieldsLoading } = useBulkyEditFields(() => {
+    fieldsRefetch();
+    formRefetch();
+  });
+  const { editSections, editSectionsLoading } = useBulkyEditSections(() => {
+    fieldsRefetch();
+    formRefetch();
+  });
+
+  const { me } = useGetMe();
+  const { createSectionsRole } = getRoles(me?.roles || []);
 
   return (
     <PageTemplate
@@ -21,16 +50,54 @@ const Form = () => {
           to: "/configurations",
         },
         {
-          label: "Form",
+          label: translate("Form"),
         },
       ]}
-      tabKey="form"
-      tabs={[
-        { name: "Details", value: "details" },
-        { name: "Section & Fields", value: "sections-fields" },
-      ]}
+      titleActions={
+        form || fields ? (
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => {
+                formRefetch();
+                fieldsRefetch();
+              }}
+              variant={"secondary"}
+            >
+              <RefreshCcw
+                size={15}
+                className={cn(
+                  fieldsRefething ||
+                    formRefetching ||
+                    editFieldsLoading ||
+                    editSectionsLoading
+                    ? "animate-rotate"
+                    : ""
+                )}
+              />
+            </Button>
+            {createSectionsRole && (
+              <Button
+                className="gap-2"
+                onClick={() => {
+                  search.set("selectedSection", "new");
+                  setSearch(search);
+                }}
+              >
+                <PlusIcon size={15} /> Add Section
+              </Button>
+            )}
+          </div>
+        ) : undefined
+      }
     >
-      Single form page
+      <div>
+        <Page
+          editFields={editFields}
+          editFieldsLoading={editFieldsLoading}
+          editSections={editSections}
+          editSectionsLoading={editSectionsLoading}
+        />
+      </div>
     </PageTemplate>
   );
 };

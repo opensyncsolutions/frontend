@@ -95,7 +95,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const loading = createMenuLoading || editMenuLoading;
 
   const LanguageSchema = z.object({
-    name: z.string({ required_error: "You must provide a name" }),
+    name: z.string().optional(),
   });
 
   const translationsObject: Record<string, typeof LanguageSchema> = {};
@@ -105,7 +105,7 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
 
   const formSchema = z.object({
     name: z.string({ required_error: "You must provide a name" }),
-    path: z.string({ required_error: "You must provide a name" }),
+    path: z.string({ required_error: "You must provide a path" }),
     translations: z.object(translationsObject),
   });
 

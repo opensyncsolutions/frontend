@@ -4,6 +4,7 @@ import Page from "./page";
 import { useSearchParams } from "react-router-dom";
 import { useGetMe } from "@/shared/services/auth";
 import { getRoles } from "@/shared/utils/roles";
+import { PlusIcon } from "lucide-react";
 
 const Users = () => {
   const [search, setSearch] = useSearchParams();
@@ -31,8 +32,9 @@ const Users = () => {
               search.append("selected", "new");
               setSearch(search);
             }}
+            className="gap-2"
           >
-            Add User
+            <PlusIcon size={15} /> Add User
           </Button>
         )
       }

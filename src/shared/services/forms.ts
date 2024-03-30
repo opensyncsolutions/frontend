@@ -17,7 +17,7 @@ export const useForms = () => {
         `/forms`,
         {
           params: {
-            fiels: "name,translations,id,code",
+            fields: "name,translations,id,code",
             pageSize: 100,
           },
         }
@@ -44,7 +44,7 @@ export const useForm = (id: string) => {
     async () => {
       const { data } = await AxiosInstance.get<FormResponse>(`/forms/${id}`, {
         params: {
-          fiels: "*",
+          fields: "*",
         },
       });
       return data;
@@ -60,7 +60,7 @@ export const useForm = (id: string) => {
     formError: error as ApiError,
     formLoading: isLoading,
     formRefetch: refetch,
-    formRefething: isRefetching,
+    formRefetching: isRefetching,
   };
 };
 
