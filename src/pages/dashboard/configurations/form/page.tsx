@@ -120,11 +120,8 @@ const Page = ({
             })}
             onDataReordering={async (data) => {
               const { sections, fields } = rearrangeData(data);
-              // update section batch
-              // update fields batch
               await editSections(sections);
               editFields(fields);
-              console.log(sections, fields, data);
             }}
             loading={isRefetching}
           />
