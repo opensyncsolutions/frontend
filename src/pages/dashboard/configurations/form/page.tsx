@@ -28,6 +28,7 @@ const Page = ({
     {
       id: string;
       sortOrder: number;
+      fields: { id: string }[];
     }[],
     unknown
   >;
@@ -123,6 +124,9 @@ const Page = ({
               form.sections?.map((section) => ({
                 id: section?.id,
                 sortOrder: section?.sortOrder,
+                fields: section?.fields?.map((field) => ({
+                  id: field?.id,
+                })),
               })) || [];
             const oldFields: NewField[] =
               fields?.map((field) => ({
@@ -290,6 +294,7 @@ interface NewField {
 interface NewSection {
   id: string;
   sortOrder: number;
+  fields: { id: string }[];
 }
 
 interface Result {
@@ -311,7 +316,12 @@ const rearrangeData = (
 
   data.forEach((item, index) => {
     if (item.id !== "unnamed-section") {
-      const section: NewSection = { id: item.id, sortOrder: index };
+      const section: NewSection = {
+        id: item.id,
+        sortOrder: index,
+        fields:
+          item?.subItems?.map((subItem) => ({ id: subItem?.id || "" })) || [],
+      };
       sections.push(section);
       item.subItems.forEach((subItem, index) => {
         fields.push({ name: subItem?.name, id: subItem?.id, sortOrder: index });

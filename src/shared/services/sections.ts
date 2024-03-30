@@ -125,7 +125,9 @@ export const useEditSection = (id: string, cb?: () => void) => {
 
 export const useBulkyEditSections = (cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
-    async (payload: { id: string; sortOrder: number }[]) => {
+    async (
+      payload: { id: string; sortOrder: number; fields: { id: string }[] }[]
+    ) => {
       const { data } = await AxiosInstance.put(`/sections/bulky`, payload);
       return data;
     },
