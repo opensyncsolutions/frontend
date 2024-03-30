@@ -105,27 +105,25 @@ const Page = ({
 
   if (fields && form)
     return (
-      <div className="w-full overflow-x-auto overflow-y-hidden">
-        <div className="">
-          <NestedDragAndDrop
-            data={groupSections({
-              sections: form?.sections || [],
-              fields,
-              refetch: () => {
-                formRefetch();
-                fieldsRefetch();
-              },
-              canEditField: !!editFieldsRole,
-              canEditSection: !!editSectionsRole,
-            })}
-            onDataReordering={async (data) => {
-              const { sections, fields } = rearrangeData(data);
-              await editSections(sections);
-              editFields(fields);
-            }}
-            loading={isRefetching}
-          />
-        </div>
+      <div className="w-full overflow-x-auto">
+        <NestedDragAndDrop
+          data={groupSections({
+            sections: form?.sections || [],
+            fields,
+            refetch: () => {
+              formRefetch();
+              fieldsRefetch();
+            },
+            canEditField: !!editFieldsRole,
+            canEditSection: !!editSectionsRole,
+          })}
+          onDataReordering={async (data) => {
+            const { sections, fields } = rearrangeData(data);
+            await editSections(sections);
+            editFields(fields);
+          }}
+          loading={isRefetching}
+        />
         {createSectionsRole && (
           <CreateSection
             open={

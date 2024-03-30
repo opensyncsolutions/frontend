@@ -142,12 +142,12 @@ const NestedDragAndDrop = ({
           <ul
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex w-fit border rounded h-fit"
+            className="flex w-fit border rounded h-full overflow-y-hidden"
           >
             {items.map((item, index) => {
               if (!item?.canDrag) {
                 return (
-                  <li className="border-r rounded w-[280px]" key={item?.id}>
+                  <li className="border-r rounded w-[280px] h-full" key={item?.id}>
                     <div className="flex border-b gap-3 p-3 max-h-[60px] h-[60px] justify-between gap-3 items-center">
                       {item.content}
                     </div>
@@ -172,7 +172,7 @@ const NestedDragAndDrop = ({
                                 <li
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
-                                  className="p-2 mb-2 items-center border rounded flex justify-between w-full"
+                                  className="p-2 mb-2 items-center border bg-white rounded flex justify-between w-full"
                                 >
                                   {subItem.content}
                                   {subItem?.canDrag && (
@@ -236,7 +236,7 @@ const NestedDragAndDrop = ({
                                   <li
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
-                                    className="p-2 items-center border rounded flex justify-between w-full"
+                                    className="p-2 items-center border bg-white rounded flex justify-between w-full"
                                   >
                                     {subItem.content}
                                     <Tooltip content="Grab to drag and drop">
