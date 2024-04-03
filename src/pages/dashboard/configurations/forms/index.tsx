@@ -72,7 +72,13 @@ const Forms = () => {
                         )
                     )
                     .map((form) => {
-                      return <Form form={form} formsRefetch={formsRefetch} />;
+                      return (
+                        <Form
+                          form={form}
+                          formsRefetch={formsRefetch}
+                          key={form?.code}
+                        />
+                      );
                     })}
                 </div>
               </PopoverContent>

@@ -94,9 +94,7 @@ const Form = () => {
         ) : undefined
       }
     >
-      <div>
-        <Page updateLoadingStatus={(isLoading) => setRefetching(isLoading)} />
-      </div>
+      <Page updateLoadingStatus={(isLoading) => setRefetching(isLoading)} />
       <DeleteForm
         id={openDelete ? form?.id || "" : ""}
         name={form?.translations?.[language]?.name || form?.name || ""}

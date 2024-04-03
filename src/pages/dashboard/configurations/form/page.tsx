@@ -1,5 +1,5 @@
 import { useBulkyEditFields, useFields } from "@/shared/services/fields";
-import { useForm } from "@/shared/services/forms";
+import { useEditForm, useForm } from "@/shared/services/forms";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loader from "@/components/ui/loader";
@@ -36,6 +36,13 @@ const Page = ({
     formId || ""
   );
 
+  const { editForm, editFormLoading } = useEditForm(formId || "", () => {
+    setLoading(true);
+    formRefetch().finally(() => {
+      setLoading(false);
+    });
+  });
+
   const formData = formsOptions.find(({ code }) => form?.code === code);
 
   const { fields, fieldsLoading } = useFields(formData?.field || "");
@@ -50,7 +57,7 @@ const Page = ({
     form: form?.sections?.length ? form?.id : "",
   });
 
-  const isLoading = loading || formLoading;
+  const isLoading = loading || formLoading || editFormLoading;
 
   const isSectionsLoading = sectionLoading || sectionsLoading;
 
@@ -79,6 +86,18 @@ const Page = ({
   useEffect(() => {
     updateLoadingStatus(isRefetching);
   }, [isRefetching]);
+
+  useEffect(() => {
+    if (form && !form?.fields?.length && fields) {
+      editForm({
+        ...form,
+        fields: fields?.map((field) => ({
+          ...field,
+          value: field?.name,
+        })),
+      });
+    }
+  }, [form, fields]);
 
   if (isLoading || fieldsLoading) {
     return (
