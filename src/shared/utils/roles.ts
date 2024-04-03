@@ -386,6 +386,39 @@ export const getRoles = (roles: Role[]) => {
     )
   )?.id;
 
+  // organisation units
+  const readOrganisationUnitsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_ORGANISATIONUNITS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createOrganisationUnitsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_ORGANISATIONUNITS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editOrganisationUnitsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_ORGANISATIONUNITS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteOrganisationUnitsRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_ORGANISATIONUNITS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
   return {
     // roles
     readRolesRole,
@@ -465,5 +498,11 @@ export const getRoles = (roles: Role[]) => {
     createObjectivesRole,
     editObjectivesRole,
     deleteObjectivesRole,
+
+    // organisation units
+    readOrganisationUnitsRole,
+    createOrganisationUnitsRole,
+    editOrganisationUnitsRole,
+    deleteOrganisationUnitsRole,
   };
 };

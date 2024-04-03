@@ -5,12 +5,14 @@ import { useMenus } from "@/shared/services/menus";
 import { getRoles } from "@/shared/utils/roles";
 import {
   Banknote,
+  Building2,
   CalendarDays,
   Layers,
   Layers3,
   LayoutDashboard,
   Settings,
   SlidersHorizontal,
+  TableProperties,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -40,6 +42,8 @@ const pathToIcon: Record<string, ReactNode> = {
   "blood-collections": <Layers size={18} />,
   "cash-disbursement": <Banknote size={18} />,
   "data-collections": <Layers3 size={18} />,
+  objectives: <TableProperties size={18} />,
+  "organisation-units": <Building2 size={18} />,
   users: <Users size={18} />,
 };
 
@@ -53,6 +57,8 @@ export const paths = [
   "users",
   "roles-and-privileges",
   "configurations",
+  "objectives",
+  "organisation-units",
 ];
 
 export const useMenuConfig = () => {
@@ -69,6 +75,8 @@ export const useMenuConfig = () => {
     readDisbursementsRole,
     readBloodCollectionRole,
     readDataCollectionRole,
+    readObjectivesRole,
+    readOrganisationUnitsRole,
   } = getRoles(me?.roles || []);
 
   return {
@@ -96,6 +104,12 @@ export const useMenuConfig = () => {
             canAccess = true;
           }
           if (readDataCollectionRole && menu.path === "data-collections") {
+            canAccess = true;
+          }
+          if (readObjectivesRole && menu.path === "objectives") {
+            canAccess = true;
+          }
+          if (readOrganisationUnitsRole && menu.path === "organisation-units") {
             canAccess = true;
           }
           return pathToIcon?.[menu?.path] && canAccess;

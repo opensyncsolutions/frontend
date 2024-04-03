@@ -20,6 +20,11 @@ const RolesPrivileges = lazy(
   () => import("@/pages/dashboard/roles-privileges")
 );
 const Configurations = lazy(() => import("@/pages/dashboard/configurations"));
+const Objectives = lazy(() => import("@/pages/dashboard/objectives"));
+
+const OrganisationUnits = lazy(
+  () => import("@/pages/dashboard/organisation-units")
+);
 
 const Form = lazy(() => import("@/pages/dashboard/configurations/form"));
 
@@ -43,6 +48,7 @@ const DashboardRoutes = (roles: Role[]) => {
     readFieldsRole,
     readFormsRole,
     readObjectivesRole,
+    readOrganisationUnitsRole,
   } = getRoles(roles);
 
   return (
@@ -63,6 +69,16 @@ const DashboardRoutes = (roles: Role[]) => {
           </Suspense>
         }
       />
+      {readObjectivesRole && (
+        <Route
+          path="/objectives"
+          element={
+            <Suspense fallback={PageLoader}>
+              <Objectives />
+            </Suspense>
+          }
+        />
+      )}
       {readEnrollmentsRole && (
         <Route
           path="/enrollments"
@@ -113,6 +129,16 @@ const DashboardRoutes = (roles: Role[]) => {
           }
         />
       )}
+      {readOrganisationUnitsRole && (
+        <Route
+          path="/organisation-units"
+          element={
+            <Suspense fallback={PageLoader}>
+              <OrganisationUnits />
+            </Suspense>
+          }
+        />
+      )}
       {readUsersRole && (
         <Route
           path="/users"
@@ -133,10 +159,7 @@ const DashboardRoutes = (roles: Role[]) => {
           }
         />
       )}
-      {(readFieldsRole ||
-        readFormsRole ||
-        readMenuRole ||
-        readObjectivesRole) && (
+      {(readFieldsRole || readFormsRole || readMenuRole) && (
         <Route
           path="/configurations"
           element={

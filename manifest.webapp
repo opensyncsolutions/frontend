@@ -14,9 +14,22 @@
       }
     },
     {
+      "name": "Objectives",
+      "path": "objectives",
+      "sortOrder": 2,
+      "translations": {
+        "en": {
+          "name": "Objectives"
+        },
+        "sw": {
+          "name": "Malengo"
+        }
+      }
+    },
+    {
       "name": "Enrollments",
       "path": "enrollments",
-      "sortOrder": 2,
+      "sortOrder": 3,
       "translations": {
         "en": {
           "name": "Enrollments"
@@ -29,7 +42,7 @@
     {
       "name": "Followup",
       "path": "followup",
-      "sortOrder": 3,
+      "sortOrder": 4,
       "translations": {
         "en": {
           "name": "Followup"
@@ -42,7 +55,7 @@
     {
       "name": "Cash Disbursement",
       "path": "cash-disbursement",
-      "sortOrder": 4,
+      "sortOrder": 5,
       "translations": {
         "en": {
           "name": "Cash Disbursement"
@@ -55,7 +68,7 @@
     {
       "name": "Blood Collections",
       "path": "blood-collections",
-      "sortOrder": 5,
+      "sortOrder": 6,
       "translations": {
         "en": {
           "name": "Blood Collections"
@@ -68,7 +81,7 @@
     {
       "name": "Data Collections",
       "path": "data-collections",
-      "sortOrder": 6,
+      "sortOrder": 7,
       "translations": {
         "en": {
           "name": "Data Collections"
@@ -79,9 +92,22 @@
       }
     },
     {
+      "name": "Organisation Units",
+      "path": "organisation-units",
+      "sortOrder": 8,
+      "translations": {
+        "en": {
+          "name": "Organisation Units"
+        },
+        "sw": {
+          "name": "Vipengele vya Shirika"
+        }
+      }
+    },
+    {
       "name": "Users",
       "path": "users",
-      "sortOrder": 7,
+      "sortOrder": 9,
       "translations": {
         "en": {
           "name": "Users"
@@ -94,7 +120,7 @@
     {
       "name": "Roles & Privileges",
       "path": "roles-and-privileges",
-      "sortOrder": 8,
+      "sortOrder": 10,
       "translations": {
         "en": {
           "name": "Roles & Privileges"
@@ -107,7 +133,7 @@
     {
       "name": "Configurations",
       "path": "configurations",
-      "sortOrder": 9,
+      "sortOrder": 11,
       "translations": {
         "en": {
           "name": "Configurations"
