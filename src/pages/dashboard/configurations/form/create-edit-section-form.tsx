@@ -24,6 +24,7 @@ const CreateEditSectionForm = ({
   id,
   form,
   highestSortOrder,
+
   cb,
 }: {
   id: string;
@@ -43,8 +44,8 @@ const CreateEditSectionForm = ({
   const loading = createSectionLoading || editSectionLoading;
 
   const LanguageSchema = z.object({
-    code: z.string().optional(),
     name: z.string().optional(),
+    description: z.string().optional(),
   });
 
   type LanguageSchemaType = typeof LanguageSchema;
@@ -65,8 +66,8 @@ const CreateEditSectionForm = ({
   const defaultTranslations: Record<string, Record<string, string>> = {};
   languages.forEach(({ lang }) => {
     defaultTranslations[lang] = {
-      code: section?.translations?.[lang]?.code || "",
       name: section?.translations?.[lang]?.name || "",
+      description: section?.translations?.[lang]?.name || "",
     };
   });
 
@@ -85,7 +86,7 @@ const CreateEditSectionForm = ({
     },
   });
 
-  watch("code");
+  watch("name");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!id) {
@@ -156,7 +157,7 @@ const CreateEditSectionForm = ({
           <div className="space-y-3 rounded border p-3" key={lang}>
             <h3>{name}</h3>
             {fields?.map(({ name, type }) => {
-              if (type === "TEXT") {
+              if (type === "TEXT" && name !== "code") {
                 return (
                   <Controller
                     key={name}
@@ -190,7 +191,7 @@ const CreateEditSectionForm = ({
         );
       })}
       <div className="flex justify-end">
-        <Button disabled={!getValues("code") || loading}>
+        <Button disabled={!getValues("name") || loading}>
           {loading ? "Please Wait" : !id ? "Create" : "Edit"}
         </Button>
       </div>

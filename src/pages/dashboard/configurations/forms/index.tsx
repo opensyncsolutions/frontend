@@ -18,22 +18,17 @@ import { formsOptions } from "./data";
 import { useNavigate } from "react-router-dom";
 import FormItem from "./form-item";
 import { useLanguage } from "@/shared/contexts/languages";
+import { useFields } from "@/shared/services/fields";
 
 const Forms = () => {
   const [createOpen, setCreateOpen] = useState(false);
   const { translate } = useTranslations();
-  const navigate = useNavigate();
+
   const { me } = useGetMe();
-  const { language } = useLanguage();
   const { createFormsRole, deleteFormsRole } = getRoles(me?.roles || []);
   const [isLoading, setLoading] = useState(false);
   const { forms, formsError, formsLoading, formsRefetch, formsRefething } =
     useForms();
-
-  const { createForm, createFormLoading } = useCreateForm((id) => {
-    formsRefetch();
-    navigate(`/configurations/forms/${id}`);
-  });
 
   const loading = formsLoading || isLoading;
 
@@ -77,18 +72,7 @@ const Forms = () => {
                         )
                     )
                     .map((form) => {
-                      return (
-                        <button
-                          className="px-5 py-1 text-sm disabled:opacity-50"
-                          key={form.code}
-                          onClick={() => {
-                            createForm(form);
-                          }}
-                          disabled={createFormLoading}
-                        >
-                          {form?.translations?.[language]?.name || form?.name}
-                        </button>
-                      );
+                      return <Form form={form} formsRefetch={formsRefetch} />;
                     })}
                 </div>
               </PopoverContent>
@@ -133,6 +117,46 @@ const Forms = () => {
         </ul>
       ) : null}
     </div>
+  );
+};
+
+const Form = ({
+  form,
+  formsRefetch,
+}: {
+  form: {
+    code: Form;
+    name: FormNames;
+    field: Fields;
+    translations?: Record<Languages, Record<"name", string>>;
+  };
+  formsRefetch: () => void;
+}) => {
+  const { field, ...rest } = form;
+  const { fields } = useFields(field);
+  const { language } = useLanguage();
+  const navigate = useNavigate();
+  const { createForm, createFormLoading } = useCreateForm((id) => {
+    formsRefetch();
+    navigate(`/configurations/forms/${id}`);
+  });
+  return (
+    <button
+      className="px-5 py-1 text-sm disabled:opacity-50"
+      key={form.code}
+      onClick={() => {
+        createForm({
+          ...rest,
+          fields: fields?.map((field) => ({
+            ...field,
+            value: field?.name,
+          })),
+        });
+      }}
+      disabled={createFormLoading}
+    >
+      {form?.translations?.[language]?.name || form?.name}
+    </button>
   );
 };
 

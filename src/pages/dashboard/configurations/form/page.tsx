@@ -1,49 +1,28 @@
-import { useFields } from "@/shared/services/fields";
+import { useBulkyEditFields, useFields } from "@/shared/services/fields";
 import { useForm } from "@/shared/services/forms";
 import { useParams, useSearchParams } from "react-router-dom";
-import { formsOptions } from "../forms/data";
-import { ReactNode, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/ui/loader";
 import Error from "@/pages/error";
 import { compareArray, formatErrorMessage } from "@/shared/utils/helpers";
-import NestedDragAndDrop, { NestedDnDItem } from "@/components/dnd/nested-dnd";
+import NestedDragAndDrop from "@/components/dnd/nested-dnd";
 import { getRoles } from "@/shared/utils/roles";
 import { useGetMe } from "@/shared/services/auth";
 import CreateSection from "./create-section";
 import Section from "./section";
 import FieldItem from "./field-item";
 import SectionItem from "./section-item";
-import { UseMutateAsyncFunction } from "react-query";
 import EditField from "./edit-field";
+import DragAndDropList from "@/components/dnd";
+import { useBulkyEditSections, useSections } from "@/shared/services/sections";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { formsOptions } from "../forms/data";
 
 const Page = ({
-  editFields,
-  editFieldsLoading,
-  editSections,
-  editSectionsLoading,
+  updateLoadingStatus,
 }: {
-  editSections: UseMutateAsyncFunction<
-    any,
-    unknown,
-    {
-      id: string;
-      sortOrder: number;
-      fields: { id: string }[];
-    }[],
-    unknown
-  >;
-  editFields: UseMutateAsyncFunction<
-    any,
-    unknown,
-    {
-      name: string;
-      sortOrder: number;
-      id?: string | undefined;
-    }[],
-    unknown
-  >;
-  editSectionsLoading: boolean;
-  editFieldsLoading: boolean;
+  updateLoadingStatus: (isLoading: boolean) => void;
 }) => {
   const [search, setSearch] = useSearchParams();
   const { me } = useGetMe();
@@ -52,31 +31,56 @@ const Page = ({
   );
   const { formId } = useParams<{ formId: string }>();
   const [loading, setLoading] = useState(false);
+  const [sectionLoading, setSectionLoading] = useState(false);
   const { form, formLoading, formError, formRefetch, formRefetching } = useForm(
     formId || ""
   );
+
   const formData = formsOptions.find(({ code }) => form?.code === code);
 
-  const { fields, fieldsError, fieldsLoading, fieldsRefetch, fieldsRefething } =
-    useFields(formData?.field || "");
+  const { fields, fieldsLoading } = useFields(formData?.field || "");
 
-  const isLoading = loading || formLoading || fieldsLoading;
+  const {
+    sections,
+    sectionsError,
+    sectionsLoading,
+    sectionsRefetch,
+    sectionsRefetching,
+  } = useSections({
+    form: form?.sections?.length ? form?.id : "",
+  });
+
+  const isLoading = loading || formLoading;
+
+  const isSectionsLoading = sectionLoading || sectionsLoading;
+
+  const { editFields, editFieldsLoading } = useBulkyEditFields(() => {
+    formRefetch();
+  });
+  const { editSections, editSectionsLoading } = useBulkyEditSections(() => {
+    sectionsRefetch();
+    formRefetch();
+  });
 
   const isRefetching =
-    fieldsRefething ||
     formRefetching ||
     editFieldsLoading ||
-    editSectionsLoading;
+    editSectionsLoading ||
+    sectionsRefetching;
 
   const highestSortOrder: number | undefined =
     form?.sections?.sort((a, b) => b.sortOrder - a.sortOrder)?.[0]?.sortOrder ||
     0;
 
-  const selectedField = fields?.find(
+  const selectedField = form?.fields?.find(
     (field) => field?.id === search.get("selectedField")
   );
 
-  if (isLoading) {
+  useEffect(() => {
+    updateLoadingStatus(isRefetching);
+  }, [isRefetching]);
+
+  if (isLoading || fieldsLoading) {
     return (
       <div className="h-12 flex justify-center items-center">
         <Loader />
@@ -84,62 +88,69 @@ const Page = ({
     );
   }
 
-  if (formError || fieldsError) {
+  if (formError) {
     return (
       <Error
-        message={
-          formError
-            ? formatErrorMessage(formError)
-            : formatErrorMessage(fieldsError)
-        }
+        message={formatErrorMessage(formError)}
         refetch={() => {
           setLoading(true);
-          if (formError)
-            formRefetch().finally(() => {
-              setLoading(false);
-            });
-          if (fieldsError) fieldsRefetch().finally(() => setLoading(false));
+          formRefetch().finally(() => {
+            setLoading(false);
+          });
         }}
       />
     );
   }
 
-  if (fields && form)
+  if (form && !form?.sections?.length) {
     return (
-      <div className="w-full overflow-x-auto">
-        <NestedDragAndDrop
-          data={groupSections({
-            sections: form?.sections || [],
-            fields,
-            refetch: () => {
-              formRefetch();
-              fieldsRefetch();
-            },
-            canEditField: !!editFieldsRole,
-            canEditSection: !!editSectionsRole,
-          })}
-          onDataReordering={async (data) => {
-            const { sections, fields: newFields } = rearrangeData(data);
-            const oldSections: NewSection[] =
-              form.sections?.map((section) => ({
-                id: section?.id,
-                sortOrder: section?.sortOrder,
-                fields: section?.fields?.map((field) => ({
+      <div className="space-y-5">
+        <div className="flex justify-between items-center">
+          <h3>Fields</h3>
+          {createSectionsRole && (
+            <Button
+              className="gap-2"
+              variant={"secondary"}
+              onClick={() => {
+                search.set("selectedSection", "new");
+                setSearch(search);
+              }}
+            >
+              <PlusIcon size={15} /> Add Section
+            </Button>
+          )}
+        </div>
+        <DragAndDropList
+          data={
+            form?.fields
+              ?.sort((a, b) => a.sortOrder - b.sortOrder)
+              ?.map((field) => ({
+                id: field?.id,
+                content: <FieldItem field={field} />,
+              })) || []
+          }
+          onDataReordering={(data) => {
+            const prevData =
+              form?.fields
+                ?.sort((a, b) => a.sortOrder - b.sortOrder)
+                .map((field) => ({
                   id: field?.id,
-                })),
-              })) || [];
-            const oldFields: NewField[] =
-              fields?.map((field) => ({
-                name: field?.name,
-                id: field?.name,
-                sortOrder: field?.sortOrder,
-              })) || [];
+                  sortOrder: field?.sortOrder,
+                })) || [];
 
-            if (!compareArray(sections, oldSections))
-              await editSections(sections);
-            if (!compareArray(oldFields, newFields)) editFields(newFields);
+            const newData: { id: string; sortOrder: number }[] = data?.map(
+              (field, index) => {
+                return {
+                  id: field.id,
+                  sortOrder: index,
+                };
+              }
+            );
+            if (!compareArray(prevData, newData)) {
+              editFields(newData);
+            }
           }}
-          loading={isRefetching || editSectionsLoading || editFieldsLoading}
+          loading={editFieldsLoading || formRefetching}
         />
         {createSectionsRole && (
           <CreateSection
@@ -155,8 +166,8 @@ const Page = ({
             }}
             form={form?.id}
             refetch={() => {
+              sectionsRefetch();
               formRefetch();
-              fieldsRefetch();
             }}
             highestSortOrder={highestSortOrder}
           />
@@ -176,8 +187,8 @@ const Page = ({
             }}
             form={form?.id}
             refetch={() => {
+              sectionsRefetch();
               formRefetch();
-              fieldsRefetch();
             }}
           />
         )}
@@ -186,8 +197,8 @@ const Page = ({
             field={selectedField}
             close={(shouldRefetch) => {
               if (shouldRefetch) {
+                sectionsRefetch();
                 formRefetch();
-                fieldsRefetch();
               }
               search.delete("selectedField");
               setSearch(search);
@@ -196,146 +207,231 @@ const Page = ({
         )}
       </div>
     );
+  }
+
+  if (isSectionsLoading) {
+    return (
+      <div className="h-12 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (sectionsError) {
+    return (
+      <Error
+        message={formatErrorMessage(sectionsError)}
+        refetch={() => {
+          setSectionLoading(true);
+          sectionsRefetch().finally(() => {
+            setSectionLoading(false);
+          });
+        }}
+      />
+    );
+  }
+
+  if (!sections?.sections?.length && form) {
+    return (
+      <>
+        <Error
+          message={"Sections not found"}
+          type="default"
+          refetch={() => {
+            search.set("selectedSection", "new");
+            setSearch(search);
+          }}
+          retryText="Create Section"
+        />
+        {createSectionsRole && (
+          <CreateSection
+            open={
+              createSectionsRole
+                ? search.get("selectedSection") === "new"
+                : false
+            }
+            close={() => {
+              if (search.get("selectedSection"))
+                search.delete("selectedSection");
+              setSearch(search);
+            }}
+            form={form?.id}
+            refetch={() => {
+              sectionsRefetch();
+              formRefetch();
+            }}
+            highestSortOrder={highestSortOrder}
+          />
+        )}
+      </>
+    );
+  }
+
+  const selectedFields: Field[] = [];
+
+  // Iterate through each section
+  sections?.sections?.forEach((section) => {
+    selectedFields.push(...(section?.fields || []));
+  });
+
+  const unselectedFields = fields?.filter(
+    (field) =>
+      !selectedFields?.find(
+        (selectedField) => selectedField?.name === field?.name
+      )
+  );
+
+  if (sections?.sections?.length && form)
+    return (
+      <div className="space-y-5">
+        <div className="flex justify-between items-center">
+          <h3>Sections</h3>
+          {createSectionsRole && (
+            <Button
+              className="gap-2"
+              variant={"secondary"}
+              onClick={() => {
+                search.set("selectedSection", "new");
+                setSearch(search);
+              }}
+            >
+              <PlusIcon size={15} /> Add Section
+            </Button>
+          )}
+        </div>
+        <div className="w-full pb-5">
+          <NestedDragAndDrop
+            // @ts-ignore
+            data={[
+              ...(unselectedFields?.length
+                ? [
+                    {
+                      id: "",
+                      canDrag: false,
+                      content: <SectionItem />,
+                      subItems:
+                        unselectedFields.map((field) => ({
+                          id: field?.name || "",
+                          content: <FieldItem field={field} />,
+                          canDrag: true,
+                        })) || [],
+                    },
+                  ]
+                : []),
+              ...sections?.sections
+                ?.sort((a, b) => a.sortOrder - b.sortOrder)
+                ?.map((section) => ({
+                  id: section?.id,
+                  content: (
+                    <SectionItem
+                      section={section}
+                      refetch={() => {
+                        sectionsRefetch();
+                        formRefetch();
+                      }}
+                    />
+                  ),
+                  canDrag: true,
+                  sortOrder: section?.sortOrder,
+                  subItems: section?.fields
+                    ?.sort((a, b) => a.sortOrder - b.sortOrder)
+                    .map((field) => ({
+                      id: field?.id,
+                      content: <FieldItem field={field} />,
+                      canDrag: true,
+                    })),
+                })),
+            ]}
+            onDataReordering={async (data) => {
+              const oldSections = sections?.sections?.map((section) => ({
+                id: section?.id,
+                sortOrder: section?.sortOrder,
+                fields: section?.fields?.map((field) => ({
+                  id: field?.id,
+                  sortOrder: field?.sortOrder,
+                })),
+              }));
+              const newSections = data
+                ?.filter((section) => section?.id)
+                ?.map((section, index) => ({
+                  id: section?.id,
+                  sortOrder: index,
+                  fields: section?.subItems?.map((field, index) => {
+                    const newField = form?.fields?.find(
+                      (fieldItem) => fieldItem?.name === field?.id
+                    );
+                    if (newField) {
+                      return newField;
+                    }
+                    return {
+                      id: field?.id,
+                      sortOrder: index,
+                    };
+                  }),
+                }));
+
+              if (!compareArray(oldSections, newSections))
+                await editSections(newSections);
+            }}
+            loading={isRefetching || editSectionsLoading || editFieldsLoading}
+          />
+          {createSectionsRole && (
+            <CreateSection
+              open={
+                createSectionsRole
+                  ? search.get("selectedSection") === "new"
+                  : false
+              }
+              close={() => {
+                if (search.get("selectedSection"))
+                  search.delete("selectedSection");
+                setSearch(search);
+              }}
+              form={form?.id}
+              refetch={() => {
+                sectionsRefetch();
+                formRefetch();
+              }}
+              highestSortOrder={highestSortOrder}
+            />
+          )}
+          {editSectionsRole && (
+            <Section
+              id={
+                search.get("selectedSection") &&
+                search.get("selectedSection") !== "new"
+                  ? (search.get("selectedSection") as string)
+                  : ""
+              }
+              close={() => {
+                if (search.get("selectedSection"))
+                  search.delete("selectedSection");
+                setSearch(search);
+              }}
+              form={form?.id}
+              refetch={() => {
+                sectionsRefetch();
+                formRefetch();
+              }}
+            />
+          )}
+          {editFieldsRole && (
+            <EditField
+              field={selectedField}
+              close={(shouldRefetch) => {
+                if (shouldRefetch) {
+                  sectionsRefetch();
+                  formRefetch();
+                }
+                search.delete("selectedField");
+                setSearch(search);
+              }}
+            />
+          )}
+        </div>
+      </div>
+    );
   return null;
 };
 
 export default Page;
-
-interface SubItem {
-  id: string;
-  canDrag?: boolean;
-  content: ReactNode;
-}
-
-const groupSections = ({
-  fields,
-  sections,
-  canEditField,
-  canEditSection,
-  refetch,
-}: {
-  sections: Section[];
-  fields: Field[];
-  canEditField?: boolean;
-  canEditSection?: boolean;
-  refetch: () => void;
-}): NestedDnDItem[] => {
-  const groupedSections: NestedDnDItem[] = [];
-
-  const fieldsWithoutSection: SubItem[] = [];
-
-  sections.forEach((section) => {
-    const sectionFields: SubItem[] = [];
-
-    section.fields?.forEach((field) => {
-      sectionFields.push({
-        id: field.code || "",
-        canDrag: canEditField,
-        content: <FieldItem field={field} />,
-      });
-    });
-
-    // Sort fields within the section by sortOrder
-    sectionFields.sort((a, b) => {
-      const sortOrderA = fields.find((f) => f.code === a.id)?.sortOrder || 0;
-      const sortOrderB = fields.find((f) => f.code === b.id)?.sortOrder || 0;
-      return sortOrderA - sortOrderB;
-    });
-
-    const nestedSection: NestedDnDItem = {
-      id: section.id,
-      canDrag: canEditSection,
-      sortOrder: section?.sortOrder,
-      content: <SectionItem section={section} refetch={refetch} />,
-      subItems: sectionFields,
-    };
-
-    groupedSections.push(nestedSection);
-  });
-
-  fields?.forEach((field) => {
-    if (!sections.some((section) => section.fields?.includes(field))) {
-      fieldsWithoutSection.push({
-        id: field?.name,
-        canDrag: canEditField,
-        content: <FieldItem field={field} />,
-      });
-    }
-  });
-
-  // Sort fieldsWithoutSection by sortOrder
-  fieldsWithoutSection.sort((a, b) => {
-    const sortOrderA = fields.find((f) => f.name === a.id)?.sortOrder || 0;
-    const sortOrderB = fields.find((f) => f.name === b.id)?.sortOrder || 0;
-    return sortOrderA - sortOrderB;
-  });
-
-  const unnamedSection: NestedDnDItem = {
-    id: "unnamed-section",
-    sortOrder: 0,
-    content: <SectionItem refetch={refetch} />,
-    canDrag: false,
-    subItems: fieldsWithoutSection,
-  };
-
-  groupedSections
-    .sort((a, b) => a.sortOrder - b.sortOrder)
-    .unshift(unnamedSection);
-
-  return groupedSections;
-};
-
-interface NewField {
-  name: string;
-  id?: string;
-  sortOrder: number;
-}
-
-interface NewSection {
-  id: string;
-  sortOrder: number;
-  fields: { id: string }[];
-}
-
-interface Result {
-  sections: NewSection[];
-  fields: NewField[];
-}
-
-const rearrangeData = (
-  data: {
-    id: string;
-    subItems: {
-      name: string;
-      id?: string;
-    }[];
-  }[]
-): Result => {
-  const sections: NewSection[] = [];
-  const fields: NewField[] = [];
-
-  data.forEach((item, index) => {
-    if (item.id !== "unnamed-section") {
-      const section: NewSection = {
-        id: item.id,
-        sortOrder: index,
-        fields:
-          item?.subItems?.map((subItem) => ({ id: subItem?.id || "" })) || [],
-      };
-      sections.push(section);
-      item.subItems.forEach((subItem, index) => {
-        fields.push({ name: subItem?.name, id: subItem?.id, sortOrder: index });
-      });
-    } else if (
-      item.id === "unnamed-section" &&
-      item.subItems &&
-      item.subItems.length > 0
-    ) {
-      item.subItems.forEach((subItem, index) => {
-        fields.push({ name: subItem?.name, id: subItem?.id, sortOrder: index });
-      });
-    }
-  });
-
-  return { sections, fields };
-};

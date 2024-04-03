@@ -85,7 +85,7 @@ export const useCreateMenu = (cb?: () => void) => {
 export const useBulkyEditMenu = (cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async (payload: { id: string; sortOrder: number }[]) => {
-      const { data } = await AxiosInstance.put("/menus/bulky", payload);
+      const { data } = await AxiosInstance.post("/menus/bulky", payload);
       return data;
     },
     {

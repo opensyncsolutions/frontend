@@ -31,8 +31,8 @@ export const useFields = (path: Fields | "") => {
 
 export const useBulkyEditFields = (cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
-    async (payload: { name: string; sortOrder: number; id?: string }[]) => {
-      const { data } = await AxiosInstance.put(`/fields/bulky`, payload);
+    async (payload: { sortOrder: number; id?: string }[]) => {
+      const { data } = await AxiosInstance.post(`/fields/bulky`, payload);
       return data;
     },
     {

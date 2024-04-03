@@ -5,8 +5,9 @@ import { formatErrorMessage } from "../utils/helpers";
 
 interface FormPayload {
   name: string;
-  code: string;
-  translations?: Record<Languages, Record<"name", string>>;
+  code?: string;
+  fields?: Field[];
+  translations?: Record<Languages, Partial<{ name?: string }>>;
 }
 
 export const useForms = () => {
@@ -92,6 +93,37 @@ export const useCreateForm = (cb?: (id?: string) => void) => {
   return {
     createForm: mutateAsync,
     createFormLoading: isLoading,
+  };
+};
+
+export const useEditForm = (id: string, cb?: (id?: string) => void) => {
+  const { mutateAsync, isLoading } = useMutation(
+    async (payload: FormPayload) => {
+      const { data } = await AxiosInstance.put<FormResponse>(
+        `/forms/${id}`,
+        payload
+      );
+      return data;
+    },
+    {
+      onError: (error) => {
+        toast(formatErrorMessage(error), {
+          duration: 5000,
+          closeButton: true,
+        });
+      },
+      onSuccess: (res) => {
+        toast("Successfully edited form", {
+          duration: 5000,
+          closeButton: true,
+        });
+        cb?.(res?.id);
+      },
+    }
+  );
+  return {
+    editForm: mutateAsync,
+    editFormLoading: isLoading,
   };
 };
 

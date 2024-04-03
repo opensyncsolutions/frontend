@@ -7,6 +7,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import Tooltip from "../ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface SubItem {
   id: string;
@@ -19,6 +20,7 @@ export interface NestedDnDItem {
   content: ReactNode;
   sortOrder: number;
   canDrag?: boolean;
+  noDataMessage?: string;
   subItems: SubItem[];
 }
 
@@ -40,7 +42,7 @@ const NestedDragAndDrop = ({
 }: {
   data: NestedDnDItem[];
   onDataReordering: (
-    data: { id: string; subItems: { name: string; id: string }[] }[]
+    data: { id: string; subItems: { id: string }[] }[]
   ) => void;
   loading?: boolean;
 }) => {
@@ -62,7 +64,6 @@ const NestedDragAndDrop = ({
         newItems.map((item) => ({
           id: item?.id,
           subItems: item?.subItems?.map((item) => ({
-            name: item?.id,
             id: item?.id,
           })),
         }))
@@ -101,7 +102,6 @@ const NestedDragAndDrop = ({
           newItems.map((item) => ({
             id: item?.id,
             subItems: item?.subItems?.map((item) => ({
-              name: item?.id,
               id: item?.id,
             })),
           }))
@@ -125,7 +125,6 @@ const NestedDragAndDrop = ({
           newItems.map((item) => ({
             id: item?.id,
             subItems: item?.subItems?.map((item) => ({
-              name: item?.id,
               id: item?.id,
             })),
           }))
@@ -142,138 +141,175 @@ const NestedDragAndDrop = ({
         direction="horizontal"
       >
         {(provided) => (
-          <ul
+          <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex w-fit border rounded h-full overflow-y-hidden"
+            className="flex w-full flex-wrap gap-4"
           >
-            {items.map((item, index) => {
-              if (!item?.canDrag) {
-                return (
-                  <li
-                    className="border-r rounded w-[280px] h-full"
-                    key={item?.id}
-                  >
-                    <div className="flex border-b gap-3 p-3 max-h-[60px] h-[60px] justify-between gap-3 items-center">
-                      {item.content}
-                    </div>
-                    <Droppable
-                      droppableId={item.id}
-                      type={`droppableSubItem`}
-                      direction="vertical"
-                    >
-                      {(provided) => (
-                        <ul
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="flex flex-col h-full p-3"
+            {items?.filter((item) => !item?.canDrag)?.length ? (
+              <ul
+                className={cn(
+                  "w-full space-y-4",
+                  items?.filter((item) => item?.canDrag)?.length
+                    ? "md:w-[calc(50%-8px)]"
+                    : ""
+                )}
+              >
+                {items
+                  ?.filter((item) => !item?.canDrag)
+                  .map((item) => {
+                    return (
+                      <li
+                        className="border rounded w-full h-full flex-1"
+                        key={item?.id}
+                      >
+                        <div className="flex border-b gap-3 p-3 max-h-[60px] h-[60px] justify-between gap-3 items-center">
+                          {item.content}
+                        </div>
+                        <Droppable
+                          droppableId={item.id}
+                          type={`droppableSubItem`}
+                          direction="vertical"
                         >
-                          {item.subItems.map((subItem, subIndex) => (
-                            <Draggable
-                              key={subItem.id}
-                              draggableId={subItem.id}
-                              index={subIndex}
+                          {(provided) => (
+                            <ul
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="flex flex-col h-full p-3"
                             >
-                              {(provided) => (
-                                <li
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className="p-2 mb-2 items-center border bg-white rounded flex justify-between w-full"
+                              {item.subItems.map((subItem, subIndex) => (
+                                <Draggable
+                                  key={subItem.id}
+                                  draggableId={subItem.id}
+                                  index={subIndex}
                                 >
-                                  {subItem.content}
-                                  {subItem?.canDrag && (
-                                    <Tooltip content="Grab to drag and drop">
-                                      <span
-                                        className="px-2 py-2"
-                                        {...(!loading
-                                          ? { ...provided.dragHandleProps }
-                                          : {})}
-                                      >
-                                        <Grip size={16} />
-                                      </span>
-                                    </Tooltip>
+                                  {(provided) => (
+                                    <li
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      className="p-2 mb-2 items-center border bg-white rounded flex justify-between w-full"
+                                    >
+                                      {subItem.content}
+                                      {subItem?.canDrag && (
+                                        <Tooltip content="Grab to drag and drop">
+                                          <span
+                                            className="px-2 py-2"
+                                            {...(!loading
+                                              ? { ...provided.dragHandleProps }
+                                              : {})}
+                                          >
+                                            <Grip size={16} />
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                    </li>
                                   )}
-                                </li>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </ul>
-                      )}
-                    </Droppable>
-                  </li>
-                );
-              }
-              return (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided) => (
-                    <li
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      className="border-r rounded w-[280px] flex flex-col bg-white"
-                    >
-                      <div className="flex gap-2 border-b p-3 max-h-[60px] min-h-[60px] justify-between items-center">
-                        {item.content}
-                        <Tooltip content="Grab to drag and drop">
-                          <span
-                            className="px-2 py-2"
-                            {...(!loading
-                              ? { ...provided.dragHandleProps }
-                              : {})}
-                          >
-                            <Grip size={16} />
-                          </span>
-                        </Tooltip>
-                      </div>
-                      <Droppable
-                        droppableId={item.id}
-                        type={`droppableSubItem`}
-                        direction="vertical"
+                                </Draggable>
+                              ))}
+                              {provided.placeholder}
+                            </ul>
+                          )}
+                        </Droppable>
+                      </li>
+                    );
+                  })}
+              </ul>
+            ) : null}
+            {items?.filter((item) => item?.canDrag)?.length ? (
+              <ul
+                className={cn(
+                  " w-full space-y-4",
+                  items?.filter((item) => !item?.canDrag)?.length
+                    ? "md:w-[calc(50%-8px)]"
+                    : ""
+                )}
+              >
+                {items
+                  ?.filter((item) => item?.canDrag)
+                  .map((item, index) => {
+                    return (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
                       >
                         {(provided) => (
-                          <ul
+                          <li
                             ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="flex flex-col gap-2 p-3 h-full"
+                            {...provided.draggableProps}
+                            className="border rounded w-full flex flex-col bg-white"
                           >
-                            {item.subItems.map((subItem, subIndex) => (
-                              <Draggable
-                                key={subItem.id}
-                                draggableId={subItem.id}
-                                index={subIndex}
-                              >
-                                {(provided) => (
-                                  <li
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    className="p-2 items-center border bg-white rounded flex justify-between w-full"
-                                  >
-                                    {subItem.content}
-                                    <Tooltip content="Grab to drag and drop">
-                                      <span
-                                        className="px-2 py-2"
-                                        {...(!loading
-                                          ? { ...provided.dragHandleProps }
-                                          : {})}
-                                      >
-                                        <Grip size={16} />
-                                      </span>
-                                    </Tooltip>
-                                  </li>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </ul>
+                            <div className="flex gap-2 border-b p-3 max-h-[60px] min-h-[60px] justify-between items-center">
+                              {item.content}
+                              <Tooltip content="Grab to drag and drop">
+                                <span
+                                  className="px-2 py-2"
+                                  {...(!loading
+                                    ? { ...provided.dragHandleProps }
+                                    : {})}
+                                >
+                                  <Grip size={16} />
+                                </span>
+                              </Tooltip>
+                            </div>
+                            <Droppable
+                              droppableId={item.id}
+                              type={`droppableSubItem`}
+                              direction="vertical"
+                            >
+                              {(provided) => (
+                                <ul
+                                  ref={provided.innerRef}
+                                  {...provided.droppableProps}
+                                  className="flex flex-col gap-2 p-3 h-full"
+                                >
+                                  {!item?.subItems?.length && (
+                                    <li className="text-sm">
+                                      {item?.noDataMessage || "No Data Found"}
+                                    </li>
+                                  )}
+                                  {item.subItems.map((subItem, subIndex) => (
+                                    <Draggable
+                                      key={subItem.id}
+                                      draggableId={subItem.id}
+                                      index={subIndex}
+                                    >
+                                      {(provided) => (
+                                        <li
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          className="p-2 items-center border bg-white rounded flex justify-between w-full"
+                                        >
+                                          {subItem.content}
+                                          <Tooltip content="Grab to drag and drop">
+                                            <span
+                                              className="px-2 py-2"
+                                              {...(!loading
+                                                ? {
+                                                    ...provided.dragHandleProps,
+                                                  }
+                                                : {})}
+                                            >
+                                              <Grip size={16} />
+                                            </span>
+                                          </Tooltip>
+                                        </li>
+                                      )}
+                                    </Draggable>
+                                  ))}
+                                  {provided.placeholder}
+                                </ul>
+                              )}
+                            </Droppable>
+                          </li>
                         )}
-                      </Droppable>
-                    </li>
-                  )}
-                </Draggable>
-              );
-            })}
+                      </Draggable>
+                    );
+                  })}
+              </ul>
+            ) : null}
             {provided.placeholder}
-          </ul>
+          </div>
         )}
       </Droppable>
     </DragDropContext>

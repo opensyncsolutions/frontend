@@ -13,15 +13,15 @@ const FieldItem = ({ field }: { field: Field }) => {
   const { language } = useLanguage();
   const { me } = useGetMe();
   const { editFieldsRole } = getRoles(me?.roles || []);
+
   return (
     <div className="flex items-center justify-between w-[calc(100%-32px)] gap-2">
       <span>
         {field?.translations?.[language]?.description ||
-          capitalizeFirstLetter(
-            separateTextOnCapitalLetter(field?.description || field?.name || "")
-          )}
+          field?.description ||
+          capitalizeFirstLetter(separateTextOnCapitalLetter(field?.name || ""))}
       </span>
-      {editFieldsRole && (
+      {editFieldsRole && field?.id && (
         <button
           onClick={() => {
             search.set("selectedField", field?.id);

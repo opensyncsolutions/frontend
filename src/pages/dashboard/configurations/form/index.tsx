@@ -1,41 +1,41 @@
 import { useLanguage } from "@/shared/contexts/languages";
 import { useTranslations } from "@/shared/hooks/use-translations";
-import { useForm } from "@/shared/services/forms";
+import { useForm, useForms } from "@/shared/services/forms";
 import PageTemplate from "@/templates/page-template";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Page from "./page";
 import { formsOptions } from "../forms/data";
-import { useBulkyEditFields, useFields } from "@/shared/services/fields";
+import { useFields } from "@/shared/services/fields";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, RefreshCcw } from "lucide-react";
+import { Edit2Icon, RefreshCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGetMe } from "@/shared/services/auth";
 import { getRoles } from "@/shared/utils/roles";
-import { useBulkyEditSections } from "@/shared/services/sections";
+import { useState } from "react";
+import { useSections } from "@/shared/services/sections";
+import DeleteForm from "../forms/delete-form";
+import SideSheet from "@/components/ui/side-sheet";
+import EditForm from "./edit-form";
 
 const Form = () => {
-  const [search, setSearch] = useSearchParams();
+  const [isRefetching, setRefetching] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const { language } = useLanguage();
+  const navigate = useNavigate();
   const { translate } = useTranslations();
   const { formId } = useParams<{ formId: string }>();
-  const { form, formRefetch, formRefetching } = useForm(formId || "");
+  const { form, formRefetch } = useForm(formId || "");
   const formData = formsOptions.find(({ code }) => form?.code === code);
+  const { formsRefetch } = useForms();
+  const { fields, fieldsRefetch } = useFields(formData?.field || "");
 
-  const { fields, fieldsRefetch, fieldsRefething } = useFields(
-    formData?.field || ""
-  );
-
-  const { editFields, editFieldsLoading } = useBulkyEditFields(() => {
-    fieldsRefetch();
-    formRefetch();
-  });
-  const { editSections, editSectionsLoading } = useBulkyEditSections(() => {
-    fieldsRefetch();
-    formRefetch();
+  const { sectionsRefetch } = useSections({
+    form: form?.sections?.length ? form?.id : "",
   });
 
   const { me } = useGetMe();
-  const { createSectionsRole } = getRoles(me?.roles || []);
+  const { deleteFormsRole, editFormsRole } = getRoles(me?.roles || []);
 
   return (
     <PageTemplate
@@ -60,30 +60,34 @@ const Form = () => {
               onClick={() => {
                 formRefetch();
                 fieldsRefetch();
+                sectionsRefetch();
               }}
               variant={"secondary"}
             >
               <RefreshCcw
                 size={15}
-                className={cn(
-                  fieldsRefething ||
-                    formRefetching ||
-                    editFieldsLoading ||
-                    editSectionsLoading
-                    ? "animate-rotate"
-                    : ""
-                )}
+                className={cn(isRefetching ? "animate-rotate" : "")}
               />
             </Button>
-            {createSectionsRole && (
+            {deleteFormsRole && (
+              <Button
+                className="gap-2"
+                variant={"destructive"}
+                onClick={() => {
+                  setOpenDelete(true);
+                }}
+              >
+                <Trash2 size={15} />
+              </Button>
+            )}
+            {editFormsRole && (
               <Button
                 className="gap-2"
                 onClick={() => {
-                  search.set("selectedSection", "new");
-                  setSearch(search);
+                  setOpenEdit(true);
                 }}
               >
-                <PlusIcon size={15} /> Add Section
+                <Edit2Icon size={15} /> Edit Form
               </Button>
             )}
           </div>
@@ -91,13 +95,35 @@ const Form = () => {
       }
     >
       <div>
-        <Page
-          editFields={editFields}
-          editFieldsLoading={editFieldsLoading}
-          editSections={editSections}
-          editSectionsLoading={editSectionsLoading}
-        />
+        <Page updateLoadingStatus={(isLoading) => setRefetching(isLoading)} />
       </div>
+      <DeleteForm
+        id={openDelete ? form?.id || "" : ""}
+        name={form?.translations?.[language]?.name || form?.name || ""}
+        cb={(deleted) => {
+          if (deleted) {
+            formsRefetch();
+            navigate("/configurations");
+          }
+          setOpenDelete(false);
+        }}
+      />
+      {form && (
+        <SideSheet open={openEdit} close={() => setOpenEdit(false)}>
+          {openEdit && (
+            <EditForm
+              form={form}
+              cb={(edited) => {
+                if (edited) {
+                  formRefetch();
+                  formsRefetch();
+                }
+                setOpenEdit(false);
+              }}
+            />
+          )}
+        </SideSheet>
+      )}
     </PageTemplate>
   );
 };

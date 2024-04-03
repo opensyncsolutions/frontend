@@ -12,12 +12,13 @@ const DeleteForm = ({
   cb: (refetch?: boolean) => void;
 }) => {
   const { deleteForm, deleteFormLoading } = useDeleteForm(id, () => cb(true));
+
   return (
     <Modal
       open={!!id}
       close={() => cb()}
       title={`Delete ${name}`}
-      description="Are you sure you want to delete this menu? This action is irreversible"
+      description="Are you sure you want to delete this form? This action is irreversible"
       footer={
         <div className="space-x-4">
           <Button

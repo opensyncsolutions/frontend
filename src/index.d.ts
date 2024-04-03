@@ -130,6 +130,7 @@ type BloodCollection = {
 interface Field {
   id: string;
   code: string;
+  value: string;
   name: string;
   mandatory: boolean;
   type: "DATE" | "BOOLEAN" | "TEXT" | "NUMBER";
@@ -144,10 +145,10 @@ interface Field {
 
 interface Section {
   id: string;
-  code: string;
-  name: string;
+  code?: string;
+  name?: string;
   sortOrder: number;
-  fields: Field[];
+  fields?: Field[];
   translations?: Record<Languages, Record<"code" | "name", string>>;
 }
 
@@ -206,7 +207,8 @@ type Fields =
   | "bloodCollections"
   | "disbursements"
   | "sections"
-  | "fields";
+  | "fields"
+  | "forms";
 
 type FormNames =
   | "Enrollments"

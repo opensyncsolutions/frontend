@@ -12,7 +12,7 @@ const SectionItem = ({
   refetch,
 }: {
   section?: Section;
-  refetch: () => void;
+  refetch?: () => void;
 }) => {
   const [search, setSearch] = useSearchParams();
   const [deleteSection, setDeleteSection] = useState(false);
@@ -24,9 +24,9 @@ const SectionItem = ({
   return (
     <div className="flex items-center justify-between w-[calc(100%-32px)] gap-2">
       <span className="truncate font-bold">
-        {section?.translations?.[language]?.code ||
-          section?.code ||
-          "Unnamed Section"}
+        {section?.translations?.[language]?.name ||
+          section?.name ||
+          "Fields Without Section"}
       </span>
       {section && (
         <div className="flex items-center gap-3">
@@ -53,7 +53,7 @@ const SectionItem = ({
       <DeleteSection
         name={section?.translations?.[language]?.code || section?.code || ""}
         cb={(shouldRefetch) => {
-          if (shouldRefetch) refetch();
+          if (shouldRefetch) refetch?.();
           setDeleteSection(false);
         }}
         id={deleteSection ? section?.id || "" : ""}

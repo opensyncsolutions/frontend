@@ -7,19 +7,23 @@ interface SectionPayload {
   code: string;
   name: string;
   form?: string;
+  fields?: Field[];
   sortOrder?: number;
-  translations?: Record<Languages, Partial<{ code?: string }>>;
+  translations?: Record<
+    Languages,
+    Partial<{ name?: string; description?: string }>
+  >;
 }
 
 export const useSections = ({ form }: { form: string }) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
     ["sections", form],
     async () => {
-      const { data } = await AxiosInstance.get<Section>(
+      const { data } = await AxiosInstance.get<{ sections: Section[] }>(
         `/sections?filter=form.id:eq:${form}`,
         {
           params: {
-            fields: "*",
+            fields: "id,fields,translations,name,sortOrder",
             pageSize: 100,
           },
         }
@@ -128,7 +132,7 @@ export const useBulkyEditSections = (cb?: () => void) => {
     async (
       payload: { id: string; sortOrder: number; fields: { id: string }[] }[]
     ) => {
-      const { data } = await AxiosInstance.put(`/sections/bulky`, payload);
+      const { data } = await AxiosInstance.post(`/sections/bulky`, payload);
       return data;
     },
     {
