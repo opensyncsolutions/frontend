@@ -8,6 +8,7 @@ import { formatErrorMessage } from "@/shared/utils/helpers";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
+import { useObjectives } from "@/shared/services/objectives";
 
 const searchableFields = ["organisationUnit", "name", "studyId", "ctcId"];
 const filterableFields = ["gender", "status", "objective"];
@@ -16,11 +17,6 @@ const sortabledDateFileds = ["dob", "created"];
 const genderOptions = [
   { label: "Male", value: "Male" },
   { label: "Female", value: "Female" },
-];
-
-const objectiveOptions = [
-  { label: "Objective One", value: "Objective One" },
-  { label: "Objective Two", value: "Objective Two" },
 ];
 
 const statusOptions = [
@@ -91,6 +87,10 @@ const Page = () => {
       : {}),
   });
 
+  const { objectives } = useObjectives({
+    paginate: { pageSize: 100, page: 1 },
+  });
+
   const loading = enrollmentsLoading || isLoading;
 
   return (
@@ -113,7 +113,10 @@ const Page = () => {
                 key === "gender"
                   ? genderOptions
                   : key === "objective"
-                  ? objectiveOptions
+                  ? objectives?.objectives?.map((objective) => ({
+                      label: objective?.name,
+                      value: objective?.name,
+                    })) || []
                   : key === "status"
                   ? statusOptions
                   : [],

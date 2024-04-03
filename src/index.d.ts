@@ -208,7 +208,9 @@ type Fields =
   | "disbursements"
   | "sections"
   | "fields"
-  | "forms";
+  | "forms"
+  | "objectives"
+  | "organisationUnits";
 
 type FormNames =
   | "Enrollments"
@@ -217,6 +219,14 @@ type FormNames =
   | "Blood Collections"
   | "Data Collections"
   | "Eacs";
+
+interface Objective {
+  id: string;
+  description: string;
+  name: string;
+  created: string;
+  translations?: Record<Languages, Record<"name" | "description", string>>;
+}
 
 // End API
 
