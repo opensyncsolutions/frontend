@@ -7,6 +7,7 @@ import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { DATE_FORMAT, DATE_TIME_FORMAT } from "@/shared/constants/constants";
 // import TableFilters from "@/components/table-filters";
 
 const searchableFields: string[] = [];
@@ -149,7 +150,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell(record) {
-              return format(record.row.original.created, "dd MMM, yyyy");
+              return format(record.row.original.created, DATE_TIME_FORMAT);
             },
           },
           {
@@ -163,7 +164,7 @@ const Page = () => {
             accessorKey: "nextVisit",
             cell(record) {
               const date = record.row.original.nextVisit;
-              return date ? format(date, "dd MMM, yyyy") : "-";
+              return date ? format(date, DATE_FORMAT) : "-";
             },
           },
           {
@@ -171,7 +172,7 @@ const Page = () => {
             accessorKey: "firstReturn",
             cell(record) {
               const date = record.row.original.firstReturn;
-              return date ? format(date, "dd MMM, yyyy") : "-";
+              return date ? format(date, DATE_FORMAT) : "-";
             },
           },
           {

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useObjectives } from "@/shared/services/objectives";
+import { DATE_FORMAT } from "@/shared/constants/constants";
 
 const searchableFields = ["organisationUnit", "name", "studyId", "ctcId"];
 const filterableFields = ["gender", "status", "objective"];
@@ -208,7 +209,7 @@ const Page = () => {
             header: "DOB",
             accessorKey: "dob",
             cell(record) {
-              return format(record.row.original.dob, "dd MMM, yyyy");
+              return format(record.row.original.dob, DATE_FORMAT);
             },
           },
           {

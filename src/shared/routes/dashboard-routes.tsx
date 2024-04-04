@@ -6,6 +6,7 @@ import { getRoles } from "../utils/roles";
 const Home = lazy(() => import("@/pages/dashboard/home"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
 const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
+const EAC = lazy(() => import("@/pages/dashboard/eac"));
 const CashDisbursement = lazy(
   () => import("@/pages/dashboard/cash-disbursement")
 );
@@ -13,19 +14,15 @@ const DataCollection = lazy(() => import("@/pages/dashboard/data-collection"));
 const BloodCollection = lazy(
   () => import("@/pages/dashboard/blood-collection")
 );
-
 const Users = lazy(() => import("@/pages/dashboard/users"));
-
 const RolesPrivileges = lazy(
   () => import("@/pages/dashboard/roles-privileges")
 );
 const Configurations = lazy(() => import("@/pages/dashboard/configurations"));
 const Objectives = lazy(() => import("@/pages/dashboard/objectives"));
-
 const OrganisationUnits = lazy(
   () => import("@/pages/dashboard/organisation-units")
 );
-
 const Form = lazy(() => import("@/pages/dashboard/configurations/form"));
 
 const DashboardRoutes = (roles: Role[]) => {
@@ -49,6 +46,7 @@ const DashboardRoutes = (roles: Role[]) => {
     readFormsRole,
     readObjectivesRole,
     readOrganisationUnitsRole,
+    readEacRole,
   } = getRoles(roles);
 
   return (
@@ -95,6 +93,16 @@ const DashboardRoutes = (roles: Role[]) => {
           element={
             <Suspense fallback={PageLoader}>
               <FollowUp />
+            </Suspense>
+          }
+        />
+      )}
+      {readEacRole && (
+        <Route
+          path="/eac"
+          element={
+            <Suspense fallback={PageLoader}>
+              <EAC />
             </Suspense>
           }
         />

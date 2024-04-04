@@ -4,7 +4,7 @@ import { DataTable } from "@/components/ui/data-table";
 import SideSheet from "@/components/ui/side-sheet";
 import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
-import { DATE_FORMAT } from "@/shared/constants/constants";
+import { DATE_TIME_FORMAT } from "@/shared/constants/constants";
 import { useGetMe } from "@/shared/services/auth";
 import { useObjectives } from "@/shared/services/objectives";
 import { formatErrorMessage } from "@/shared/utils/helpers";
@@ -152,7 +152,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell: (record) =>
-              format(record?.row?.original?.created, DATE_FORMAT),
+              format(record?.row?.original?.created, DATE_TIME_FORMAT),
           },
           {
             header: "Organisation Units",

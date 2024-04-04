@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useBloodCollections } from "@/shared/services/blood-collection";
+import { DATE_FORMAT, DATE_TIME_FORMAT } from "@/shared/constants/constants";
 
 const searchableFields: string[] = ["mdhCollection", "result"];
 const sortabledDateFileds = ["resultDate"];
@@ -125,7 +126,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell(record) {
-              return format(record.row.original.created, "dd MMM, yyyy");
+              return format(record.row.original.created, DATE_TIME_FORMAT);
             },
           },
           {
@@ -141,7 +142,7 @@ const Page = () => {
             accessorKey: "resultDate",
             cell(record) {
               return record.row.original.resultDate
-                ? format(record.row.original.resultDate, "dd MMM, yyyy")
+                ? format(record.row.original.resultDate, DATE_FORMAT)
                 : "-";
             },
           },

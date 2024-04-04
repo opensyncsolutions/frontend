@@ -240,6 +240,38 @@ export const getRoles = (roles: Role[]) => {
     )
   )?.id;
 
+  // data eac
+  const readEacRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_DATACOLLECTIONS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createEacRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_DATACOLLECTIONS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editEacRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_DATACOLLECTIONS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteEacRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_DATACOLLECTIONS" ||
+        privilege?.value === "ALL"
+    )
+  )?.id;
+
   // configurations
   // menu
   const readMenuRole = roles?.find((role) =>
@@ -467,6 +499,12 @@ export const getRoles = (roles: Role[]) => {
     createDataCollectionRole,
     editDataCollectionRole,
     deleteDataCollectionRole,
+
+    // eac
+    readEacRole,
+    createEacRole,
+    editEacRole,
+    deleteEacRole,
 
     // configurations
     // menu

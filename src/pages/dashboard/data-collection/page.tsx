@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useDataCollections } from "@/shared/services/data-collection";
+import { DATE_FORMAT } from "@/shared/constants/constants";
 
 const searchableFields: string[] = [
   "midlineHvlStatus",
@@ -113,7 +114,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell(record) {
-              return format(record.row.original.created, "dd MMM, yyyy");
+              return format(record.row.original.created, DATE_FORMAT);
             },
           },
           {

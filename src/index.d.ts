@@ -248,6 +248,29 @@ interface OrganisationUnit {
   >;
 }
 
+interface EAC {
+  id: string;
+  created: string;
+  updated: string;
+  code: string;
+  sessionDate: string;
+  verified: boolean;
+  correctMotherName: boolean;
+  controlDate: string;
+  interventionDate: string;
+  contactStill: boolean;
+  createdBy: User;
+  enrollment: Enrollment;
+  sessions: Session[];
+}
+
+interface Session {
+  id: string;
+  session: number;
+  created: string;
+  date: string;
+}
+
 // End API
 
 // Start UI

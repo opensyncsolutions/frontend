@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from "@/shared/constants/constants";
+import { DATE_FORMAT, DATE_TIME_FORMAT } from "@/shared/constants/constants";
 import { format } from "date-fns";
 
 const OrganisationUnits = ({ objective }: { objective: Objective }) => {
@@ -22,7 +22,7 @@ const OrganisationUnits = ({ objective }: { objective: Objective }) => {
               <b>Active:</b> {unit?.active ? "YES" : "NO"}
             </span>
             <span>
-              <b>Created:</b> {format(unit?.created, DATE_FORMAT)}
+              <b>Created:</b> {format(unit?.created, DATE_TIME_FORMAT)}
             </span>
             <span>
               <b>Opening Date:</b> {format(unit.openingDate, DATE_FORMAT)}

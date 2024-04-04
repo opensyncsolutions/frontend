@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { cn } from "@/lib/utils";
 import Error from "@/pages/error";
-import { DATE_FORMAT } from "@/shared/constants/constants";
+import { DATE_FORMAT, DATE_TIME_FORMAT } from "@/shared/constants/constants";
 import { useGetMe } from "@/shared/services/auth";
 import { useOrganisationUnits } from "@/shared/services/organisation-units";
 import { formatErrorMessage } from "@/shared/utils/helpers";
@@ -172,7 +172,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell: (record) =>
-              format(record?.row?.original?.created, DATE_FORMAT),
+              format(record?.row?.original?.created, DATE_TIME_FORMAT),
           },
           { header: "Name", accessorKey: "name" },
           {

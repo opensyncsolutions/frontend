@@ -8,6 +8,7 @@ import { formatErrorMessage } from "@/shared/utils/helpers";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
+import { DATE_TIME_FORMAT } from "@/shared/constants/constants";
 
 const searchableFields: string[] = ["transid", "utilityref"];
 
@@ -107,7 +108,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell(record) {
-              return format(record.row.original.created, "dd MMM, yyyy");
+              return format(record.row.original.created, DATE_TIME_FORMAT);
             },
           },
           {

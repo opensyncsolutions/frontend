@@ -45,6 +45,7 @@ const pathToIcon: Record<string, ReactNode> = {
   objectives: <TableProperties size={18} />,
   "organisation-units": <Building2 size={18} />,
   users: <Users size={18} />,
+  eac: <Layers size={18} />,
 };
 
 export const paths = [
@@ -59,6 +60,7 @@ export const paths = [
   "configurations",
   "objectives",
   "organisation-units",
+  "eac",
 ];
 
 export const useMenuConfig = () => {
@@ -77,6 +79,7 @@ export const useMenuConfig = () => {
     readDataCollectionRole,
     readObjectivesRole,
     readOrganisationUnitsRole,
+    readEacRole,
   } = getRoles(me?.roles || []);
 
   return {
@@ -110,6 +113,9 @@ export const useMenuConfig = () => {
             canAccess = true;
           }
           if (readOrganisationUnitsRole && menu.path === "organisation-units") {
+            canAccess = true;
+          }
+          if (readEacRole && menu.path === "eac") {
             canAccess = true;
           }
           return pathToIcon?.[menu?.path] && canAccess;
