@@ -11,19 +11,21 @@ import { formatErrorMessage } from "@/shared/utils/helpers";
 import { getRoles } from "@/shared/utils/roles";
 import { CellContext } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Edit2Icon, RefreshCcw } from "lucide-react";
+import { Edit2Icon, RefreshCcw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditObjectiveForm from "./create-edit-objective-form";
 import Objective from "./objective";
 import BottomSheet from "@/components/ui/bottom-sheet";
 import OrganisationUnits from "./organisation-units";
+import DeleteObjective from "./delete-objective";
 
 const searchableFields: string[] = ["name", "organisationUnit"];
 const sortabledDateFileds = ["created"];
 
 const Page = () => {
   const [search, setSearch] = useSearchParams();
+  const [objectiveToDelete, setObjectiveToDelete] = useState("");
   const [selectedObjectiveForUnits, setSelectedObjectiveForUnits] =
     useState("");
   const [filters, setFilters] = useState<Filter[]>([
@@ -71,9 +73,8 @@ const Page = () => {
 
   const { me } = useGetMe();
 
-  const { editObjectivesRole, createObjectivesRole } = getRoles(
-    me?.roles || []
-  );
+  const { editObjectivesRole, createObjectivesRole, deleteObjectivesRole } =
+    getRoles(me?.roles || []);
 
   const selectedObjective = search.get("selectedObjective");
 
@@ -177,7 +178,7 @@ const Page = () => {
                   size: 100,
                   cell: (record: CellContext<Objective, unknown>) => {
                     return (
-                      <div className="flex justify-between gap-3 max-w-[100px]">
+                      <div className="flex gap-3 max-w-[100px]">
                         <button
                           className="px-2 py-2"
                           onClick={(e) => {
@@ -192,6 +193,18 @@ const Page = () => {
                         >
                           <Edit2Icon size={15} />
                         </button>
+                        {deleteObjectivesRole && (
+                          <button
+                            className="px-2 py-2 text-red-500"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.nativeEvent.stopImmediatePropagation();
+                              setObjectiveToDelete(record?.row?.original?.id);
+                            }}
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        )}
                       </div>
                     );
                   },
@@ -254,6 +267,22 @@ const Page = () => {
       >
         {objective && <OrganisationUnits objective={objective} />}
       </BottomSheet>
+      {deleteObjectivesRole && (
+        <DeleteObjective
+          id={objectiveToDelete}
+          name={
+            objectives?.objectives?.find(
+              (unit) => unit?.id === objectiveToDelete
+            )?.name || ""
+          }
+          cb={(deleted) => {
+            if (deleted) {
+              objectivesRefetch();
+            }
+            setObjectiveToDelete("");
+          }}
+        />
+      )}
     </div>
   );
 };
