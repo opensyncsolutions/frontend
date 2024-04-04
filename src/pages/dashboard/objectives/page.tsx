@@ -16,12 +16,16 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateEditObjectiveForm from "./create-edit-objective-form";
 import Objective from "./objective";
+import BottomSheet from "@/components/ui/bottom-sheet";
+import OrganisationUnits from "./organisation-units";
 
 const searchableFields: string[] = ["name", "organisationUnit"];
 const sortabledDateFileds = ["created"];
 
 const Page = () => {
   const [search, setSearch] = useSearchParams();
+  const [selectedObjectiveForUnits, setSelectedObjectiveForUnits] =
+    useState("");
   const [filters, setFilters] = useState<Filter[]>([
     ...searchableFields.map((key) => ({
       key,
@@ -72,6 +76,10 @@ const Page = () => {
   );
 
   const selectedObjective = search.get("selectedObjective");
+
+  const objective = objectives?.objectives?.find(
+    (objective) => objective?.id === selectedObjectiveForUnits
+  );
 
   return (
     <div className="space-y-5">
@@ -139,12 +147,24 @@ const Page = () => {
             header: "Name",
             accessorKey: "name",
           },
-
           {
             header: "Created",
             accessorKey: "created",
             cell: (record) =>
               format(record?.row?.original?.created, DATE_FORMAT),
+          },
+          {
+            header: "Organisation Units",
+            accessorKey: "organisationUnits",
+            cell: (record) => (
+              <button
+                onClick={() => {
+                  setSelectedObjectiveForUnits(record?.row?.original?.id);
+                }}
+              >
+                View {record?.row?.original?.organisationUnits?.length} Units
+              </button>
+            ),
           },
           {
             header: "Description",
@@ -225,6 +245,15 @@ const Page = () => {
           />
         )}
       </SideSheet>
+      <BottomSheet
+        open={!!objective}
+        close={() => {
+          setSelectedObjectiveForUnits("");
+        }}
+        title="Organisation Units"
+      >
+        {objective && <OrganisationUnits objective={objective} />}
+      </BottomSheet>
     </div>
   );
 };

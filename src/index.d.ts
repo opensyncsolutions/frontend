@@ -226,6 +226,20 @@ interface Objective {
   name: string;
   created: string;
   translations?: Record<Languages, Record<"name" | "description", string>>;
+  organisationUnits: OrganisationUnit[];
+}
+
+interface OrganisationUnit {
+  id: string;
+  created: string;
+  updated: string;
+  name: string;
+  shortName: string;
+  path: string;
+  openingDate: string;
+  active: boolean;
+  level: number;
+  data: boolean;
 }
 
 // End API

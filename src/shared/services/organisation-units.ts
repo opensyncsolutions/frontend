@@ -5,15 +5,9 @@ import { toast } from "sonner";
 
 interface ObjectivePayload {
   name: string;
-  description?: string;
-  organisationUnits: { id: string }[];
-  translations?: Record<
-    Languages,
-    Partial<{ name?: string; description?: string }>
-  >;
 }
 
-export const useObjectives = ({
+export const useOrganisationUnits = ({
   paginate: { page, pageSize },
   filter,
 }: {
@@ -21,7 +15,7 @@ export const useObjectives = ({
   filter?: string;
 }) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["objectives", page, pageSize, filter],
+    ["organisation-units", page, pageSize, filter],
     async () => {
       const params: Record<string, string | number | boolean> = {
         fields: "*",
@@ -42,11 +36,11 @@ export const useObjectives = ({
       params.rootJoin = "OR";
 
       const { data } = await AxiosInstance.get<{
-        objectives: Objective[];
+        organisationUnits: OrganisationUnit[];
         total: number;
         page: number;
         pageSize: number;
-      }>(`/objectives?${filters}`, {
+      }>(`/organisationUnits?${filters}`, {
         params,
       });
       return data;
@@ -57,17 +51,17 @@ export const useObjectives = ({
     }
   );
   return {
-    objectives: data,
-    objectivesError: error as ApiError,
-    objectivesLoading: isLoading,
-    objectivesRefetch: refetch,
-    objectivesRefething: isRefetching,
+    organisationUnits: data,
+    organisationUnitsError: error as ApiError,
+    organisationUnitsLoading: isLoading,
+    organisationUnitsRefetch: refetch,
+    organisationUnitsRefething: isRefetching,
   };
 };
 
-export const useObjective = (id: string) => {
+export const useOrganisationUnit = (id: string) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["objectives", id],
+    ["organisation-units", id],
     async () => {
       const params: Record<string, string | number | boolean> = {
         fields: "*",
@@ -75,9 +69,12 @@ export const useObjective = (id: string) => {
 
       params.rootJoin = "OR";
 
-      const { data } = await AxiosInstance.get<Objective>(`/objectives/${id}`, {
-        params,
-      });
+      const { data } = await AxiosInstance.get<OrganisationUnit>(
+        `/organisationUnits/${id}`,
+        {
+          params,
+        }
+      );
       return data;
     },
     {
@@ -87,18 +84,18 @@ export const useObjective = (id: string) => {
     }
   );
   return {
-    objective: data,
-    objectiveError: error as ApiError,
-    objectiveLoading: isLoading,
-    objectiveRefetch: refetch,
-    objectiveRefething: isRefetching,
+    organisationUnit: data,
+    organisationUnitError: error as ApiError,
+    organisationUnitLoading: isLoading,
+    organisationUnitRefetch: refetch,
+    organisationUnitRefething: isRefetching,
   };
 };
 
-export const useCreateObjective = (cb?: () => void) => {
+export const useCreateOrganisationUnit = (cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async (payload: ObjectivePayload) => {
-      const { data } = await AxiosInstance.post("/objectives", payload);
+      const { data } = await AxiosInstance.post("/organisationUnits", payload);
       return data;
     },
     {
@@ -109,7 +106,7 @@ export const useCreateObjective = (cb?: () => void) => {
         });
       },
       onSuccess: () => {
-        toast("Successfully created objective", {
+        toast("Successfully created organisation unit", {
           duration: 5000,
           closeButton: true,
         });
@@ -118,15 +115,18 @@ export const useCreateObjective = (cb?: () => void) => {
     }
   );
   return {
-    createObjective: mutateAsync,
-    createObjectiveLoading: isLoading,
+    createOrganisationUnit: mutateAsync,
+    createOrganisationUnitLoading: isLoading,
   };
 };
 
-export const useEditObjective = (id: string, cb?: () => void) => {
+export const useEditOrganisationUnit = (id: string, cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async (payload: ObjectivePayload) => {
-      const { data } = await AxiosInstance.put(`/objectives/${id}`, payload);
+      const { data } = await AxiosInstance.put(
+        `/organisationUnits/${id}`,
+        payload
+      );
       return data;
     },
     {
@@ -137,7 +137,7 @@ export const useEditObjective = (id: string, cb?: () => void) => {
         });
       },
       onSuccess: () => {
-        toast("Successfully updated objective", {
+        toast("Successfully updated organisation unit", {
           duration: 5000,
           closeButton: true,
         });
@@ -146,15 +146,15 @@ export const useEditObjective = (id: string, cb?: () => void) => {
     }
   );
   return {
-    editObjective: mutateAsync,
-    editObjectiveLoading: isLoading,
+    editOrganisationUnit: mutateAsync,
+    editOrganisationUnitLoading: isLoading,
   };
 };
 
-export const useDeleteObjective = (id: string, cb?: () => void) => {
+export const useDeleteOrganisationUnit = (id: string, cb?: () => void) => {
   const { mutateAsync, isLoading } = useMutation(
     async () => {
-      const { data } = await AxiosInstance.delete(`/objectives/${id}`);
+      const { data } = await AxiosInstance.delete(`/organisationUnits/${id}`);
       return data;
     },
     {
@@ -165,7 +165,7 @@ export const useDeleteObjective = (id: string, cb?: () => void) => {
         });
       },
       onSuccess: () => {
-        toast("Successfully deleted objective", {
+        toast("Successfully deleted organisation unit", {
           duration: 5000,
           closeButton: true,
         });
@@ -173,5 +173,8 @@ export const useDeleteObjective = (id: string, cb?: () => void) => {
       },
     }
   );
-  return { deleteObjective: mutateAsync, deleteObjectiveLoading: isLoading };
+  return {
+    deleteOrganisationUnit: mutateAsync,
+    deleteOrganisationUnitLoading: isLoading,
+  };
 };
