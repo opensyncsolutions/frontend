@@ -157,7 +157,7 @@ const Roles = () => {
                   size: 100,
                   cell: (record: CellContext<Role, unknown>) => {
                     return (
-                      <div className="flex justify-between gap-3 max-w-[100px]">
+                      <div className="flex gap-3 max-w-[100px]">
                         {!record?.row?.original.system && editRolesRole && (
                           <button
                             className="px-2 py-2"

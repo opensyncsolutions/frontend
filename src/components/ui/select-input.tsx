@@ -31,7 +31,7 @@ const noOptionsMessageStyles = "text-muted-foreground bg-background";
 
 type SelectComponentProps = {
   options: any[];
-  value?: { value: string; label: string }[] | string;
+  value?: { value: string; label: string }[] | { value: string; label: string };
   defaultValue?: string[] | string;
   onChange?: (value: any) => void;
   isMulti?: boolean;

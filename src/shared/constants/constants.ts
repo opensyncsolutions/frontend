@@ -1,5 +1,5 @@
 export const API_TIMEOUT = 15000;
-export const DATE_FORMAT = "yyyy-MMM-dd";
+export const DATE_FORMAT = "yyyy-MMM-dd hh:mm";
 export const languages: {
   lang: Languages;
   name: LanguagesNames;
@@ -12,5 +12,4 @@ export const languages: {
     lang: "sw",
     name: "Swahili",
   },
-  // { lang: "fr", name: "Franc" },
 ];

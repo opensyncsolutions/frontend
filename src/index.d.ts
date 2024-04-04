@@ -234,12 +234,18 @@ interface OrganisationUnit {
   created: string;
   updated: string;
   name: string;
+  description?: string;
   shortName: string;
   path: string;
+  code: string;
   openingDate: string;
   active: boolean;
   level: number;
   data: boolean;
+  translations?: Record<
+    Languages,
+    Record<"name" | "description" | "shortName", string>
+  >;
 }
 
 // End API

@@ -251,7 +251,6 @@ const CreateEditForm = ({ id, cb }: { id: string; cb: () => void }) => {
                       value={
                         field?.value
                           ? {
-                              // @ts-ignore
                               value: field?.value,
                               label: field?.value,
                             }

@@ -5,6 +5,15 @@ import { toast } from "sonner";
 
 interface ObjectivePayload {
   name: string;
+  shortName: string;
+  OOP?: string;
+  data: boolean;
+  active: boolean;
+  description?: string;
+  translations?: Record<
+    Languages,
+    Partial<{ name?: string; shortName?: string; description?: string }>
+  >;
 }
 
 export const useOrganisationUnits = ({

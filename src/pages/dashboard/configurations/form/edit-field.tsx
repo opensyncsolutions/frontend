@@ -118,7 +118,7 @@ const EditFieldForm = ({
       />
     );
   }
-  
+
   return (
     <form className="space-y-3 mt-4" onSubmit={handleSubmit(onSubmit)}>
       {fields?.map(({ name, type, options }) => {
@@ -170,13 +170,12 @@ const EditFieldForm = ({
                     value={
                       options?.find((option) => option?.value === field?.value)
                         ? {
-                            // @ts-ignore
                             label: options?.find(
                               (option) => option?.value === field?.value
                             )?.name as string,
                             value: options?.find(
                               (option) => option?.value === field?.value
-                            )?.value,
+                            )?.value as string,
                           }
                         : undefined
                     }

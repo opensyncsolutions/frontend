@@ -202,7 +202,6 @@ const CreateEditObjectiveForm = ({
                   })) || []
                 }
                 {...field}
-                // @ts-ignore
                 value={field?.value ?? undefined}
                 onChange={(e) => {
                   field?.onChange(e);
