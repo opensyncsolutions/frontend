@@ -74,19 +74,49 @@ interface Enrollment {
   updated: string;
   status: string;
   ctcId: string;
+  studyId?: string;
   recentVisit: string;
+  firstName: string;
+  middleName?: string;
+  surname: string;
+  nickName?: string;
+  motherName?: string;
+  village?: string;
+  hbcNumber?: string;
+  hbcName?: string;
+  landmark?: string;
+  dob: string;
+  gender: string;
+  recentVisit?: string;
+  deleted?: string;
+  enrollmentDate?: string;
+  screeningId?: string;
+  appointment?: string;
+  scheduledReturn?: string;
+  assessmentDate?: string;
+  viralLoadDate?: string;
+  counsellingDate?: string;
+  clinicalInterventionVisit?: string;
+  clinicalControlVisit?: string;
   participantConsent: boolean;
   informedConsent: boolean;
   followupConsent: boolean;
   fundsConfirmation: boolean;
-  firstName: string;
-  surname: string;
-  dob: string;
   mainConsentStudy: boolean;
   consentToBeContacted: boolean;
   completeBaselineSurvey: boolean;
   currentEnrolled: boolean;
-  gender: string;
+  mobileAccess?: boolean;
+  returnMobileNumber?: boolean;
+  createdBy: User;
+  updatedBy?: User;
+  objective: Objective;
+  organisationUnit: OrganisationUnit;
+  phones?: Phone[];
+  disbursements: Disbursement[];
+  eacs: EAC[];
+  bloodCollections: BloodCollection[];
+  dataCollections: DataCollection[];
 }
 
 interface FollowUp {
@@ -269,6 +299,14 @@ interface Session {
   session: number;
   created: string;
   date: string;
+}
+
+interface Phone {
+  id: string;
+  name?: string;
+  phone: string;
+  personal: boolean;
+  mobileMoneyAccount: boolean;
 }
 
 // End API

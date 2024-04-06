@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { EyeIcon, RefreshCcw } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
@@ -144,22 +144,6 @@ const Page = () => {
               return record.row.original.resultDate
                 ? format(record.row.original.resultDate, DATE_FORMAT)
                 : "-";
-            },
-          },
-          {
-            header: "Action",
-            size: 100,
-            cell: () => {
-              return (
-                <div className="flex justify-between gap-3 max-w-[100px]">
-                  <button className="px-2 py-2">
-                    <EyeIcon size={15} />
-                  </button>
-                </div>
-              );
-            },
-            meta: {
-              className: "sticky right-0",
             },
           },
         ]}

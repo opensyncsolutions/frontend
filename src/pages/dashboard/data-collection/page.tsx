@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { EyeIcon, RefreshCcw } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useDataCollections } from "@/shared/services/data-collection";
-import { DATE_FORMAT } from "@/shared/constants/constants";
+import { DATE_TIME_FORMAT } from "@/shared/constants/constants";
 
 const searchableFields: string[] = [
   "midlineHvlStatus",
@@ -114,7 +114,7 @@ const Page = () => {
             header: "Created",
             accessorKey: "created",
             cell(record) {
-              return format(record.row.original.created, DATE_FORMAT);
+              return format(record.row.original.created, DATE_TIME_FORMAT);
             },
           },
           {
@@ -128,22 +128,6 @@ const Page = () => {
           {
             header: "Endline Survey Status",
             accessorKey: "endlineSurveyStatus",
-          },
-          {
-            header: "Action",
-            size: 100,
-            cell: () => {
-              return (
-                <div className="flex justify-between gap-3 max-w-[100px]">
-                  <button className="px-2 py-2">
-                    <EyeIcon size={15} />
-                  </button>
-                </div>
-              );
-            },
-            meta: {
-              className: "sticky right-0",
-            },
           },
         ]}
       />

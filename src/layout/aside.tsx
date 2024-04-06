@@ -46,7 +46,7 @@ const Aside = ({ isSidebarOpen, closeSidebar }: AsideProps) => {
       )}
       <aside
         className={cn(
-          "fixed h-[100dvh] overflow-hidden border-r bg-primary left-0 top-0 transition-all",
+          "fixed h-[100dvh] overflow-hidden bg-primary left-0 top-0 transition-all",
           width > 992
             ? !isSidebarOpen
               ? "w-[70px]"

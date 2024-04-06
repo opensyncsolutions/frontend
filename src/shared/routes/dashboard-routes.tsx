@@ -4,6 +4,7 @@ import { Navigate, Route } from "react-router-dom";
 import { getRoles } from "../utils/roles";
 
 const Home = lazy(() => import("@/pages/dashboard/home"));
+const Enrollments = lazy(() => import("@/pages/dashboard/enrollments"));
 const Enrollment = lazy(() => import("@/pages/dashboard/enrollment"));
 const FollowUp = lazy(() => import("@/pages/dashboard/followup"));
 const EAC = lazy(() => import("@/pages/dashboard/eac"));
@@ -80,6 +81,16 @@ const DashboardRoutes = (roles: Role[]) => {
       {readEnrollmentsRole && (
         <Route
           path="/enrollments"
+          element={
+            <Suspense fallback={PageLoader}>
+              <Enrollments />
+            </Suspense>
+          }
+        />
+      )}
+      {readEnrollmentsRole && (
+        <Route
+          path="/enrollments/:id"
           element={
             <Suspense fallback={PageLoader}>
               <Enrollment />

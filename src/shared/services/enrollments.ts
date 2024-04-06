@@ -85,3 +85,34 @@ export const useEnrollements = ({
     enrollmentsRefething: isRefetching,
   };
 };
+
+export const useEnrollement = (id: string) => {
+  const { data, error, isLoading, refetch, isRefetching } = useQuery(
+    ["enrollments", id],
+    async () => {
+      const params: Record<string, string | number | boolean> = {
+        fields: "*",
+      };
+
+      const { data } = await AxiosInstance.get<Enrollment>(
+        `/enrollments/${id}`,
+        {
+          params,
+        }
+      );
+      return data;
+    },
+    {
+      enabled: !!id,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  return {
+    enrollment: data,
+    enrollmentError: error as ApiError,
+    enrollmentLoading: isLoading,
+    enrollmentRefetch: refetch,
+    enrollmentRefething: isRefetching,
+  };
+};

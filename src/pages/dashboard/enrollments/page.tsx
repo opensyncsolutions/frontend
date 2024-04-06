@@ -10,6 +10,9 @@ import { format } from "date-fns";
 import TableFilters from "@/components/table-filters";
 import { useObjectives } from "@/shared/services/objectives";
 import { DATE_FORMAT } from "@/shared/constants/constants";
+import { Link } from "react-router-dom";
+import { useGetMe } from "@/shared/services/auth";
+import { getRoles } from "@/shared/utils/roles";
 
 const searchableFields = ["organisationUnit", "name", "studyId", "ctcId"];
 const filterableFields = ["gender", "status", "objective"];
@@ -93,6 +96,10 @@ const Page = () => {
   });
 
   const loading = enrollmentsLoading || isLoading;
+
+  const { me } = useGetMe();
+
+  const { editEnrollmentsRole } = getRoles(me?.roles || []);
 
   return (
     <div className="space-y-5">
@@ -219,22 +226,27 @@ const Page = () => {
           {
             header: "Action",
             size: 100,
-            cell: () => {
+            cell: (record) => {
               return (
                 <div className="flex justify-between gap-3 max-w-[100px]">
-                  <button className="px-2 py-2">
-                    <EyeIcon size={15} />
-                  </button>
-                  <button
+                  <Link
                     className="px-2 py-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.nativeEvent.stopImmediatePropagation();
-                      // edit clicked
-                    }}
+                    to={`/enrollments/${record?.row?.original?.id}`}
                   >
-                    <Edit2Icon size={15} />
-                  </button>
+                    <EyeIcon size={15} />
+                  </Link>
+                  {editEnrollmentsRole && (
+                    <Link
+                      className="px-2 py-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                      }}
+                      to={`/enrollments/${record?.row?.original?.id}?edit=true`}
+                    >
+                      <Edit2Icon size={15} />
+                    </Link>
+                  )}
                 </div>
               );
             },
