@@ -9,12 +9,13 @@ import PageTemplate from "@/templates/page-template";
 import { Edit2Icon } from "lucide-react";
 import { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import EditEnrollment from "./edit-enrollment";
+import EditEnrollment from "./edit";
 import BasicDetails from "./basic-details";
 import Disbursement from "./disbursement";
 import BloodCollection from "./blood-collection";
 import DataCollection from "./data-collection";
 import Eac from "./eac";
+import Phones from "./phones";
 
 const tabkey = "tab";
 
@@ -36,7 +37,34 @@ const Enrollment = () => {
     "blood-collections",
     "data-collections",
     "eacs",
+    "phones",
   ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (enrollmentError) {
+    return (
+      <Error
+        message={formatErrorMessage(enrollmentError)}
+        refetch={() => {
+          setLoading(true);
+          enrollmentRefetch().finally(() => {
+            setLoading(false);
+          });
+        }}
+      />
+    );
+  }
+
+  if (search?.get("edit") === "true" && editEnrollmentsRole) {
+    return <EditEnrollment id={id || ""} />;
+  }
 
   return (
     <PageTemplate
@@ -57,8 +85,6 @@ const Enrollment = () => {
       tabs={
         !enrollment
           ? undefined
-          : search?.get("edit") === "true" && editEnrollmentsRole
-          ? []
           : [
               {
                 name: "Basic Details",
@@ -80,12 +106,15 @@ const Enrollment = () => {
                 name: "EACs",
                 value: "eacs",
               },
+              {
+                name: "Phones",
+                value: "phones",
+              },
             ]
       }
       tabKey={tabkey}
       titleActions={
-        !enrollment ? undefined : editEnrollmentsRole &&
-          search?.get("edit") !== "true" ? (
+        !enrollment ? undefined : editEnrollmentsRole ? (
           <Button
             className="gap-2"
             onClick={() => {
@@ -95,54 +124,15 @@ const Enrollment = () => {
           >
             <Edit2Icon size={14} /> Edit
           </Button>
-        ) : editEnrollmentsRole && search?.get("edit") === "true" ? (
-          <>
-            <Button
-              variant={"outline"}
-              onClick={() => {
-                search.delete("edit");
-                setSearch(search);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button>Save</Button>
-          </>
         ) : undefined
       }
     >
-      {isLoading && (
-        <div className="flex justify-center items-center">
-          <Loader />
-        </div>
-      )}
-      {enrollmentError && (
-        <Error
-          message={formatErrorMessage(enrollmentError)}
-          refetch={() => {
-            setLoading(true);
-            enrollmentRefetch().finally(() => {
-              setLoading(false);
-            });
-          }}
-        />
-      )}
-      {enrollment && (
-        <>
-          {search.get("edit") === "true" && editEnrollmentsRole && (
-            <EditEnrollment id={id || ""} />
-          )}
-          {search.get("edit") !== "true" && (
-            <>
-              {!tabs.includes(tab || "") && <BasicDetails id={id || ""} />}
-              {tab === "disbursements" && <Disbursement id={id || ""} />}
-              {tab === "blood-collections" && <BloodCollection id={id || ""} />}
-              {tab === "data-collections" && <DataCollection id={id || ""} />}
-              {tab === "eacs" && <Eac id={id || ""} />}
-            </>
-          )}
-        </>
-      )}
+      {!tabs.includes(tab || "") && <BasicDetails id={id || ""} />}
+      {tab === "disbursements" && <Disbursement id={id || ""} />}
+      {tab === "blood-collections" && <BloodCollection id={id || ""} />}
+      {tab === "data-collections" && <DataCollection id={id || ""} />}
+      {tab === "eacs" && <Eac id={id || ""} />}
+      {tab === "phones" && <Phones id={id || ""} />}
     </PageTemplate>
   );
 };

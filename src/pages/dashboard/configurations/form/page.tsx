@@ -293,7 +293,7 @@ const Page = ({
     selectedFields.push(...(section?.fields || []));
   });
 
-  const unselectedFields = fields?.filter(
+  const unselectedFields = form?.fields?.filter(
     (field) =>
       !selectedFields?.find(
         (selectedField) => selectedField?.name === field?.name
@@ -325,7 +325,7 @@ const Page = ({
               ...(unselectedFields?.length
                 ? [
                     {
-                      id: "",
+                      id: "unnamed-section",
                       canDrag: false,
                       content: <SectionItem />,
                       subItems:
@@ -371,7 +371,7 @@ const Page = ({
                 })),
               }));
               const newSections = data
-                ?.filter((section) => section?.id)
+                ?.filter((section) => section?.id !== "unnamed-section")
                 ?.map((section, index) => ({
                   id: section?.id,
                   sortOrder: index,

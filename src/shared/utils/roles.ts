@@ -244,31 +244,57 @@ export const getRoles = (roles: Role[]) => {
   const readEacRole = roles?.find((role) =>
     role?.privileges?.find(
       (privilege) =>
-        privilege?.value === "READ_DATACOLLECTIONS" ||
-        privilege?.value === "ALL"
+        privilege?.value === "READ_EACS" || privilege?.value === "ALL"
     )
   )?.id;
 
   const createEacRole = roles?.find((role) =>
     role?.privileges?.find(
       (privilege) =>
-        privilege?.value === "ADD_DATACOLLECTIONS" || privilege?.value === "ALL"
+        privilege?.value === "ADD_EACS" || privilege?.value === "ALL"
     )
   )?.id;
 
   const editEacRole = roles?.find((role) =>
     role?.privileges?.find(
       (privilege) =>
-        privilege?.value === "UPDATE_DATACOLLECTIONS" ||
-        privilege?.value === "ALL"
+        privilege?.value === "UPDATE_EACS" || privilege?.value === "ALL"
     )
   )?.id;
 
   const deleteEacRole = roles?.find((role) =>
     role?.privileges?.find(
       (privilege) =>
-        privilege?.value === "DELETE_DATACOLLECTIONS" ||
-        privilege?.value === "ALL"
+        privilege?.value === "DELETE_EACS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  // phones
+  const readPhoneRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_PHONES" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createPhoneRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_PHONES" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editPhoneRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_PHONES" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deletePhoneRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_PHONES" || privilege?.value === "ALL"
     )
   )?.id;
 
@@ -505,6 +531,12 @@ export const getRoles = (roles: Role[]) => {
     createEacRole,
     editEacRole,
     deleteEacRole,
+
+    // phones
+    readPhoneRole,
+    createPhoneRole,
+    editPhoneRole,
+    deletePhoneRole,
 
     // configurations
     // menu

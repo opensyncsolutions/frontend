@@ -5,8 +5,9 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FilterIcon } from "lucide-react";
 import SelectInput from "../ui/select-input";
-import DatePicker from "../ui/date-picker";
+import { DateRangePicker } from "../ui/date-picker";
 import { DATE_FORMAT } from "@/shared/constants/constants";
+import { capitalizeFirstLetter } from "@/shared/utils/helpers";
 
 interface TableFiltersProps {
   title?: ReactNode;
@@ -113,7 +114,7 @@ const TableFilters = ({
                     key={filter?.key}
                     options={filter.options}
                     isMulti={filter?.isMulti}
-                    placeholder={`Filter ${filter?.key}`}
+                    placeholder={`Filter ${capitalizeFirstLetter(filter?.key)}`}
                     onChange={(e) => {
                       setFilters((filters) => {
                         let filtersCopy = [...filters];
@@ -174,8 +175,11 @@ const TableFilters = ({
                   )?.value;
 
                   return (
-                    <DatePicker
+                    <DateRangePicker
                       key={filter?.key}
+                      placeholder={`Select Date For ${capitalizeFirstLetter(
+                        filter?.key
+                      )}`}
                       onChange={(date) => {
                         setFilters((filters) => {
                           let filtersCopy = [...filters];

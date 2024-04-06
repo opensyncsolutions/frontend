@@ -65,7 +65,7 @@ const DragAndDropList = ({
                     className="p-3 border bg-white rounded mb-2 flex justify-between items-center"
                     {...provided.draggableProps}
                     ref={provided.innerRef}
-                    {...(!useDragHandler && !loading
+                    {...(!useDragHandler
                       ? { ...provided.dragHandleProps }
                       : undefined)}
                   >
@@ -74,7 +74,7 @@ const DragAndDropList = ({
                       <Tooltip content="Grab to drag and drop">
                         <span
                           className="px-2 py-2"
-                          {...(!loading ? { ...provided.dragHandleProps } : {})}
+                          {...provided.dragHandleProps}
                         >
                           <Grip size={16} />
                         </span>

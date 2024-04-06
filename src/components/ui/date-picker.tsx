@@ -20,12 +20,14 @@ const DatePicker = ({
   error,
   label,
   disabled,
+  placeholder = "Pick a date",
 }: {
-  value?: DateRange;
-  onChange?: (date?: DateRange | undefined) => void;
+  value?: Date;
+  onChange?: (date?: Date | undefined) => void;
   error?: string;
   label?: string;
   disabled?: boolean;
+  placeholder?: string;
 }) => {
   return (
     <div>
@@ -43,30 +45,17 @@ const DatePicker = ({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, dateFormat)} -{" "}
-                  {format(date.to, dateFormat)}
-                </>
-              ) : (
-                format(date.from, dateFormat)
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
+            {date ? format(date, dateFormat) : <span>{placeholder}</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
-            mode="range"
+            mode="single"
             selected={date}
-            toDate={new Date()}
             disabled={disabled}
+            defaultMonth={date}
             onSelect={(date) => onChange?.(date)}
             initialFocus
-            defaultMonth={date?.from}
-            numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>
@@ -81,12 +70,14 @@ export const DateRangePicker = ({
   error,
   label,
   disabled,
+  placeholder = "Pick a date",
 }: {
   value: DateRange;
   onChange: (date?: DateRange) => void;
   error?: string;
   label?: string;
   disabled?: boolean;
+  placeholder?: string;
 }) => {
   return (
     <div>
@@ -98,27 +89,36 @@ export const DateRangePicker = ({
           <Button
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal",
+              "w-full justify-start text-left text-xs font-normal truncated",
               !date && "text-muted-foreground",
               error ? "border-red-500" : ""
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? (
-              format(date?.from ? date?.from?.toISOString() : "", "PPP")
+            <CalendarIcon className="mr-2 h-4 w-4 min-w-4" />
+            {date?.from ? (
+              date.to ? (
+                <>
+                  {format(date.from, dateFormat)} -{" "}
+                  {format(date.to, dateFormat)}
+                </>
+              ) : (
+                format(date.from, dateFormat)
+              )
             ) : (
-              <span>Pick a date</span>
+              <span>{placeholder}</span>
             )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
-            mode={"range"}
-            fromDate={new Date()}
-            disabled={disabled}
+            mode="range"
             selected={date}
-            onSelect={(date: DateRange | undefined) => onChange(date)}
+            toDate={new Date()}
+            disabled={disabled}
+            onSelect={(date) => onChange?.(date)}
             initialFocus
+            defaultMonth={date?.from}
+            numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>

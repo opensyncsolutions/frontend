@@ -1,5 +1,7 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { AxiosInstance } from "../configs/api";
+import { toast } from "sonner";
+import { formatErrorMessage } from "../utils/helpers";
 
 // const fields = [
 //   "clinic",
@@ -114,5 +116,35 @@ export const useEnrollement = (id: string) => {
     enrollmentLoading: isLoading,
     enrollmentRefetch: refetch,
     enrollmentRefething: isRefetching,
+  };
+};
+
+export const useEditEnrollment = (id: string, cb?: () => void) => {
+  const { enrollmentRefetch } = useEnrollement(id);
+  const { mutateAsync, isLoading } = useMutation(
+    async (payload: Record<string, string | boolean | number>) => {
+      const { data } = await AxiosInstance.put(`/enrollments/${id}`, payload);
+      return data;
+    },
+    {
+      onError: (error) => {
+        toast(formatErrorMessage(error), {
+          duration: 5000,
+          closeButton: true,
+        });
+      },
+      onSuccess: () => {
+        toast("Successfully updated enrollment", {
+          duration: 5000,
+          closeButton: true,
+        });
+        enrollmentRefetch();
+        cb?.();
+      },
+    }
+  );
+  return {
+    editEnrollment: mutateAsync,
+    editEnrollmentLoading: isLoading,
   };
 };

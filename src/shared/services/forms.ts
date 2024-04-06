@@ -10,16 +10,17 @@ interface FormPayload {
   translations?: Record<Languages, Partial<{ name?: string }>>;
 }
 
-export const useForms = () => {
+export const useForms = (code?: Form) => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["forms"],
+    ["forms", code],
     async () => {
       const { data } = await AxiosInstance.get<{ forms: FormResponse[] }>(
         `/forms`,
         {
           params: {
-            fields: "name,translations,id,code",
-            pageSize: 100,
+            ...(code
+              ? { filter: "code:ilike:" + code, pageSize: 1, fields: "*" }
+              : { fields: "name,translations,id,code", pageSize: 100 }),
           },
         }
       );

@@ -116,7 +116,7 @@ interface Enrollment {
   disbursements: Disbursement[];
   eacs: EAC[];
   bloodCollections: BloodCollection[];
-  dataCollections: DataCollection[];
+  dataCollection: DataCollection;
 }
 
 interface FollowUp {
@@ -240,7 +240,8 @@ type Fields =
   | "fields"
   | "forms"
   | "objectives"
-  | "organisationUnits";
+  | "organisationUnits"
+  | "phones";
 
 type FormNames =
   | "Enrollments"
@@ -307,6 +308,7 @@ interface Phone {
   phone: string;
   personal: boolean;
   mobileMoneyAccount: boolean;
+  created: string;
 }
 
 // End API

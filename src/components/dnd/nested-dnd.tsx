@@ -135,11 +135,7 @@ const NestedDragAndDrop = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable
-        droppableId="droppable"
-        type="droppableItem"
-        direction="horizontal"
-      >
+      <Droppable droppableId="sectionsDroppable" type="droppableItem">
         {(provided) => (
           <div
             ref={provided.innerRef}
@@ -194,9 +190,7 @@ const NestedDragAndDrop = ({
                                         <Tooltip content="Grab to drag and drop">
                                           <span
                                             className="px-2 py-2"
-                                            {...(!loading
-                                              ? { ...provided.dragHandleProps }
-                                              : {})}
+                                            {...provided.dragHandleProps}
                                           >
                                             <Grip size={16} />
                                           </span>
@@ -244,9 +238,7 @@ const NestedDragAndDrop = ({
                               <Tooltip content="Grab to drag and drop">
                                 <span
                                   className="px-2 py-2"
-                                  {...(!loading
-                                    ? { ...provided.dragHandleProps }
-                                    : {})}
+                                  {...provided.dragHandleProps}
                                 >
                                   <Grip size={16} />
                                 </span>
@@ -284,11 +276,7 @@ const NestedDragAndDrop = ({
                                           <Tooltip content="Grab to drag and drop">
                                             <span
                                               className="px-2 py-2"
-                                              {...(!loading
-                                                ? {
-                                                    ...provided.dragHandleProps,
-                                                  }
-                                                : {})}
+                                              {...provided.dragHandleProps}
                                             >
                                               <Grip size={16} />
                                             </span>

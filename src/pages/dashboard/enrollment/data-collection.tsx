@@ -5,11 +5,14 @@ import { format } from "date-fns";
 
 const DataCollection = ({ id }: { id: string }) => {
   const { enrollment } = useEnrollement(id);
+  
   return (
     <div className="space-y-4">
       <h3 className="font-bold">Data Collections</h3>
       <DataTable
-        data={enrollment?.dataCollections || []}
+        data={
+          enrollment?.dataCollection ? [enrollment?.dataCollection] || [] : []
+        }
         columns={[
           {
             header: "Created",

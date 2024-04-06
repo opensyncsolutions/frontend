@@ -223,7 +223,7 @@ const BasicDetails = ({ id }: { id: string }) => {
           />
         )}
       </div>
-      {enrollment?.phones?.length ? (
+      {/* {enrollment?.phones?.length ? (
         <div className="border rounded p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {enrollment?.phones?.map((phone, index) => {
             return (
@@ -235,7 +235,7 @@ const BasicDetails = ({ id }: { id: string }) => {
             );
           })}
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };
