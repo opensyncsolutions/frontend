@@ -26,6 +26,8 @@ const OrganisationUnits = lazy(
 );
 const Form = lazy(() => import("@/pages/dashboard/configurations/form"));
 
+const Settings = lazy(() => import("@/pages/dashboard/settings"));
+
 const DashboardRoutes = (roles: Role[]) => {
   const PageLoader = (
     <div className="flex justify-center h-40">
@@ -198,6 +200,14 @@ const DashboardRoutes = (roles: Role[]) => {
           }
         />
       )}
+      <Route
+        path="/settings"
+        element={
+          <Suspense fallback={PageLoader}>
+            <Settings />
+          </Suspense>
+        }
+      />
     </>
   );
 };

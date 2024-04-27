@@ -74,7 +74,11 @@ const CreateEditOrganisationUnit = ({
     code: z.string().optional(),
     data: z.boolean(),
     active: z.boolean(),
-    OOP: z.string().optional(),
+    parent: z
+      .object({
+        id: z.string(),
+      })
+      .optional(),
     description: z.string().optional(),
     translations: z.object(translationsObject),
   });
@@ -100,7 +104,9 @@ const CreateEditOrganisationUnit = ({
       name: organisationUnit?.name || "",
       shortName: organisationUnit?.shortName || "",
       code: organisationUnit?.code || "",
-      OOP: path || "",
+      parent: {
+        id: path || "",
+      },
       active: organisationUnit?.active || false,
       data: organisationUnit?.data || false,
       description: organisationUnit?.description || "",
@@ -145,6 +151,8 @@ const CreateEditOrganisationUnit = ({
       />
     );
   }
+
+  console.log(getValues());
 
   return (
     <form className="space-y-3 mt-4" onSubmit={handleSubmit(onSubmit)}>
@@ -205,11 +213,11 @@ const CreateEditOrganisationUnit = ({
           })}
 
         <Controller
-          name="OOP"
+          name="parent"
           control={control}
           render={({ field: { ref, ...field } }) => {
             const unitValue = organisationUnits?.organisationUnits?.find(
-              (unit) => unit?.id === field?.value
+              (unit) => unit?.id === field?.value?.id
             );
             return (
               <SelectInput
@@ -234,9 +242,11 @@ const CreateEditOrganisationUnit = ({
                     : undefined
                 }
                 onChange={(e) => {
-                  field?.onChange(e?.value);
+                  field?.onChange({
+                    id: e?.value
+                  });
                 }}
-                error={errors?.OOP?.message || ""}
+                error={errors?.parent?.message || ""}
               />
             );
           }}

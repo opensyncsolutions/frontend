@@ -25,6 +25,8 @@ import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/shared/contexts/languages";
 import { useTranslations } from "@/shared/hooks/use-translations";
 import { languages } from "@/shared/constants/constants";
+import { useMenus } from "@/shared/services/menus";
+import { capitalizeFirstLetter } from "@/shared/utils/helpers";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -33,6 +35,7 @@ interface HeaderProps {
 
 const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   const { language, updateLanguage } = useLanguage();
+  const { menus } = useMenus();
   const { translate } = useTranslations();
   const { width } = useWindowSize();
   const {
@@ -48,6 +51,17 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
   const { me } = useGetMe();
 
   const selectedTab = useLocation().pathname?.split("/")?.[1];
+
+  let menuTitle =
+    menus?.menus?.find((menu) => menu?.path === selectedTab)?.translations?.[
+      language
+    ]?.name || menus?.menus?.find((menu) => menu?.path === selectedTab)?.name;
+
+  if (!menuTitle) {
+    menuTitle = translate(
+      capitalizeFirstLetter(selectedTab?.replace(new RegExp("-", "g"), " "))
+    );
+  }
 
   return (
     <header
@@ -69,7 +83,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }: HeaderProps) => {
           <Menu />
         </Button>
         <span key={selectedTab} className="animate-fade-in capitalize">
-          {selectedTab?.replace(new RegExp("-", "g"), " ")}
+          {menuTitle}
         </span>
       </div>
       <div className="flex gap-3 items-center">

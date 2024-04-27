@@ -5,14 +5,12 @@ export const translate = (text: string, lang: Languages) => {
 const dictionary = [
   {
     en: "Settings",
-    sw: "Tengeneza",
-    fr: "jkbdw",
+    sw: "Mipangilo",
     default: "Settings",
   },
   {
     en: "Path",
     sw: "Njia",
-    fr: "jhb",
     default: "Path",
   },
   {

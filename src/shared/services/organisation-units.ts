@@ -6,7 +6,9 @@ import { toast } from "sonner";
 interface ObjectivePayload {
   name: string;
   shortName: string;
-  OOP?: string;
+  parent?: {
+    id: string
+  };
   data: boolean;
   active: boolean;
   description?: string;

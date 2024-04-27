@@ -311,6 +311,11 @@ interface Phone {
   created: string;
 }
 
+interface DPResponse {
+  path: string;
+  message: string;
+}
+
 // End API
 
 // Start UI

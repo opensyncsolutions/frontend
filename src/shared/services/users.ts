@@ -5,8 +5,8 @@ import { formatErrorMessage } from "../utils/helpers";
 
 interface UserPayload {
   email?: string;
-  name: string;
-  username: string;
+  name?: string;
+  username?: string;
   phoneNumber?: string;
   password?: string;
   roles?: { id: string }[];
@@ -171,4 +171,20 @@ export const useDeleteUser = (id: string, cb?: () => void) => {
     }
   );
   return { deleteUser: mutateAsync, deleteUserLoading: isLoading };
+};
+
+export const useUploadDP = () => {
+  const { mutateAsync, isLoading } = useMutation(async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const { data } = await AxiosInstance.post<DPResponse>(
+      `/users/dps`,
+      formData
+    );
+    return data;
+  });
+  return {
+    upload: mutateAsync,
+    uploadLoading: isLoading,
+  };
 };
