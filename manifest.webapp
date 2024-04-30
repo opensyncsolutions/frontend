@@ -118,9 +118,22 @@
       }
     },
     {
+      "name": "Networks",
+      "path": "networks",
+      "sortOrder": 10,
+      "translations": {
+        "en": {
+          "name": "Networks"
+        },
+        "sw": {
+          "name": "Mitandao"
+        }
+      }
+    },
+    {
       "name": "Users",
       "path": "users",
-      "sortOrder": 10,
+      "sortOrder": 11,
       "translations": {
         "en": {
           "name": "Users"
@@ -133,7 +146,7 @@
     {
       "name": "Roles & Privileges",
       "path": "roles-and-privileges",
-      "sortOrder": 11,
+      "sortOrder": 12,
       "translations": {
         "en": {
           "name": "Roles & Privileges"
@@ -146,7 +159,7 @@
     {
       "name": "Configurations",
       "path": "configurations",
-      "sortOrder": 12,
+      "sortOrder": 13,
       "translations": {
         "en": {
           "name": "Configurations"

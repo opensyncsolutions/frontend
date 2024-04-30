@@ -4,9 +4,11 @@ import logoIcon from "@/assets/images/logo-icon.svg";
 const Logo = ({
   height = 30,
   icon,
+  className,
 }: {
   height?: number | string;
   icon?: boolean;
+  className?: string;
 }) => {
   return (
     <img
@@ -15,6 +17,7 @@ const Logo = ({
         width: "auto",
         height,
       }}
+      className={className}
     />
   );
 };

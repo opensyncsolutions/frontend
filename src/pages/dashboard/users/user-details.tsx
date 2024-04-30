@@ -43,6 +43,18 @@ const UserDetails = ({ id }: { id: string }) => {
           ))}
         </h3>
       </div>
+      {user?.organisationUnits?.length ? (
+        <div>
+          <p className="text-sm">Organization Unit(s)</p>
+          <h3 className="flex flex-col ml-2">
+            {user?.organisationUnits?.map((unit, i) => (
+              <span key={unit?.id}>
+                {i + 1}. {unit?.name}
+              </span>
+            ))}
+          </h3>
+        </div>
+      ) : null}
     </div>
   );
 };

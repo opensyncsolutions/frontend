@@ -64,4 +64,24 @@ export const formsOptions: {
       fr: { name: "Eacs" },
     },
   },
+  {
+    code: "SESSION",
+    name: "Sessions",
+    field: "sessions",
+    translations: {
+      en: { name: "Sessions" },
+      sw: { name: "Vipindi" },
+      fr: { name: "Eacs" },
+    },
+  },
+  {
+    code: "PHONE",
+    name: "Phones",
+    field: "phones",
+    translations: {
+      en: { name: "Phones" },
+      sw: { name: "Simu" },
+      fr: { name: "Eacs" },
+    },
+  },
 ];

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import SelectInput from "@/components/ui/select-input";
 import { Button } from "@/components/ui/button";
+import { useOrganisationUnits } from "@/shared/services/organisation-units";
 
 const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
   const formSchema = z.object({
@@ -48,6 +49,12 @@ const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
         id: z.string(),
       })
     ),
+    organisationUnits: z.array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    ),
   });
   const { user } = useUser({
     id: id !== "new" ? id : "",
@@ -58,6 +65,13 @@ const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
       page: 1,
     },
     fields: ["id", "name"],
+  });
+
+  const { organisationUnits } = useOrganisationUnits({
+    paginate: {
+      pageSize: 1000,
+      page: 1,
+    },
   });
 
   const { createUser, createUserLoading } = useCreateUser();
@@ -80,6 +94,10 @@ const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
         user?.roles?.map((role) => {
           return { id: role?.id };
         }) || [],
+      organisationUnits: user?.organisationUnits?.map((unit) => ({
+        value: unit?.id,
+        label: unit?.name,
+      })),
     },
   });
 
@@ -91,9 +109,19 @@ const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (id === "new") {
-      return createUser(values).then(() => cb?.());
+      return createUser({
+        ...values,
+        organisationUnits: values?.organisationUnits?.map((unit) => ({
+          id: unit?.value,
+        })),
+      }).then(() => cb?.());
     }
-    return editUser(values).then(() => cb?.());
+    return editUser({
+      ...values,
+      organisationUnits: values?.organisationUnits?.map((unit) => ({
+        id: unit?.value,
+      })),
+    }).then(() => cb?.());
   };
 
   return (
@@ -203,6 +231,32 @@ const CreateEditUserForm = ({ id, cb }: { id: string; cb: () => void }) => {
                 );
               }}
               error={errors.roles?.message || ""}
+            />
+          );
+        }}
+      />
+      <Controller
+        name="organisationUnits"
+        control={control}
+        render={({ field: { ref, ...field } }) => {
+          return (
+            <SelectInput
+              label="Organisation Unit"
+              placeholder="Select unit"
+              disabled={loading}
+              isMulti
+              options={
+                organisationUnits?.organisationUnits?.map((unit) => ({
+                  label: unit?.name,
+                  value: unit?.id,
+                })) || []
+              }
+              {...field}
+              value={field?.value ?? undefined}
+              onChange={(e) => {
+                field?.onChange(e);
+              }}
+              error={errors?.organisationUnits?.message || ""}
             />
           );
         }}

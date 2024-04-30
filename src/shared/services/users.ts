@@ -10,6 +10,7 @@ interface UserPayload {
   phoneNumber?: string;
   password?: string;
   roles?: { id: string }[];
+  organisationUnits?: { id: string }[];
 }
 
 export const useUsers = ({

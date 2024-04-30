@@ -21,11 +21,11 @@ const RolesPrivileges = lazy(
 );
 const Configurations = lazy(() => import("@/pages/dashboard/configurations"));
 const Objectives = lazy(() => import("@/pages/dashboard/objectives"));
+const Networks = lazy(() => import("@/pages/dashboard/networks"));
 const OrganisationUnits = lazy(
   () => import("@/pages/dashboard/organisation-units")
 );
 const Form = lazy(() => import("@/pages/dashboard/configurations/form"));
-
 const Settings = lazy(() => import("@/pages/dashboard/settings"));
 
 const DashboardRoutes = (roles: Role[]) => {
@@ -50,6 +50,7 @@ const DashboardRoutes = (roles: Role[]) => {
     readObjectivesRole,
     readOrganisationUnitsRole,
     readEacRole,
+    readNetworksRole,
   } = getRoles(roles);
 
   return (
@@ -166,6 +167,16 @@ const DashboardRoutes = (roles: Role[]) => {
           element={
             <Suspense fallback={PageLoader}>
               <Users />
+            </Suspense>
+          }
+        />
+      )}
+      {readNetworksRole && (
+        <Route
+          path="/networks"
+          element={
+            <Suspense fallback={PageLoader}>
+              <Networks />
             </Suspense>
           }
         />

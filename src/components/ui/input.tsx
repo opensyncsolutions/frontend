@@ -3,21 +3,24 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "./label";
 
-
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   label?: string;
+  labelClassName?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, name, id, label, error, ...props }, ref) => {
+  (
+    { className, type, name, id, label, error, labelClassName, ...props },
+    ref
+  ) => {
     return (
       <div className="flex flex-col gap-2">
         {label && (
           <Label
             htmlFor={id || name}
-            className={cn(error ? "text-red-500" : "")}
+            className={cn(error ? "text-red-500" : "", labelClassName)}
           >
             {label}
           </Label>

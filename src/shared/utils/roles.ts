@@ -144,6 +144,35 @@ export const getRoles = (roles: Role[]) => {
     )
   )?.id;
 
+  // networks
+  const readNetworksRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "READ_NETWORKS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const createNetworksRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "ADD_NETWORKS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const editNetworksRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "UPDATE_NETWORKS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
+  const deleteNetworksRole = roles?.find((role) =>
+    role?.privileges?.find(
+      (privilege) =>
+        privilege?.value === "DELETE_NETWORKS" || privilege?.value === "ALL"
+    )
+  )?.id;
+
   // disbursement
   const readDisbursementsRole = roles?.find((role) =>
     role?.privileges?.find(
@@ -537,6 +566,12 @@ export const getRoles = (roles: Role[]) => {
     createPhoneRole,
     editPhoneRole,
     deletePhoneRole,
+
+    // networks
+    readNetworksRole,
+    createNetworksRole,
+    editNetworksRole,
+    deleteNetworksRole,
 
     // configurations
     // menu

@@ -23,6 +23,7 @@ interface User {
   name: string;
   active: boolean;
   roles?: Role[];
+  organisationUnits?: OrganisationUnit[];
 }
 
 interface TotalEligible {
@@ -226,7 +227,9 @@ type Form =
   | "DISBURSEMENT"
   | "BLOODCOLLECTION"
   | "DATACOLLECTION"
-  | "EAC";
+  | "EAC"
+  | "SESSION"
+  | "PHONE";
 
 type Fields =
   | "menus"
@@ -241,6 +244,8 @@ type Fields =
   | "forms"
   | "objectives"
   | "organisationUnits"
+  | "phones"
+  | "sessions"
   | "phones";
 
 type FormNames =
@@ -249,7 +254,9 @@ type FormNames =
   | "Disbursements"
   | "Blood Collections"
   | "Data Collections"
-  | "Eacs";
+  | "Eacs"
+  | "Sessions"
+  | "Phones";
 
 interface Objective {
   id: string;

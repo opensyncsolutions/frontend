@@ -10,6 +10,7 @@ import {
   Layers,
   Layers3,
   LayoutDashboard,
+  Network,
   Settings,
   SlidersHorizontal,
   TableProperties,
@@ -46,6 +47,7 @@ const pathToIcon: Record<string, ReactNode> = {
   "organisation-units": <Building2 size={18} />,
   users: <Users size={18} />,
   eac: <Layers size={18} />,
+  networks: <Network size={18} />,
 };
 
 export const paths = [
@@ -61,6 +63,7 @@ export const paths = [
   "objectives",
   "organisation-units",
   "eac",
+  "networks",
 ];
 
 export const useMenuConfig = () => {
@@ -80,6 +83,7 @@ export const useMenuConfig = () => {
     readObjectivesRole,
     readOrganisationUnitsRole,
     readEacRole,
+    readNetworksRole,
   } = getRoles(me?.roles || []);
 
   return {
@@ -116,6 +120,9 @@ export const useMenuConfig = () => {
             canAccess = true;
           }
           if (readEacRole && menu.path === "eac") {
+            canAccess = true;
+          }
+          if (readNetworksRole && menu.path === "networks") {
             canAccess = true;
           }
           return pathToIcon?.[menu?.path] && canAccess;
