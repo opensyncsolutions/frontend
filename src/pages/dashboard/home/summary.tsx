@@ -6,10 +6,6 @@ import Error from "@/pages/error";
 import { useDashboardSummary } from "@/shared/services/summary";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 
-interface SummaryProps {
-  objective?: "" | "/obj2";
-}
-
 const arrayOfObjects = (data: DashboardSummaryType | object) =>
   Object.entries(data)
     .filter(([_, value]) => typeof value === "object")
@@ -19,14 +15,14 @@ const arrayOfObjects = (data: DashboardSummaryType | object) =>
       value: value.value,
     }));
 
-const Summary = ({ objective = "" }: SummaryProps) => {
+const Summary = () => {
   const {
     dashboardSummary,
     dashboardSummaryLoading,
     dashboardSummaryError,
     dashboardSummaryRefetch,
     dashboardSummaryRefething,
-  } = useDashboardSummary(objective);
+  } = useDashboardSummary();
 
   const summary = arrayOfObjects(dashboardSummary || {});
 

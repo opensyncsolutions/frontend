@@ -152,8 +152,6 @@ const CreateEditOrganisationUnit = ({
     );
   }
 
-  console.log(getValues());
-
   return (
     <form className="space-y-3 mt-4" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-3 rounded border p-3">
@@ -243,7 +241,7 @@ const CreateEditOrganisationUnit = ({
                 }
                 onChange={(e) => {
                   field?.onChange({
-                    id: e?.value
+                    id: e?.value,
                   });
                 }}
                 error={errors?.parent?.message || ""}

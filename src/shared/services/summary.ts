@@ -47,13 +47,13 @@ export const useEnrollmentSummary = () => {
   };
 };
 
-export const useCashDisbursementSummary = (objective: string) => {
+export const useCashDisbursementSummary = () => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["cashdisbursements-summary", objective],
+    ["cashdisbursements-summary"],
     async () => {
       const { data } = await AxiosInstance.get<{
         data: CashDisbursementSummaryResponse;
-      }>(`/v1${objective}/dashboard/cashdisbursements`);
+      }>(`/v1/dashboard/cashdisbursements`);
       return data;
     },
     {

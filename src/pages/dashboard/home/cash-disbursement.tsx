@@ -1,18 +1,18 @@
 import { useCashDisbursementSummary } from "@/shared/services/summary";
-import { PageProps } from "./page";
+
 import Loader from "@/components/ui/loader";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 import BarGraph from "@/components/charts/bar-chart";
 
-const CashDisbursement = ({ objective = "" }: PageProps) => {
+const CashDisbursement = () => {
   const {
     cashDisbursementsSummary,
     cashDisbursementSummaryError,
     cashDisbursementSummaryLoading,
     cashDisbursementSummaryRefetch,
     cashDisbursementSummaryRefething,
-  } = useCashDisbursementSummary(objective);
+  } = useCashDisbursementSummary();
   const loading =
     cashDisbursementSummaryLoading || cashDisbursementSummaryRefething;
 
