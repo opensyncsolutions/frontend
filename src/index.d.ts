@@ -120,6 +120,16 @@ interface Enrollment {
   dataCollection: DataCollection;
 }
 
+interface EnrollmentAnalytic {
+  id: string;
+  created: string;
+  updated: string;
+  enrollments: number;
+  eligible: number;
+  non: number;
+  organisationUnit: OrganisationUnit;
+}
+
 interface FollowUp {
   id: string;
   created: string;

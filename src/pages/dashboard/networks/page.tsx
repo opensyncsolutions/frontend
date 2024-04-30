@@ -18,7 +18,13 @@ import NetworkItem from "./network";
 import DeleteObjective from "./delete-network";
 import { useNetworks } from "@/shared/services/networks";
 
-const searchableFields: string[] = ["name", "organisationUnit"];
+const searchableFields: string[] = [
+  "name",
+  "status",
+  "operator",
+  "utilitycode",
+  "description",
+];
 const sortabledDateFileds = ["created"];
 
 const Page = () => {

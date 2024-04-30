@@ -1,18 +1,17 @@
 import BarGraph from "@/components/charts/bar-chart";
-import { PageProps } from "./page";
 import { useEnrollmentSummary } from "@/shared/services/summary";
 import Loader from "@/components/ui/loader";
 import Error from "@/pages/error";
 import { formatErrorMessage } from "@/shared/utils/helpers";
 
-const Enrollments = ({ objective = "" }: PageProps) => {
+const Enrollments = () => {
   const {
     clinicEnrollmentSummary,
     clinicEnrollmentSummaryError,
     clinicEnrollmentSummaryLoading,
     clinicEnrollmentSummaryRefetch,
     clinicEnrollmentSummaryRefething,
-  } = useEnrollmentSummary(objective);
+  } = useEnrollmentSummary();
 
   if (clinicEnrollmentSummaryLoading || clinicEnrollmentSummaryRefething)
     return (

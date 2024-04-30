@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
 import { AxiosInstance } from "../configs/api";
 
-export const useDashboardSummary = (objective: string) => {
+export const useDashboardSummary = () => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["dashboard-summary", objective],
+    ["dashboard-summary"],
     async () => {
       const { data } = await AxiosInstance.get<{ data: DashboardSummaryType }>(
-        `/v1${objective}/dashboard/indicators`
+        `/v1/dashboard/indicators`
       );
       return data;
     },
@@ -24,13 +24,13 @@ export const useDashboardSummary = (objective: string) => {
   };
 };
 
-export const useEnrollmentSummary = (objective: string) => {
+export const useEnrollmentSummary = () => {
   const { data, error, isLoading, refetch, isRefetching } = useQuery(
-    ["clinicenrollments-summary", objective],
+    ["clinicenrollments-summary"],
     async () => {
       const { data } = await AxiosInstance.get<{
         data: EnrollmentSummaryResponse;
-      }>(`/v1${objective}/dashboard/clinicenrollments`);
+      }>(`/v1/dashboard/clinicenrollments`);
       return data;
     },
     {

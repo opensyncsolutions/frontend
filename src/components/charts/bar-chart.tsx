@@ -38,7 +38,7 @@ const BarGraph = ({ data, label, tickCount = 6, names }: BarChartProps) => {
         margin={{
           top: 15,
           right: 0,
-          left: -30,
+          left: -20,
           bottom: 10,
         }}
       >

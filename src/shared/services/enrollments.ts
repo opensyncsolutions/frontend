@@ -3,39 +3,6 @@ import { AxiosInstance } from "../configs/api";
 import { toast } from "sonner";
 import { formatErrorMessage } from "../utils/helpers";
 
-// const fields = [
-//   "clinic",
-//   "objective",
-//   "middleName",
-//   "firstName",
-//   "surname",
-//   "dob",
-//   "status",
-//   "studyId",
-//   "ctcId",
-//   "recentVisit",
-//   "participantConsent",
-//   "informedConsent",
-//   "enrollmentDate",
-//   "assessmentDate",
-//   "hbcName",
-//   "hbcNumber",
-//   "scheduledReturn",
-//   "assessmentDate",
-//   "viralLoadDate",
-//   "counsellingDate",
-//   "clinicalInterventionVisit",
-//   "clinicalControlVisit",
-//   "returnMobileNumber",
-//   "mainConsentStudy",
-//   "consentToBeContacted",
-//   "completeBaselineSurvey",
-//   "currentEnrolled",
-//   "organisationUnit",
-//   "createdBy",
-//   "updatedBy",
-// ];
-
 export const useEnrollements = ({
   paginate: { page, pageSize },
   filter,
@@ -146,5 +113,45 @@ export const useEditEnrollment = (id: string, cb?: () => void) => {
   return {
     editEnrollment: mutateAsync,
     editEnrollmentLoading: isLoading,
+  };
+};
+
+// analytics
+export const useEnrollementsAnalytics = ({
+  paginate: { page, pageSize },
+}: {
+  paginate: Paginate;
+}) => {
+  const { data, error, isLoading, refetch, isRefetching } = useQuery(
+    ["enrollmentsAnalytics", page, pageSize],
+    async () => {
+      const params: Record<string, string | number | boolean> = {
+        fields: "*",
+      };
+
+      if (pageSize) params.pageSize = pageSize;
+      if (page) params.page = page;
+
+      const { data } = await AxiosInstance.get<{
+        enrollmentAnalytics: EnrollmentAnalytic[];
+        total: number;
+        page: number;
+        pageSize: number;
+      }>(`/enrollmentAnalytics`, {
+        params,
+      });
+      return data;
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  return {
+    enrollmentAnalytics: data,
+    enrollmentAnalyticsError: error as ApiError,
+    enrollmentAnalyticsLoading: isLoading,
+    enrollmentAnalyticsRefetch: refetch,
+    enrollmentAnalyticsRefething: isRefetching,
   };
 };
