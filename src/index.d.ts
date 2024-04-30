@@ -149,6 +149,20 @@ type DataCollection = {
   endlineSurveyStatus: string;
 };
 
+type Network = {
+  id: string;
+  created: string;
+  updated: string;
+  name: string;
+  description?: string;
+  operator: string;
+  fee: number;
+  cash: number;
+  status: string;
+  utilitycode: string;
+  code?: string;
+};
+
 type BloodCollection = {
   id: string;
   created: string;
@@ -246,7 +260,8 @@ type Fields =
   | "organisationUnits"
   | "phones"
   | "sessions"
-  | "phones";
+  | "phones"
+  | "networks";
 
 type FormNames =
   | "Enrollments"
