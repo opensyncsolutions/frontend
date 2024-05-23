@@ -60,6 +60,8 @@ const Login = () => {
             <Logo />
           </span>
           <Button
+            formTarget="_blank"
+            onClick={() => window.open("https://opensync.solutions/support")}
             variant={"outline"}
             className="bg-transparent text-neutral-100 !border-primary-100 border-2"
           >
